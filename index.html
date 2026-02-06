@@ -1,379 +1,91 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Layout Institucional Padrão MEC</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+// --- INTEGRAÇÃO SIOP GRAPHQL ---
 
-    <style>
-        :root {
-            /* Paleta Oficial MEC / Governo */
-            --mec-blue-primary: #003366;
-            --mec-blue-light: #004a8d;
-            --mec-green: #219653;
-            --mec-yellow: #fecb00;
-            
-            /* Tons Neutros */
-            --bg-body: #f8f9fa;
-            --bg-card: #ffffff;
-            --text-primary: #1f2937;
-            --text-secondary: #6b7280;
-            --border-color: #e5e7eb;
-            
-            /* Dimensões */
-            --sidebar-width: 280px;
-            --card-radius: 12px;
+async function consultarSiop() {
+    // 1. Configurações (Você precisará da URL real fornecida pela SOF)
+    const SIOP_ENDPOINT = "https://url-do-servico-siop.gov.br/graphql"; 
+    const token = document.getElementById('siop-token').value;
+    const container = document.getElementById('resultado-siop');
+
+    if (!token) {
+        alert("Por favor, insira um Token de acesso válido.");
+        return;
+    }
+
+    container.innerHTML = '<div style="text-align:center; padding:50px"><i class="fa-solid fa-spinner fa-spin fa-2x"></i><br>Consultando SIOP ME/SOF...</div>';
+
+    // 2. A Query GraphQL (Baseada na documentação que você enviou)
+    // Estamos pedindo: ID, Código, Descrição e Valor das emendas de 2026
+    const graphqlQuery = {
+        query: `
+            query BuscarEmendas {
+                itens(filtro: { exercicio: 2026 }) {
+                    id
+                    codigo
+                    descricao
+                    valor
+                    beneficiario {
+                        nome
+                        cnpj
+                    }
+                    situacao
+                }
+            }
+        `
+    };
+
+    try {
+        // 3. A Requisição POST
+        const response = await fetch(SIOP_ENDPOINT, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`, // Autenticação obrigatória
+                "Accept": "application/json"
+            },
+            body: JSON.stringify(graphqlQuery)
+        });
+
+        const json = await response.json();
+
+        // 4. Tratamento de Erros da API
+        if (json.errors) {
+            container.innerHTML = `<div style="color:red"><strong>Erro na API:</strong> ${json.errors[0].message}</div>`;
+            return;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg-body);
-            color: var(--text-primary);
-            display: flex;
-            height: 100vh;
-            overflow: hidden;
-        }
-
-        /* --- MENU LATERAL (Fundo Claro) --- */
-        aside {
-            width: var(--sidebar-width);
-            background-color: var(--bg-card);
-            border-right: 1px solid var(--border-color);
-            display: flex;
-            flex-direction: column;
-            flex-shrink: 0;
-        }
-
-        .brand-area {
-            padding: 24px;
-            border-bottom: 1px solid var(--border-color);
-            border-top: 4px solid var(--mec-yellow); /* Detalhe Institucional */
-        }
+        // 5. Renderização dos Dados
+        const itens = json.data.itens;
         
-        .brand-title {
-            font-size: 1.1rem;
-            font-weight: 800;
-            color: var(--mec-blue-primary);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            display: flex; align-items: center; gap: 10px;
+        if (itens.length === 0) {
+            container.innerHTML = "<div>Nenhum item encontrado para este perfil.</div>";
+            return;
         }
+
+        let html = '<table style="width:100%; font-size:0.85rem;"><thead><tr><th>Cód</th><th>Descrição</th><th>Valor</th><th>Situação</th></tr></thead><tbody>';
         
-        .brand-subtitle {
-            font-size: 0.75rem;
-            color: var(--text-secondary);
-            margin-top: 5px;
-            font-weight: 500;
-        }
-
-        nav {
-            flex: 1;
-            padding: 24px 16px;
-            overflow-y: auto;
-        }
-
-        .nav-category {
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            color: var(--text-secondary);
-            font-weight: 700;
-            margin-bottom: 12px;
-            padding-left: 12px;
-            margin-top: 16px;
-        }
-
-        .nav-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px 16px;
-            color: var(--text-primary);
-            text-decoration: none;
-            border-radius: 8px;
-            margin-bottom: 4px;
-            font-weight: 500;
-            transition: all 0.2s;
-        }
-
-        .nav-item:hover {
-            background-color: #f3f4f6;
-            color: var(--mec-blue-light);
-        }
-
-        .nav-item.active {
-            background-color: #eff6ff;
-            color: var(--mec-blue-primary);
-            font-weight: 600;
-        }
+        itens.forEach(item => {
+            html += `
+                <tr style="border-bottom:1px solid #eee;">
+                    <td style="padding:8px; font-weight:bold;">${item.codigo || item.id}</td>
+                    <td style="padding:8px;">${item.descricao}</td>
+                    <td style="padding:8px;">R$ ${parseFloat(item.valor).toLocaleString('pt-BR')}</td>
+                    <td style="padding:8px;"><span style="background:#e0f2fe; color:#0369a1; padding:2px 6px; border-radius:4px;">${item.situacao || 'Ativo'}</span></td>
+                </tr>
+            `;
+        });
         
-        .nav-icon {
-            width: 20px;
-            text-align: center;
-            color: var(--mec-blue-light);
-        }
+        html += '</tbody></table>';
+        container.innerHTML = html;
 
-        /* --- ÁREA PRINCIPAL --- */
-        main {
-            flex: 1;
-            padding: 40px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 32px;
-        }
-
-        /* Topo */
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-        }
-        
-        .page-title h1 {
-            font-size: 1.75rem;
-            font-weight: 700;
-            color: var(--mec-blue-primary);
-            letter-spacing: -0.5px;
-        }
-        
-        .page-title p {
-            color: var(--text-secondary);
-            margin-top: 6px;
-            font-size: 1rem;
-        }
-
-        /* Grid de Cards */
-        .cards-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 24px;
-        }
-
-        .card {
-            background: var(--bg-card);
-            border-radius: var(--card-radius);
-            padding: 24px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-            border: 1px solid var(--border-color);
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-            transition: transform 0.2s;
-        }
-        
-        .card:hover {
-            transform: translateY(-2px);
-            border-color: var(--mec-blue-light);
-        }
-
-        /* Ícones Coloridos nos Cards (Estilo Flat) */
-        .card-icon-box {
-            width: 50px;
-            height: 50px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            margin-bottom: 8px;
-        }
-        
-        /* Variações de Cores dos Ícones */
-        .icon-blue { background-color: #eff6ff; color: var(--mec-blue-primary); }
-        .icon-green { background-color: #dcfce7; color: var(--mec-green); }
-        .icon-yellow { background-color: #fefce8; color: #ca8a04; }
-        .icon-indigo { background-color: #eef2ff; color: #4f46e5; }
-
-        .card-title {
-            font-size: 1rem;
-            font-weight: 600;
-            color: var(--text-primary);
-        }
-
-        .card-desc {
-            font-size: 0.875rem;
-            color: var(--text-secondary);
-            line-height: 1.5;
-        }
-
-        /* Seção de Conteúdo Genérica */
-        .content-section {
-            background: var(--bg-card);
-            border-radius: var(--card-radius);
-            border: 1px solid var(--border-color);
-            padding: 32px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
-        }
-
-        .section-header {
-            margin-bottom: 24px;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 16px;
-        }
-
-        .section-title {
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: var(--mec-blue-primary);
-        }
-
-        /* Elementos Genéricos de Lista (Placeholder) */
-        .generic-list-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 16px 0;
-            border-bottom: 1px solid var(--bg-body);
-        }
-        .generic-list-item:last-child { border-bottom: none; }
-        
-        .item-info { display: flex; align-items: center; gap: 16px; }
-        .placeholder-icon { width: 36px; height: 36px; background-color: #f3f4f6; border-radius: 50%; }
-        .placeholder-text-group { display: flex; flex-direction: column; gap: 4px; }
-        .placeholder-line-lg { width: 120px; height: 10px; background-color: #e5e7eb; border-radius: 4px; }
-        .placeholder-line-sm { width: 80px; height: 8px; background-color: #f3f4f6; border-radius: 4px; }
-        
-        .tag {
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            background-color: #f3f4f6;
-            color: var(--text-secondary);
-        }
-
-    </style>
-</head>
-<body>
-
-    <aside>
-        <div class="brand-area">
-            <div class="brand-title">
-                <i class="fa-solid fa-building-columns"></i>
-                SIGLA
+    } catch (error) {
+        console.error("Erro SIOP:", error);
+        container.innerHTML = `
+            <div style="color:red; text-align:center;">
+                <strong>Falha na conexão</strong><br>
+                Verifique se a URL do Endpoint está correta e se você tem permissão de rede (VPN/Proxy).
+                <br><br>
+                <em>Erro técnico: ${error.message}</em>
             </div>
-            <div class="brand-subtitle">Ministério da Educação</div>
-        </div>
-
-        <nav>
-            <div class="nav-category">Principal</div>
-            <a href="#" class="nav-item active">
-                <div class="nav-icon"><i class="fa-solid fa-layer-group"></i></div>
-                Painel Geral
-            </a>
-            <a href="#" class="nav-item">
-                <div class="nav-icon"><i class="fa-solid fa-folder-open"></i></div>
-                Seção Administrativa
-            </a>
-            
-            <div class="nav-category">Ferramentas</div>
-            <a href="#" class="nav-item">
-                <div class="nav-icon"><i class="fa-solid fa-magnifying-glass"></i></div>
-                Consulta
-            </a>
-            <a href="#" class="nav-item">
-                <div class="nav-icon"><i class="fa-regular fa-file-lines"></i></div>
-                Relatórios
-            </a>
-            <a href="#" class="nav-item">
-                <div class="nav-icon"><i class="fa-regular fa-bell"></i></div>
-                Alertas do Sistema
-            </a>
-            
-            <div class="nav-category">Configurações</div>
-            <a href="#" class="nav-item">
-                <div class="nav-icon"><i class="fa-solid fa-users"></i></div>
-                Contatos
-            </a>
-        </nav>
-    </aside>
-
-    <main>
-        <header>
-            <div class="page-title">
-                <h1>Título da Página</h1>
-                <p>Subtítulo institucional descritivo do sistema</p>
-            </div>
-        </header>
-
-        <div class="cards-grid">
-            <div class="card">
-                <div class="card-icon-box icon-blue">
-                    <i class="fa-solid fa-file-contract"></i>
-                </div>
-                <div class="card-title">Título do Card</div>
-                <div class="card-desc">Descrição breve sobre o conteúdo desta seção.</div>
-            </div>
-
-            <div class="card">
-                <div class="card-icon-box icon-green">
-                    <i class="fa-solid fa-check-circle"></i>
-                </div>
-                <div class="card-title">Status do Sistema</div>
-                <div class="card-desc">Informação genérica sobre o estado atual.</div>
-            </div>
-
-            <div class="card">
-                <div class="card-icon-box icon-indigo">
-                    <i class="fa-solid fa-users"></i>
-                </div>
-                <div class="card-title">Seção de Pessoas</div>
-                <div class="card-desc">Texto ilustrativo sobre o grupo de usuários.</div>
-            </div>
-
-            <div class="card">
-                <div class="card-icon-box icon-yellow">
-                    <i class="fa-regular fa-star"></i>
-                </div>
-                <div class="card-title">Destaques</div>
-                <div class="card-desc">Resumo de informações importantes.</div>
-            </div>
-        </div>
-
-        <div class="content-section">
-            <div class="section-header">
-                <div class="section-title">Seção de Listagem</div>
-            </div>
-
-            <div class="generic-list-item">
-                <div class="item-info">
-                    <div class="placeholder-icon"></div>
-                    <div class="placeholder-text-group">
-                        <div class="placeholder-line-lg"></div>
-                        <div class="placeholder-line-sm"></div>
-                    </div>
-                </div>
-                <div class="tag">Status</div>
-            </div>
-
-            <div class="generic-list-item">
-                <div class="item-info">
-                    <div class="placeholder-icon"></div>
-                    <div class="placeholder-text-group">
-                        <div class="placeholder-line-lg"></div>
-                        <div class="placeholder-line-sm"></div>
-                    </div>
-                </div>
-                <div class="tag">Status</div>
-            </div>
-
-            <div class="generic-list-item">
-                <div class="item-info">
-                    <div class="placeholder-icon"></div>
-                    <div class="placeholder-text-group">
-                        <div class="placeholder-line-lg"></div>
-                        <div class="placeholder-line-sm"></div>
-                    </div>
-                </div>
-                <div class="tag">Status</div>
-            </div>
-
-        </div>
-    </main>
-
-</body>
-</html>
+        `;
+    }
+}
