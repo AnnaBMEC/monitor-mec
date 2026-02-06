@@ -61,18 +61,22 @@
             text-transform: uppercase; color: rgba(255,255,255,0.4); font-weight: 700; 
         }
 
-        /* Links do Menu - Cursor Pointer Forçado */
         .nav-link {
             display: flex; align-items: center; gap: 10px;
             padding: 12px 20px; color: #ccc; text-decoration: none;
             transition: 0.2s; border-left: 3px solid transparent;
-            cursor: pointer; /* Garante que pareça clicável */
+            cursor: pointer;
         }
         .nav-link:hover, .nav-link.active {
             background: rgba(255,255,255,0.05); color: white;
             border-left-color: var(--gov-yellow);
         }
         .nav-link i { width: 20px; text-align: center; }
+
+        /* Outlook Badge */
+        .outlook-badge {
+            background: #0078d4; color: white; padding: 2px 8px; border-radius: 10px; font-size: 0.7rem; margin-left: auto;
+        }
 
         /* --- MAIN --- */
         main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
@@ -101,7 +105,7 @@
         .border-yellow { border-top-color: var(--gov-yellow); }
         .border-red { border-top-color: var(--gov-red); }
 
-        /* --- ACESSOS RÁPIDOS (Novo) --- */
+        /* --- ACESSOS RÁPIDOS --- */
         .quick-grid {
             display: grid; grid-template-columns: repeat(6, 1fr); gap: 15px; margin-bottom: 25px;
         }
@@ -128,8 +132,14 @@
         .btn-primary { background: var(--gov-blue); color: white; }
         .btn-outline { background: white; border: 1px solid #ccc; color: #333; }
         .btn-excel { background: #1D6F42; color: white; }
+        .btn-view-toggle { background: #eef2ff; color: var(--gov-blue); border: 1px solid var(--gov-blue-light); }
+        .btn-view-toggle.active { background: var(--gov-blue); color: white; }
 
-        /* --- TABELA --- */
+        /* --- TABELA E CAROMETRO --- */
+        .view-container { display: none; } /* Esconde as views por padrão */
+        .view-container.active { display: block; }
+
+        /* Tabela */
         .table-container { background: white; border-radius: 6px; border: 1px solid var(--border-color); overflow: hidden; }
         table { width: 100%; border-collapse: collapse; }
         th { background: #f8f9fa; text-align: left; padding: 12px 15px; font-size: 0.75rem; text-transform: uppercase; border-bottom: 2px solid var(--border-color); color: #555; position: sticky; top: 0; }
@@ -142,6 +152,23 @@
         .st-liquidated { background: #dbeafe; color: #1e40af; border: 1px solid #bfdbfe; } 
         .st-paid { background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; } 
         
+        /* Carômetro Grid */
+        .carometro-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 20px;
+        }
+        .dep-card {
+            background: white; border: 1px solid var(--border-color); border-radius: 8px;
+            padding: 20px; text-align: center; cursor: pointer; transition: 0.2s;
+            position: relative; overflow: hidden;
+        }
+        .dep-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); border-color: var(--gov-blue); }
+        .dep-card img { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 3px solid #f0f0f0; margin-bottom: 10px; }
+        .dep-card h4 { font-size: 0.95rem; color: var(--gov-blue-dark); margin-bottom: 5px; font-weight: 700; }
+        .dep-card p { font-size: 0.8rem; color: #666; margin-bottom: 10px; }
+        .dep-status-bar { height: 4px; width: 100%; position: absolute; bottom: 0; left: 0; }
+
         /* --- MODAIS E DRAWER --- */
         .modal-overlay {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -155,7 +182,7 @@
         }
         @keyframes slideInDrawer { from { transform: translateX(100%); } to { transform: translateX(0); } }
         
-        /* Modal Central (Avisos/Contatos) */
+        /* Modal Central (Avisos/Contatos/Outlook) */
         .modal-center {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.5); z-index: 1001; justify-content: center; align-items: center;
@@ -179,6 +206,7 @@
         .contact-name { font-size: 0.95rem; color: var(--gov-blue); font-weight: 700; margin: 2px 0; }
         .contact-info { font-size: 0.85rem; color: #333; display: flex; gap: 10px; margin-top: 5px; }
 
+        /* Stepper */
         .stepper { display: flex; justify-content: space-between; margin-bottom: 30px; position: relative; }
         .stepper::before { content: ''; position: absolute; top: 12px; left: 0; width: 100%; height: 2px; background: #e0e0e0; z-index: 0; }
         .step { position: relative; z-index: 1; text-align: center; background: white; padding: 0 5px; }
@@ -191,6 +219,16 @@
         .form-control { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-family: 'Inter'; }
         textarea.form-control { min-height: 80px; resize: vertical; }
 
+        /* Toast Notificação Outlook */
+        .toast-notification {
+            position: fixed; bottom: 20px; right: 20px; background: white; border-left: 5px solid #0078d4;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2); padding: 15px; border-radius: 4px;
+            display: none; animation: slideInToast 0.5s; z-index: 2000; width: 300px;
+        }
+        @keyframes slideInToast { from { transform: translateX(100%); } to { transform: translateX(0); } }
+        .toast-header { font-weight: bold; color: #0078d4; display: flex; align-items: center; gap: 8px; margin-bottom: 5px; }
+        .toast-body { font-size: 0.85rem; color: #333; }
+
     </style>
 </head>
 <body>
@@ -202,13 +240,20 @@
         </div>
         <nav>
             <div class="nav-group">Gestão</div>
-            <a href="#" class="nav-link active"><i class="fa-solid fa-chart-pie"></i> Painel Geral</a>
-            <a href="#" class="nav-link"><i class="fa-solid fa-list-check"></i> Monitoramento</a>
+            <a onclick="switchView('table')" class="nav-link active" id="btn-painel">
+                <i class="fa-solid fa-chart-pie"></i> Painel Geral
+            </a>
             
             <div class="nav-group">Relacionamento</div>
-            <a href="#" class="nav-link"><i class="fa-solid fa-users"></i> Parlamentares</a>
+            <a onclick="switchView('carometro')" class="nav-link" id="btn-carometro">
+                <i class="fa-solid fa-users-viewfinder"></i> Parlamentares
+            </a>
             
-            <div class="nav-group">Sistema</div>
+            <div class="nav-group">Ferramentas</div>
+            <a onclick="abrirModalCentral('modal-outlook')" class="nav-link">
+                <i class="fa-solid fa-envelope"></i> Outlook
+                <span class="outlook-badge">Novo</span>
+            </a>
             <a onclick="abrirModalCentral('modal-avisos')" class="nav-link">
                 <i class="fa-solid fa-bell"></i> Alertas 
                 <span style="background:var(--gov-yellow); color:#000; font-size:10px; padding:1px 6px; border-radius:10px; margin-left:auto">3</span>
@@ -263,6 +308,10 @@
 
             <h4 style="margin-bottom:10px; color:#555;">Sistemas Integrados</h4>
             <div class="quick-grid">
+                <a href="https://outlook.office.com/mail/" target="_blank" class="quick-btn" style="border-color:#0078d4; color:#0078d4">
+                    <i class="fa-solid fa-envelope"></i>
+                    <span>Webmail</span>
+                </a>
                 <a href="https://portaldatransparencia.gov.br" target="_blank" class="quick-btn">
                     <i class="fa-solid fa-magnifying-glass"></i>
                     <span>Transparência</span>
@@ -279,10 +328,6 @@
                     <i class="fa-solid fa-building-columns"></i>
                     <span>Câmara</span>
                 </a>
-                <a href="https://www12.senado.leg.br" target="_blank" class="quick-btn">
-                    <i class="fa-solid fa-gavel"></i>
-                    <span>Senado</span>
-                </a>
                 <a href="https://sei.mec.gov.br" target="_blank" class="quick-btn">
                     <i class="fa-solid fa-folder-open"></i>
                     <span>SEI MEC</span>
@@ -292,16 +337,24 @@
             <div class="toolbar">
                 <div style="display:flex; gap:10px; align-items:center; flex:1;">
                     <i class="fa-solid fa-search" style="color:#888"></i>
-                    <input type="text" id="filtro-nome" class="search-input" placeholder="Buscar Parlamentar..." onkeyup="filtrarTabela()">
+                    <input type="text" id="filtro-nome" class="search-input" placeholder="Buscar Parlamentar..." onkeyup="filtrarGlobal()">
                     
                     <button class="btn-action btn-outline" onclick="location.reload()">
                         <i class="fa-solid fa-rotate"></i> Atualizar API
                     </button>
+                    
+                    <div style="display:flex; border:1px solid #ccc; border-radius:4px; overflow:hidden;">
+                        <button onclick="switchView('table')" class="btn-action btn-view-toggle active" id="toggle-table" style="border:none; border-radius:0;">
+                            <i class="fa-solid fa-table-list"></i> Lista
+                        </button>
+                        <button onclick="switchView('carometro')" class="btn-action btn-view-toggle" id="toggle-grid" style="border:none; border-radius:0;">
+                            <i class="fa-solid fa-border-all"></i> Carômetro
+                        </button>
+                    </div>
                 </div>
-                <button class="btn-action btn-excel" onclick="alert('Funcionalidade de exportação pronta para CSV.')"><i class="fa-solid fa-file-excel"></i> Exportar Dados</button>
             </div>
 
-            <div class="table-container">
+            <div id="view-table" class="view-container active table-container">
                 <table id="tabela-gestao">
                     <thead>
                         <tr>
@@ -318,6 +371,12 @@
                     </tbody>
                 </table>
             </div>
+
+            <div id="view-carometro" class="view-container">
+                <div class="carometro-grid" id="grid-corpo">
+                    </div>
+            </div>
+
         </div>
     </main>
 
@@ -330,8 +389,13 @@
             
             <div class="drawer-body">
                 <div style="margin-bottom:25px;">
-                    <h2 id="modal-nome" style="color:var(--gov-blue); margin-bottom:5px;">--</h2>
-                    <div style="font-size:0.9rem; color:#666;">Partido: <span id="modal-partido">--</span> | UF: <span id="modal-uf">--</span></div>
+                    <div style="display:flex; align-items:center; gap:15px; margin-bottom:15px;">
+                        <img id="modal-img" src="" style="width:60px; height:60px; border-radius:50%; border:2px solid #eee;">
+                        <div>
+                            <h2 id="modal-nome" style="color:var(--gov-blue); margin-bottom:2px; font-size:1.2rem;">--</h2>
+                            <div style="font-size:0.9rem; color:#666;">Partido: <span id="modal-partido">--</span> | UF: <span id="modal-uf">--</span></div>
+                        </div>
+                    </div>
                     
                     <div style="background:#f8f9fa; padding:15px; border-radius:8px; margin-top:15px; border:1px solid #eee;">
                         <div style="font-size:0.75rem; text-transform:uppercase; color:#888;">Dados Oficiais (Transparência)</div>
@@ -381,6 +445,29 @@
         </div>
     </div>
 
+    <div id="modal-outlook" class="modal-center" onclick="fecharModalCentral(event, 'modal-outlook')">
+        <div class="modal-box">
+            <div class="modal-header" style="background:#0078d4;">
+                <h3><i class="fa-solid fa-envelope"></i> Integração Outlook</h3>
+                <span style="cursor:pointer" onclick="fecharModalCentral(null, 'modal-outlook')">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div style="text-align:center; padding:20px;">
+                    <i class="fa-solid fa-envelope-open-text" style="font-size:3rem; color:#0078d4; margin-bottom:15px;"></i>
+                    <p style="font-size:0.9rem; color:#555;">Por questões de segurança corporativa, o acesso à caixa de entrada deve ser feito via Outlook Web App.</p>
+                    <br>
+                    <a href="https://outlook.office.com/mail/" target="_blank" class="btn-action btn-primary" style="background:#0078d4; justify-content:center; text-decoration:none;">
+                        Abrir Caixa de Entrada
+                    </a>
+                </div>
+                <hr style="margin:20px 0; border:0; border-top:1px solid #eee;">
+                <div style="font-size:0.8rem; color:#888;">
+                    <strong>Dica:</strong> Mantenha o Outlook aberto em outra aba para receber notificações nativas do Windows.
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div id="modal-avisos" class="modal-center" onclick="fecharModalCentral(event, 'modal-avisos')">
         <div class="modal-box">
             <div class="modal-header">
@@ -419,29 +506,26 @@
                     <div class="contact-info"><i class="fa-solid fa-phone"></i> (61) 2022-8803</div>
                     <div class="contact-info"><i class="fa-solid fa-envelope"></i> LucianaNunes@mec.gov.br</div>
                 </div>
-                <div class="contact-item">
-                    <div class="contact-role">Coord. Geral de Orçamento</div>
-                    <div class="contact-name">Ana Karina da Silva Santos Koga</div>
-                    <div class="contact-info"><i class="fa-solid fa-phone"></i> (61) 2022-8835</div>
                 </div>
-                 <div class="contact-item">
-                    <div class="contact-role">Coord. Geral de Finanças</div>
-                    <div class="contact-name">André Luiz Valente Mayrink</div>
-                    <div class="contact-info"><i class="fa-solid fa-phone"></i> (61) 2022-8912</div>
-                </div>
-            </div>
+        </div>
+    </div>
+
+    <div id="toast-outlook" class="toast-notification">
+        <div class="toast-header"><i class="fa-solid fa-envelope"></i> Novo E-mail</div>
+        <div class="toast-body">
+            <strong>De:</strong> SPO/MEC<br>
+            Nota de empenho liberada para consulta.
         </div>
     </div>
 
     <script>
         // --- FUNÇÕES GLOBAIS DE INTERFACE ---
         
-        // Formatar Moeda
         function formatarMoeda(valor) {
             return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
         }
 
-        // Modais Centrais (Avisos/Contatos)
+        // Modais Centrais
         function abrirModalCentral(id) {
             document.getElementById(id).style.display = 'flex';
         }
@@ -451,12 +535,39 @@
             }
         }
 
-        // Drawer Lateral (Detalhes)
+        // Drawer Lateral
         function fecharDrawer(event, force) {
             if (force || event.target.id === 'drawer-detalhes') {
                 document.getElementById('drawer-detalhes').style.display = 'none';
             }
         }
+
+        // Troca de Views (Tabela x Carômetro)
+        function switchView(viewName) {
+            // Esconder todas
+            document.querySelectorAll('.view-container').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.btn-view-toggle').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active'));
+
+            // Ativar selecionada
+            document.getElementById('view-' + viewName).classList.add('active');
+            
+            // Ativar botões
+            if(viewName === 'table') {
+                document.getElementById('toggle-table').classList.add('active');
+                document.getElementById('btn-painel').classList.add('active');
+            } else {
+                document.getElementById('toggle-grid').classList.add('active');
+                document.getElementById('btn-carometro').classList.add('active');
+            }
+        }
+
+        // Simulação de Notificação Outlook
+        setTimeout(() => {
+            const toast = document.getElementById('toast-outlook');
+            toast.style.display = 'block';
+            setTimeout(() => { toast.style.display = 'none'; }, 5000);
+        }, 3000);
 
         // --- LÓGICA DO SISTEMA ---
         const API_KEY = "2e820c7589765e7414b397836e6d1976";
@@ -466,17 +577,16 @@
         let baseDados = [];
         let itemAtualId = null;
 
-        // Iniciar ao carregar a página
         window.onload = iniciarSistema;
 
         async function iniciarSistema() {
             try {
-                // 1. Busca Deputados (Câmara)
+                // 1. Busca Deputados
                 const resDep = await fetch("https://dadosabertos.camara.leg.br/api/v2/deputados?ordem=ASC&ordenarPor=nome");
                 const jsonDep = await resDep.json();
                 const deputados = jsonDep.dados;
 
-                // 2. Busca Dados Financeiros MEC 2026
+                // 2. Busca Dados Financeiros (Proxy)
                 const urlFinanceiro = `https://api.portaldatransparencia.gov.br/api-de-dados/emendas?codigoOrgao=${ORGAO}&ano=${ANO}&pagina=1`;
                 const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(urlFinanceiro)}`;
                 
@@ -506,12 +616,14 @@
                         }
                     }
                 } catch (err) {
-                    console.warn("API Transparência indisponível ou vazia.", err);
+                    console.warn("API Transparência indisponível.", err);
                 }
 
                 // 3. Unificar Dados
                 const tbody = document.getElementById('lista-corpo');
+                const grid = document.getElementById('grid-corpo');
                 tbody.innerHTML = '';
+                grid.innerHTML = '';
                 baseDados = [];
 
                 deputados.forEach(dep => {
@@ -529,6 +641,7 @@
                     const obj = { ...dep, financeiro, crm, ciclo, cssCiclo };
                     baseDados.push(obj);
 
+                    // Renderizar Tabela
                     const tr = document.createElement('tr');
                     tr.onclick = () => abrirDetalhes(obj);
                     tr.innerHTML = `
@@ -552,6 +665,26 @@
                         </td>
                     `;
                     tbody.appendChild(tr);
+
+                    // Renderizar Carômetro (Card)
+                    const card = document.createElement('div');
+                    card.className = 'dep-card';
+                    card.onclick = () => abrirDetalhes(obj);
+                    
+                    // Definir cor da barra inferior baseada no status
+                    let barColor = '#ccc';
+                    if(financeiro.emp > 0) barColor = '#F59E0B'; // Amarelo
+                    if(financeiro.liq > 0) barColor = '#3B82F6'; // Azul
+                    if(financeiro.pag > 0) barColor = '#10B981'; // Verde
+
+                    card.innerHTML = `
+                        <img src="${dep.urlFoto}" loading="lazy">
+                        <h4>${dep.nome}</h4>
+                        <p>${dep.siglaPartido} / ${dep.siglaUf}</p>
+                        <span class="status-pill ${cssCiclo}" style="font-size:0.7rem">${ciclo}</span>
+                        <div class="dep-status-bar" style="background:${barColor}"></div>
+                    `;
+                    grid.appendChild(card);
                 });
 
                 document.getElementById('kpi-empenhado').innerText = formatarMoeda(totalEmp);
@@ -561,7 +694,7 @@
 
             } catch (error) {
                 console.error(error);
-                document.getElementById('lista-corpo').innerHTML = '<tr><td colspan="6" style="text-align:center; color:red">Erro ao carregar dados. Verifique a conexão.</td></tr>';
+                document.getElementById('lista-corpo').innerHTML = '<tr><td colspan="6" style="text-align:center; color:red">Erro ao carregar dados.</td></tr>';
             }
         }
 
@@ -569,6 +702,7 @@
             itemAtualId = obj.id;
             
             document.getElementById('modal-nome').innerText = obj.nome;
+            document.getElementById('modal-img').src = obj.urlFoto;
             document.getElementById('modal-partido').innerText = obj.siglaPartido;
             document.getElementById('modal-uf').innerText = obj.siglaUf;
             
@@ -617,13 +751,19 @@
             alert("Dados salvos com sucesso!");
             
             document.getElementById('drawer-detalhes').style.display = 'none';
-            iniciarSistema(); // Recarregar para atualizar tabela
+            iniciarSistema(); // Recarregar
         }
 
-        function filtrarTabela() {
+        function filtrarGlobal() {
             const termo = document.getElementById("filtro-nome").value.toUpperCase();
+            
+            // Filtra Tabela
             const linhas = document.querySelectorAll("#lista-corpo tr");
             linhas.forEach(l => l.style.display = l.innerText.toUpperCase().includes(termo) ? "" : "none");
+
+            // Filtra Carômetro
+            const cards = document.querySelectorAll(".dep-card");
+            cards.forEach(c => c.style.display = c.innerText.toUpperCase().includes(termo) ? "block" : "none");
         }
     </script>
 </body>
