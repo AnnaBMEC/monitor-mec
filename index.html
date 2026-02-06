@@ -6,44 +6,103 @@
     <title>Monitor MEC 2026</title>
     <style>
         body { font-family: 'Segoe UI', sans-serif; background: #eef2f5; margin: 0; padding: 20px; }
-        .container { max-width: 900px; margin: auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        h1 { color: #004a8d; border-bottom: 2px solid #004a8d; padding-bottom: 10px; }
-        .links { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 20px 0; }
-        .btn { padding: 15px; text-align: center; background: #007bff; color: white; text-decoration: none; border-radius: 8px; font-weight: bold; }
-        .btn:hover { background: #0056b3; }
+        .container { max-width: 1000px; margin: auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        h1 { color: #004a8d; border-bottom: 2px solid #004a8d; padding-bottom: 10px; display: flex; align-items: center; gap: 10px; }
+        .links { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin: 20px 0; }
+        .btn { padding: 15px; text-align: center; background: #007bff; color: white; text-decoration: none; border-radius: 8px; font-weight: bold; transition: 0.3s; }
+        .btn:hover { background: #0056b3; transform: translateY(-2px); }
         .btn-mec { background: #28a745; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
-        th { background: #f8f9fa; }
+        
+        input#filtro { width: 100%; padding: 12px; margin: 20px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
+        
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 14px; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #eee; }
+        th { background: #f8f9fa; color: #333; }
+        .foto-deputado { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
+        .loading { text-align: center; padding: 20px; font-style: italic; color: #666; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>📊 Monitor de Emendas e Links - MEC</h1>
-        
-        <div class="links">
-            <a href="https://www.camara.leg.br/deputados/quem-sao" target="_blank" class="btn">Lista de Deputados</a>
-            <a href="https://portaldatransparencia.gov.br/orgaos/26000?ano=2026" target="_blank" class="btn btn-mec">Portal Transparência (MEC)</a>
-            <a href="https://www.siop.planejamento.gov.br" target="_blank" class="btn">Sistema SIOP</a>
-            <a href="https://dadosabertos.camara.leg.br" target="_blank" class="btn">Dados Abertos Câmara</a>
-        </div>
 
-        <h3>Últimas Movimentações (MEC)</h3>
-        <table>
-            <thead>
-                <tr>
-                    <th>Parlamentar / Bancada</th>
-                    <th>Valor</th>
-                    <th>Tipo</th>
-                    <th>Ação</th>
-                </tr>
-            </thead>
-            <tbody id="dados-emendas">
-                <tr>
-                    <td colspan="4">Carregando dados reais...</td>
-                </tr>
-            </tbody>
-        </table>
+<div class="container">
+    <h1>🏛️ Monitor Parlamentar MEC</h1>
+    
+    <div class="links">
+        <a href="https://portaldatransparencia.gov.br/orgaos/26000" target="_blank" class="btn btn-mec">Portal Transparência MEC</a>
+        <a href="https://www.camara.leg.br/deputados/quem-sao" target="_blank" class="btn">Site da Câmara</a>
+        <a href="https://www12.senado.leg.br/hpsenado" target="_blank" class="btn">Site do Senado</a>
     </div>
+
+    <input type="text" id="filtro" placeholder="🔍 Digite o nome do parlamentar ou partido para filtrar..." onkeyup="filtrarTabela()">
+
+    <div id="status" class="loading">Conectando à API da Câmara...</div>
+
+    <table id="tabelaDeputados" style="display:none;">
+        <thead>
+            <tr>
+                <th>Foto</th>
+                <th>Nome</th>
+                <th>Partido/UF</th>
+                <th>E-mail</th>
+            </tr>
+        </thead>
+        <tbody id="lista-corpo">
+            </tbody>
+    </table>
+</div>
+
+<script>
+    // Função para buscar dados da API da Câmara
+    async function carregarDados() {
+        const url = "https://dadosabertos.camara.leg.br/api/v2/deputados?ordem=ASC&ordenarPor=nome";
+        
+        try {
+            const response = await fetch(url);
+            const data = await response.json();
+            const deputados = data.dados;
+            
+            const corpoTabela = document.getElementById('lista-corpo');
+            corpoTabela.innerHTML = '';
+
+            deputados.forEach(d => {
+                const linha = `
+                    <tr>
+                        <td><img src="${d.urlFoto}" class="foto-deputado"></td>
+                        <td><strong>${d.nome}</strong></td>
+                        <td>${d.siglaPartido} / ${d.siglaUf}</td>
+                        <td>${d.email || 'Não informado'}</td>
+                    </tr>
+                `;
+                corpoTabela.innerHTML += linha;
+            });
+
+            document.getElementById('status').style.display = 'none';
+            document.getElementById('tabelaDeputados').style.display = 'table';
+
+        } catch (error) {
+            document.getElementById('status').innerHTML = "Erro ao carregar dados. Tente novamente.";
+            console.error("Erro na API:", error);
+        }
+    }
+
+    // Função de filtro (busca em tempo real)
+    function filtrarTabela() {
+        const input = document.getElementById("filtro").value.toUpperCase();
+        const tr = document.getElementById("lista-corpo").getElementsByTagName("tr");
+
+        for (let i = 0; i < tr.length; i++) {
+            const tdNome = tr[i].getElementsByTagName("td")[1];
+            const tdPartido = tr[i].getElementsByTagName("td")[2];
+            if (tdNome || tdPartido) {
+                const texto = (tdNome.textContent + tdPartido.textContent).toUpperCase();
+                tr[i].style.display = texto.indexOf(input) > -1 ? "" : "none";
+            }
+        }
+    }
+
+    // Iniciar busca ao carregar página
+    window.onload = carregarDados;
+</script>
+
 </body>
 </html>
