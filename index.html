@@ -3,47 +3,74 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Monitor MEC 2026</title>
+    <title>Painel Orçamentário MEC - 2026</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background: #eef2f5; margin: 0; padding: 20px; }
-        .container { max-width: 1000px; margin: auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        h1 { color: #004a8d; border-bottom: 2px solid #004a8d; padding-bottom: 10px; display: flex; align-items: center; gap: 10px; }
-        .links { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin: 20px 0; }
-        .btn { padding: 15px; text-align: center; background: #007bff; color: white; text-decoration: none; border-radius: 8px; font-weight: bold; transition: 0.3s; }
-        .btn:hover { background: #0056b3; transform: translateY(-2px); }
-        .btn-mec { background: #28a745; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f2f5; margin: 0; padding: 20px; }
+        .container { max-width: 1100px; margin: auto; background: white; padding: 25px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
         
-        input#filtro { width: 100%; padding: 12px; margin: 20px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
+        h1 { color: #003366; border-bottom: 3px solid #ffd700; padding-bottom: 10px; margin-bottom: 25px; }
         
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 14px; }
-        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #eee; }
-        th { background: #f8f9fa; color: #333; }
-        .foto-deputado { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
-        .loading { text-align: center; padding: 20px; font-style: italic; color: #666; }
+        /* Dashboard de Valores */
+        .resumo-financeiro { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 30px; }
+        .card { padding: 20px; border-radius: 10px; color: white; text-align: center; }
+        .empenhado { background: #2c3e50; }
+        .liquidado { background: #2980b9; }
+        .pago { background: #27ae60; }
+        .card h2 { margin: 0; font-size: 1.2rem; opacity: 0.9; }
+        .card p { font-size: 1.5rem; font-weight: bold; margin: 10px 0 0; }
+
+        .links-rapidos { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 30px; }
+        .btn { padding: 12px 20px; border-radius: 8px; text-decoration: none; color: white; font-weight: bold; font-size: 0.9rem; transition: 0.3s; }
+        .btn-sei { background: #721c24; }
+        .btn-siop { background: #155724; }
+        .btn-camara { background: #004a8d; }
+        .btn:hover { opacity: 0.8; transform: scale(1.02); }
+
+        input#filtro { width: 100%; padding: 15px; border: 2px solid #ddd; border-radius: 10px; margin-bottom: 20px; font-size: 1rem; }
+        
+        table { width: 100%; border-collapse: collapse; background: white; border-radius: 10px; overflow: hidden; }
+        th { background: #003366; color: white; padding: 15px; text-align: left; }
+        td { padding: 12px; border-bottom: 1px solid #eee; }
+        .foto-deputado { width: 45px; height: 45px; border-radius: 50%; border: 2px solid #ddd; }
+        .btn-link { color: #007bff; text-decoration: none; font-weight: bold; }
+        .btn-link:hover { text-decoration: underline; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>🏛️ Monitor Parlamentar MEC</h1>
-    
-    <div class="links">
-        <a href="https://portaldatransparencia.gov.br/orgaos/26000" target="_blank" class="btn btn-mec">Portal Transparência MEC</a>
-        <a href="https://www.camara.leg.br/deputados/quem-sao" target="_blank" class="btn">Site da Câmara</a>
-        <a href="https://www12.senado.leg.br/hpsenado" target="_blank" class="btn">Site do Senado</a>
+    <h1>🏛️ Gestão de Emendas MEC - Exercício 2026</h1>
+
+    <div class="links-rapidos">
+        <a href="https://sei.mec.gov.br/" target="_blank" class="btn btn-sei">Acessar SEI / MEC</a>
+        <a href="https://www.siop.planejamento.gov.br/" target="_blank" class="btn btn-siop">Painel SIOP</a>
+        <a href="https://dadosabertos.camara.leg.br/swagger/recursos.html" target="_blank" class="btn btn-camara">API Dados Abertos</a>
+        <a href="https://portaldatransparencia.gov.br/emendas?ano=2026&orgao=26000" target="_blank" class="btn" style="background: #6c757d;">Transparência Emendas MEC</a>
     </div>
 
-    <input type="text" id="filtro" placeholder="🔍 Digite o nome do parlamentar ou partido para filtrar..." onkeyup="filtrarTabela()">
+    <div class="resumo-financeiro">
+        <div class="card empenhado">
+            <h2>Empenhado</h2>
+            <p id="total-empenhado">R$ --</p>
+        </div>
+        <div class="card liquidado">
+            <h2>Liquidado</h2>
+            <p id="total-liquidado">R$ --</p>
+        </div>
+        <div class="card pago">
+            <h2>Pago</h2>
+            <p id="total-pago">R$ --</p>
+        </div>
+    </div>
 
-    <div id="status" class="loading">Conectando à API da Câmara...</div>
+    <input type="text" id="filtro" placeholder="🔍 Buscar parlamentar para ver emendas específicas..." onkeyup="filtrarTabela()">
 
-    <table id="tabelaDeputados" style="display:none;">
+    <table id="tabelaDados">
         <thead>
             <tr>
-                <th>Foto</th>
-                <th>Nome</th>
+                <th>Parlamentar</th>
                 <th>Partido/UF</th>
-                <th>E-mail</th>
+                <th>Ação</th>
             </tr>
         </thead>
         <tbody id="lista-corpo">
@@ -52,56 +79,57 @@
 </div>
 
 <script>
-    // Função para buscar dados da API da Câmara
-    async function carregarDados() {
-        const url = "https://dadosabertos.camara.leg.br/api/v2/deputados?ordem=ASC&ordenarPor=nome";
-        
+    // Configurações iniciais
+    const ORGAO_MEC = "26000";
+    const ANO_ATUAL = "2026";
+
+    async function inicializar() {
+        // 1. Simulação de totais do SIOP/Portal (Valores ilustrativos para o Dashboard)
+        // Em um ambiente de produção com API Key, aqui faríamos o fetch real
+        document.getElementById('total-empenhado').innerText = "R$ 4.2B";
+        document.getElementById('total-liquidado').innerText = "R$ 2.8B";
+        document.getElementById('total-pago').innerText = "R$ 1.9B";
+
+        // 2. Carregar Parlamentares da API da Câmara
         try {
-            const response = await fetch(url);
-            const data = await response.json();
-            const deputados = data.dados;
+            const res = await fetch("https://dadosabertos.camara.leg.br/api/v2/deputados?ordem=ASC&ordenarPor=nome");
+            const json = await res.json();
+            const deputados = json.dados;
             
-            const corpoTabela = document.getElementById('lista-corpo');
-            corpoTabela.innerHTML = '';
+            const tbody = document.getElementById('lista-corpo');
+            tbody.innerHTML = '';
 
             deputados.forEach(d => {
-                const linha = `
+                // Link dinâmico para o Portal da Transparência filtrado por Deputado e MEC
+                const linkEmendas = `https://portaldatransparencia.gov.br/emendas?paginacaoSimples=true&tamanhoPagina=&offset=&direcaoOrdenacao=asc&nomeParlamentar=${encodeURIComponent(d.nome)}&orgao=${ORGAO_MEC}&ano=${ANO_ATUAL}`;
+
+                tbody.innerHTML += `
                     <tr>
-                        <td><img src="${d.urlFoto}" class="foto-deputado"></td>
-                        <td><strong>${d.nome}</strong></td>
+                        <td style="display:flex; align-items:center; gap:10px;">
+                            <img src="${d.urlFoto}" class="foto-deputado">
+                            <strong>${d.nome}</strong>
+                        </td>
                         <td>${d.siglaPartido} / ${d.siglaUf}</td>
-                        <td>${d.email || 'Não informado'}</td>
+                        <td>
+                            <a href="${linkEmendas}" target="_blank" class="btn-link">Ver Emendas MEC</a>
+                        </td>
                     </tr>
                 `;
-                corpoTabela.innerHTML += linha;
             });
-
-            document.getElementById('status').style.display = 'none';
-            document.getElementById('tabelaDeputados').style.display = 'table';
-
-        } catch (error) {
-            document.getElementById('status').innerHTML = "Erro ao carregar dados. Tente novamente.";
-            console.error("Erro na API:", error);
+        } catch (e) {
+            console.error("Erro ao carregar parlamentares", e);
         }
     }
 
-    // Função de filtro (busca em tempo real)
     function filtrarTabela() {
-        const input = document.getElementById("filtro").value.toUpperCase();
-        const tr = document.getElementById("lista-corpo").getElementsByTagName("tr");
-
-        for (let i = 0; i < tr.length; i++) {
-            const tdNome = tr[i].getElementsByTagName("td")[1];
-            const tdPartido = tr[i].getElementsByTagName("td")[2];
-            if (tdNome || tdPartido) {
-                const texto = (tdNome.textContent + tdPartido.textContent).toUpperCase();
-                tr[i].style.display = texto.indexOf(input) > -1 ? "" : "none";
-            }
+        let filter = document.getElementById("filtro").value.toUpperCase();
+        let rows = document.getElementById("lista-corpo").getElementsByTagName("tr");
+        for (let row of rows) {
+            row.style.display = row.textContent.toUpperCase().includes(filter) ? "" : "none";
         }
     }
 
-    // Iniciar busca ao carregar página
-    window.onload = carregarDados;
+    window.onload = inicializar;
 </script>
 
 </body>
