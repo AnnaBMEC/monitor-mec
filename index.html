@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monitor MEC 2026</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #eef2f5; margin: 0; padding: 20px; }
+        .container { max-width: 900px; margin: auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        h1 { color: #004a8d; border-bottom: 2px solid #004a8d; padding-bottom: 10px; }
+        .links { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 20px 0; }
+        .btn { padding: 15px; text-align: center; background: #007bff; color: white; text-decoration: none; border-radius: 8px; font-weight: bold; }
+        .btn:hover { background: #0056b3; }
+        .btn-mec { background: #28a745; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
+        th { background: #f8f9fa; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📊 Monitor de Emendas e Links - MEC</h1>
+        
+        <div class="links">
+            <a href="https://www.camara.leg.br/deputados/quem-sao" target="_blank" class="btn">Lista de Deputados</a>
+            <a href="https://portaldatransparencia.gov.br/orgaos/26000?ano=2026" target="_blank" class="btn btn-mec">Portal Transparência (MEC)</a>
+            <a href="https://www.siop.planejamento.gov.br" target="_blank" class="btn">Sistema SIOP</a>
+            <a href="https://dadosabertos.camara.leg.br" target="_blank" class="btn">Dados Abertos Câmara</a>
+        </div>
+
+        <h3>Últimas Movimentações (MEC)</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Parlamentar / Bancada</th>
+                    <th>Valor</th>
+                    <th>Tipo</th>
+                    <th>Ação</th>
+                </tr>
+            </thead>
+            <tbody id="dados-emendas">
+                <tr>
+                    <td colspan="4">Carregando dados reais...</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
