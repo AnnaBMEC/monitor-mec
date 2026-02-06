@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SGA - Sistema de Gestão ASPAR v5.0</title>
+    <title>SGA - Sistema de Gestão ASPAR v5.1</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Rawline:wght@300;400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -78,7 +78,6 @@
         }
         .nav-link i { width: 20px; text-align: center; font-size: 1.1rem; }
 
-        /* Badge Outlook */
         .badge-new { background: var(--mec-yellow); color: #000; font-size: 0.7rem; font-weight: 700; padding: 2px 8px; border-radius: 12px; margin-left: auto; }
 
         /* --- MAIN CONTENT --- */
@@ -94,9 +93,8 @@
 
         .content-area { flex: 1; overflow-y: auto; padding: 32px; max-width: 1600px; margin: 0 auto; width: 100%; }
 
-        /* KPI Cards - Clean Style */
+        /* KPI Cards */
         .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-bottom: 32px; }
-        
         .kpi-card {
             background: white; border-radius: var(--radius); padding: 24px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.04); border: 1px solid var(--border-color);
@@ -116,10 +114,8 @@
         .kpi-icon { position: absolute; right: 20px; top: 20px; font-size: 2rem; opacity: 0.05; }
         .kpi-sub { font-size: 0.8rem; color: #889; display: flex; align-items: center; gap: 6px; }
 
-        /* Acessos Rápidos - Minimalista */
-        .quick-access-bar {
-            display: flex; gap: 12px; margin-bottom: 24px; flex-wrap: wrap;
-        }
+        /* Acessos Rápidos */
+        .quick-access-bar { display: flex; gap: 12px; margin-bottom: 24px; flex-wrap: wrap; }
         .quick-chip {
             background: white; border: 1px solid var(--border-color); padding: 8px 16px;
             border-radius: 20px; font-size: 0.85rem; color: var(--text-primary); text-decoration: none;
@@ -128,14 +124,12 @@
         .quick-chip:hover { border-color: var(--mec-blue-light); color: var(--mec-blue-light); background: #f0f7ff; }
         .quick-chip i { color: var(--mec-blue-mid); }
 
-        /* Toolbar de Filtros */
+        /* Toolbar */
         .toolbar {
             background: white; padding: 16px; border-radius: var(--radius); border: 1px solid var(--border-color);
             margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center; gap: 16px;
         }
-        .search-box {
-            position: relative; flex: 1; max-width: 400px;
-        }
+        .search-box { position: relative; flex: 1; max-width: 400px; }
         .search-box input {
             width: 100%; padding: 10px 12px 10px 40px; border: 1px solid var(--border-color); border-radius: 6px;
             font-family: 'Inter'; font-size: 0.95rem; outline: none; transition: 0.2s;
@@ -143,21 +137,14 @@
         .search-box input:focus { border-color: var(--mec-blue-light); box-shadow: 0 0 0 3px rgba(38, 112, 232, 0.1); }
         .search-box i { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #999; }
 
-        .btn-toggle-view {
-            display: flex; background: #E2E8F0; padding: 4px; border-radius: 6px;
-        }
-        .btn-view {
-            border: none; background: transparent; padding: 6px 12px; border-radius: 4px; cursor: pointer; color: #666; font-size: 0.9rem;
-        }
+        .btn-toggle-view { display: flex; background: #E2E8F0; padding: 4px; border-radius: 6px; }
+        .btn-view { border: none; background: transparent; padding: 6px 12px; border-radius: 4px; cursor: pointer; color: #666; font-size: 0.9rem; }
         .btn-view.active { background: white; color: var(--mec-blue-dark); font-weight: 600; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
 
-        /* Tabela Profissional */
+        /* Tabela */
         .table-card { background: white; border-radius: var(--radius); border: 1px solid var(--border-color); overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
         table { width: 100%; border-collapse: collapse; }
-        th { 
-            background: #FAFBFC; text-align: left; padding: 14px 20px; font-size: 0.75rem; 
-            text-transform: uppercase; color: var(--text-secondary); font-weight: 700; border-bottom: 1px solid var(--border-color);
-        }
+        th { background: #FAFBFC; text-align: left; padding: 14px 20px; font-size: 0.75rem; text-transform: uppercase; color: var(--text-secondary); font-weight: 700; border-bottom: 1px solid var(--border-color); }
         td { padding: 16px 20px; border-bottom: 1px solid var(--border-color); vertical-align: middle; font-size: 0.95rem; }
         tr:last-child td { border-bottom: none; }
         tr:hover { background: #f8fbff; cursor: pointer; }
@@ -178,69 +165,48 @@
         .profile-name { font-weight: 700; color: var(--mec-blue-dark); font-size: 1rem; margin-bottom: 4px; }
         .profile-party { font-size: 0.85rem; color: var(--text-secondary); background: #f0f0f0; display: inline-block; padding: 2px 8px; border-radius: 12px; }
 
-        /* Drawer Lateral (Detalhes) */
-        .drawer-overlay {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.4); z-index: 1000; justify-content: flex-end; backdrop-filter: blur(2px);
-        }
-        .drawer {
-            width: 700px; background: white; height: 100%; box-shadow: -10px 0 30px rgba(0,0,0,0.1);
-            display: flex; flex-direction: column; animation: slideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
+        /* Modais */
+        .modal-center-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2000; justify-content: center; align-items: center; }
+        .modal-box { background: white; padding: 0; border-radius: 12px; width: 600px; max-width: 90%; box-shadow: 0 20px 50px rgba(0,0,0,0.2); animation: zoomIn 0.2s; overflow: hidden; display: flex; flex-direction: column; max-height: 85vh; }
+        .modal-header-box { background: var(--mec-blue-dark); color: white; padding: 20px; display: flex; justify-content: space-between; align-items: center; }
+        .modal-body-box { padding: 25px; overflow-y: auto; }
 
-        .drawer-header {
-            padding: 24px 32px; background: var(--mec-blue-dark); color: white;
-            display: flex; justify-content: space-between; align-items: center;
+        /* Estilo Contatos Lista */
+        .contact-section-title {
+            font-size: 0.85rem; color: var(--mec-blue-mid); text-transform: uppercase; font-weight: 700;
+            border-bottom: 2px solid var(--mec-yellow); padding-bottom: 5px; margin: 20px 0 15px 0;
         }
+        .contact-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #f0f0f0; align-items: center; }
+        .contact-row:last-child { border-bottom: none; }
+        .contact-label { font-weight: 600; color: #333; display: block; }
+        .contact-sub { font-size: 0.85rem; color: #666; }
+        .contact-action { color: var(--mec-blue-light); text-decoration: none; font-weight: 600; font-size: 0.9rem; }
+        
+        /* Drawer */
+        .drawer-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); z-index: 1000; justify-content: flex-end; backdrop-filter: blur(2px); }
+        .drawer { width: 700px; background: white; height: 100%; box-shadow: -10px 0 30px rgba(0,0,0,0.1); display: flex; flex-direction: column; animation: slideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+        @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
+        @keyframes zoomIn { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+        .drawer-header { padding: 24px 32px; background: var(--mec-blue-dark); color: white; display: flex; justify-content: space-between; align-items: center; }
         .drawer-content { flex: 1; overflow-y: auto; padding: 32px; background: #fff; }
         
+        /* Info Grid */
         .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 30px; }
         .info-item { background: #f9f9f9; padding: 12px; border-radius: 6px; border: 1px solid #eee; }
         .info-label { font-size: 0.75rem; color: #888; text-transform: uppercase; font-weight: 600; display: block; margin-bottom: 4px; }
         .info-value { font-size: 0.95rem; color: #333; font-weight: 500; display: flex; align-items: center; gap: 8px; }
 
-        /* Stepper de Status */
-        .stepper { display: flex; justify-content: space-between; position: relative; margin: 30px 0; }
-        .stepper::before { content: ''; position: absolute; top: 14px; left: 0; width: 100%; height: 2px; background: #e0e0e0; z-index: 0; }
-        .step { position: relative; z-index: 1; text-align: center; background: white; padding: 0 10px; }
-        .step-circle { 
-            width: 30px; height: 30px; border-radius: 50%; background: #e0e0e0; color: white; 
-            display: flex; align-items: center; justify-content: center; margin: 0 auto 8px; font-weight: 700; font-size: 0.8rem;
-        }
-        .step.active .step-circle { background: var(--mec-blue-light); }
-        .step.done .step-circle { background: #008000; }
-        .step-text { font-size: 0.75rem; font-weight: 600; color: #666; }
-
-        /* Inputs e Formulários */
+        /* Form */
         .form-label { display: block; font-size: 0.85rem; font-weight: 600; color: var(--text-primary); margin-bottom: 6px; }
-        .form-control {
-            width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 6px;
-            font-family: 'Inter'; font-size: 0.95rem; margin-bottom: 20px;
-        }
-        textarea.form-control { min-height: 100px; resize: vertical; }
-
-        .btn-save {
-            background: var(--mec-blue-dark); color: white; border: none; padding: 12px 24px;
-            border-radius: 6px; font-weight: 600; cursor: pointer; transition: 0.2s;
-        }
-        .btn-save:hover { background: #002855; }
-
-        /* Status Colors */
+        .form-control { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 6px; font-family: 'Inter'; font-size: 0.95rem; margin-bottom: 20px; }
+        .btn-save { background: var(--mec-blue-dark); color: white; border: none; padding: 12px 24px; border-radius: 6px; font-weight: 600; cursor: pointer; transition: 0.2s; width: 100%; }
+        
         .status-pill { padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
         .st-gray { background: #e9ecef; color: #495057; }
         .st-blue { background: #e7f5ff; color: #004a8d; }
         .st-green { background: #d3f9d8; color: #0b7285; }
-        
-        /* Modais Extras */
-        .modal-center-overlay {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.5); z-index: 2000; justify-content: center; align-items: center;
-        }
-        .modal-box {
-            background: white; padding: 30px; border-radius: 12px; width: 450px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.2); animation: zoomIn 0.2s;
-        }
+
     </style>
 </head>
 <body>
@@ -271,7 +237,7 @@
                 <i class="fa-solid fa-bell"></i> Avisos
             </a>
             <a onclick="abrirModal('modal-contatos')" class="nav-link">
-                <i class="fa-solid fa-phone"></i> Contatos SPO
+                <i class="fa-solid fa-phone"></i> Contatos Úteis
             </a>
         </nav>
     </aside>
@@ -352,7 +318,7 @@
                         </tr>
                     </thead>
                     <tbody id="tbody-dados">
-                        <tr><td colspan="6" style="padding:40px; text-align:center; color:#777"><i class="fa-solid fa-spinner fa-spin"></i> Carregando base de dados integrada...</td></tr>
+                        <tr><td colspan="6" style="padding:40px; text-align:center; color:#777"><i class="fa-solid fa-spinner fa-spin"></i> Carregando base de dados...</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -420,45 +386,110 @@
                     <label class="form-label">Unidade Responsável</label>
                     <select id="crm-responsavel" class="form-control">
                         <option value="">-- Selecione --</option>
-                        <option value="FNDE">FNDE - Fundo Nacional</option>
-                        <option value="SESU">SESu - Ensino Superior</option>
-                        <option value="SETEC">SETEC - Ensino Tecnológico</option>
-                        <option value="SEB">SEB - Educação Básica</option>
+                        <option value="FNDE">FNDE</option>
+                        <option value="SESU">SESu</option>
+                        <option value="SETEC">SETEC</option>
+                        <option value="SEB">SEB</option>
                     </select>
-
-                    <label class="form-label">Observações Políticas</label>
+                    <label class="form-label">Observações</label>
                     <textarea id="crm-obs" class="form-control" placeholder="Registre reuniões, ofícios e pendências..."></textarea>
-                    
-                    <button class="btn-save" onclick="salvarCRM()" style="width:100%">Salvar Dados</button>
+                    <button class="btn-save" onclick="salvarCRM()">Salvar Dados</button>
                 </div>
             </div>
         </div>
     </div>
 
     <div id="modal-outlook" class="modal-center-overlay" onclick="fecharModal(event, 'modal-outlook')">
-        <div class="modal-box" style="text-align:center;">
+        <div class="modal-box" style="text-align:center; padding:40px;">
             <i class="fa-solid fa-envelope-open-text" style="font-size:3rem; color:#0078d4; margin-bottom:20px;"></i>
             <h3 style="margin-bottom:10px; color:#333;">Acesso ao Outlook Web</h3>
-            <p style="color:#666; margin-bottom:20px;">Você será redirecionado para o ambiente seguro da Microsoft.</p>
+            <p style="color:#666; margin-bottom:20px;">Redirecionando para o ambiente seguro da Microsoft.</p>
             <a href="https://outlook.office.com/mail/" target="_blank" style="display:inline-block; background:#0078d4; color:white; padding:12px 30px; border-radius:6px; text-decoration:none; font-weight:600;">Abrir E-mail</a>
         </div>
     </div>
 
     <div id="modal-contatos" class="modal-center-overlay" onclick="fecharModal(event, 'modal-contatos')">
         <div class="modal-box">
-            <h3 style="color:var(--mec-blue-dark); margin-bottom:20px; border-bottom:1px solid #eee; padding-bottom:10px;">Contatos SPO</h3>
-            <div style="text-align:left;">
-                <div style="margin-bottom:15px;">
-                    <strong style="color:var(--mec-blue-mid); display:block;">Adalton Rocha (Subsecretário)</strong>
-                    <span style="font-size:0.9rem; color:#555;">(61) 2022-8801</span>
+            <div class="modal-header-box">
+                <h3 style="margin:0;"><i class="fa-solid fa-address-book"></i> Diretório de Contatos</h3>
+                <i class="fa-solid fa-times" onclick="fecharModal(null, 'modal-contatos')" style="cursor:pointer;"></i>
+            </div>
+            <div class="modal-body-box">
+                
+                <div class="contact-section-title">Destaques & Atendimento</div>
+                <div class="contact-row">
+                    <div>
+                        <span class="contact-label">WhatsApp MEC</span>
+                        <span class="contact-sub">(11) 97715-4092</span>
+                    </div>
+                    <a href="https://wa.me/5511977154092" target="_blank" class="contact-action"><i class="fa-brands fa-whatsapp"></i> Iniciar</a>
                 </div>
-                <div style="margin-bottom:15px;">
-                    <strong style="color:var(--mec-blue-mid); display:block;">Luciana Nunes (Chefe Gabinete)</strong>
-                    <span style="font-size:0.9rem; color:#555;">(61) 2022-8803</span>
+                <div class="contact-row">
+                    <div>
+                        <span class="contact-label">NAAI (Atendimento IES)</span>
+                        <span class="contact-sub">(61) 2022-8199</span>
+                    </div>
+                    <a href="#" class="contact-action"><i class="fa-solid fa-phone"></i> Ligar</a>
                 </div>
-                <div style="margin-bottom:15px;">
-                    <strong style="color:var(--mec-blue-mid); display:block;">Ana Karina (Orçamento)</strong>
-                    <span style="font-size:0.9rem; color:#555;">(61) 2022-8835</span>
+
+                <div class="contact-section-title">Sistemas & Autarquias</div>
+                <div class="contact-row">
+                    <div>
+                        <span class="contact-label">FNDE - Fundo Nacional</span>
+                        <span class="contact-sub">0800 616161 (Opção 1) | fundeb@fnde.gov.br</span>
+                    </div>
+                    <a href="https://www.gov.br/fnde/pt-br" target="_blank" class="contact-action">Site</a>
+                </div>
+                <div class="contact-row">
+                    <div>
+                        <span class="contact-label">SISU / Acesso Único</span>
+                        <span class="contact-sub">0800-616161</span>
+                    </div>
+                    <a href="https://sisu.mec.gov.br" target="_blank" class="contact-action">Site</a>
+                </div>
+                <div class="contact-row">
+                    <div>
+                        <span class="contact-label">FIES</span>
+                        <span class="contact-sub">0800 104 0 104 (Caixa)</span>
+                    </div>
+                    <a href="http://acessounico.mec.gov.br/fies" target="_blank" class="contact-action">Site</a>
+                </div>
+                <div class="contact-row">
+                    <div>
+                        <span class="contact-label">SETEC</span>
+                        <span class="contact-sub">Secretaria de Educ. Profissional</span>
+                    </div>
+                    <a href="https://www.gov.br/mec/pt-br/composicao/setec" target="_blank" class="contact-action">Site</a>
+                </div>
+
+                <div class="contact-section-title">Equipe Técnica SPO (Planejamento)</div>
+                <div class="contact-row">
+                    <div>
+                        <span class="contact-label">Adalton Rocha De Matos</span>
+                        <span class="contact-sub">Subsecretário | (61) 2022-8801</span>
+                    </div>
+                    <span class="contact-sub">Adalton.Matos@mec.gov.br</span>
+                </div>
+                <div class="contact-row">
+                    <div>
+                        <span class="contact-label">Luciana Nunes de Oliveira</span>
+                        <span class="contact-sub">Chefe de Gabinete | (61) 2022-8803</span>
+                    </div>
+                    <span class="contact-sub">LucianaNunes@mec.gov.br</span>
+                </div>
+                <div class="contact-row">
+                    <div>
+                        <span class="contact-label">Ana Karina (Orçamento)</span>
+                        <span class="contact-sub">Coord. Geral | (61) 2022-8835</span>
+                    </div>
+                    <span class="contact-sub">anakarina@mec.gov.br</span>
+                </div>
+                <div class="contact-row">
+                    <div>
+                        <span class="contact-label">André Luiz Mayrink (Finanças)</span>
+                        <span class="contact-sub">Coord. Geral | (61) 2022-8912</span>
+                    </div>
+                    <span class="contact-sub">andremayrink@mec.gov.br</span>
                 </div>
             </div>
         </div>
@@ -466,34 +497,35 @@
 
     <div id="modal-avisos" class="modal-center-overlay" onclick="fecharModal(event, 'modal-avisos')">
         <div class="modal-box">
-            <h3 style="color:var(--mec-blue-dark); margin-bottom:20px;">Central de Avisos</h3>
-            <div style="background:#fff3cd; padding:15px; border-radius:6px; border-left:4px solid #fecb00; margin-bottom:10px; text-align:left;">
-                <strong>Monitoramento Ativo</strong><br>
-                <span style="font-size:0.9rem;">Dados sincronizados com Portal da Transparência (Exercício 2026).</span>
+            <div class="modal-header-box">
+                <h3 style="margin:0;">Central de Avisos</h3>
+                <i class="fa-solid fa-times" onclick="fecharModal(null, 'modal-avisos')" style="cursor:pointer;"></i>
+            </div>
+            <div class="modal-body-box">
+                <div style="background:#fff3cd; padding:15px; border-radius:6px; border-left:4px solid #fecb00; margin-bottom:10px;">
+                    <strong style="color:#856404;">Monitoramento Ativo</strong>
+                    <p style="margin:5px 0 0; font-size:0.9rem; color:#856404;">Dados sincronizados com Portal da Transparência (Exercício 2026).</p>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
-        // --- CONFIGURAÇÃO ---
+        // CONFIG
         const API_KEY = "2e820c7589765e7414b397836e6d1976";
         const ORGAO = "26000"; 
         const ANO = "2026";
-        
         let baseDados = [];
         let deputadoAtualId = null;
 
         window.onload = iniciarSistema;
 
-        // --- SISTEMA ---
         async function iniciarSistema() {
             try {
-                // 1. Busca Deputados (Lista Básica)
                 const res = await fetch("https://dadosabertos.camara.leg.br/api/v2/deputados?ordem=ASC&ordenarPor=nome");
                 const json = await res.json();
                 const deputados = json.dados;
 
-                // 2. Busca Financeiro (Proxy Transparência)
                 const urlFin = `https://api.portaldatransparencia.gov.br/api-de-dados/emendas?codigoOrgao=${ORGAO}&ano=${ANO}&pagina=1`;
                 const proxy = `https://api.allorigins.win/get?url=${encodeURIComponent(urlFin)}`;
                 
@@ -511,31 +543,25 @@
                                 const emp = parseFloat(e.valorEmpenhado.replace(/\./g,'').replace(',','.'));
                                 const liq = parseFloat(e.valorLiquidado.replace(/\./g,'').replace(',','.'));
                                 const pag = parseFloat(e.valorPago.replace(/\./g,'').replace(',','.'));
-                                
                                 if(!finMap[autor]) finMap[autor] = { emp: 0, liq: 0, pag: 0 };
                                 finMap[autor].emp += emp; finMap[autor].liq += liq; finMap[autor].pag += pag;
                                 tEmp += emp; tLiq += liq; tPag += pag;
                             });
                         }
                     }
-                } catch(e) { console.log("Dados financeiros indisponíveis momentaneamente"); }
+                } catch(e) { console.log("Dados financeiros indisponíveis"); }
 
-                // 3. Montar Dados
                 baseDados = deputados.map(dep => {
                     const financeiro = finMap[dep.nome.toUpperCase()] || { emp: 0, liq: 0, pag: 0 };
                     const crm = JSON.parse(localStorage.getItem(`sga_crm_${dep.id}`)) || {};
-                    
                     let status = "Indicada";
                     let statusClass = "st-gray";
                     if(financeiro.emp > 0) { status = "Empenhada"; statusClass = "st-blue"; }
                     if(financeiro.pag > 0) { status = "Paga"; statusClass = "st-green"; }
-
                     return { ...dep, financeiro, crm, status, statusClass };
                 });
 
                 renderizarTelas();
-                
-                // Atualizar KPIs
                 document.getElementById('kpi-empenhado').innerText = formatarMoeda(tEmp);
                 document.getElementById('kpi-liquidado').innerText = formatarMoeda(tLiq);
                 document.getElementById('kpi-pago').innerText = formatarMoeda(tPag);
@@ -543,29 +569,23 @@
 
             } catch (error) {
                 console.error(error);
-                document.getElementById('tbody-dados').innerHTML = '<tr><td colspan="6" style="text-align:center">Erro ao conectar à API.</td></tr>';
+                document.getElementById('tbody-dados').innerHTML = '<tr><td colspan="6" style="text-align:center">Erro API.</td></tr>';
             }
         }
 
         function renderizarTelas() {
             const tbody = document.getElementById('tbody-dados');
             const grid = document.getElementById('view-carometro');
-            
-            tbody.innerHTML = '';
-            grid.innerHTML = '';
+            tbody.innerHTML = ''; grid.innerHTML = '';
 
             baseDados.forEach(d => {
-                // Tabela
                 const tr = document.createElement('tr');
                 tr.onclick = () => abrirDetalhes(d);
                 tr.innerHTML = `
                     <td>
                         <div class="user-cell">
                             <img src="${d.urlFoto}" class="user-avatar">
-                            <div>
-                                <span class="user-name">${d.nome}</span>
-                                <span class="user-meta">${d.siglaPartido} - ${d.siglaUf}</span>
-                            </div>
+                            <div><span class="user-name">${d.nome}</span><span class="user-meta">${d.siglaPartido} - ${d.siglaUf}</span></div>
                         </div>
                     </td>
                     <td><span class="status-pill ${d.statusClass}">${d.status}</span></td>
@@ -576,7 +596,6 @@
                 `;
                 tbody.appendChild(tr);
 
-                // Carômetro
                 const card = document.createElement('div');
                 card.className = 'profile-card';
                 card.onclick = () => abrirDetalhes(d);
@@ -584,73 +603,50 @@
                     <img src="${d.urlFoto}" class="profile-img" loading="lazy">
                     <div class="profile-name">${d.nome}</div>
                     <div class="profile-party">${d.siglaPartido} / ${d.siglaUf}</div>
-                    <div style="margin-top:10px;">
-                        <span class="status-pill ${d.statusClass}">${d.status}</span>
-                    </div>
+                    <div style="margin-top:10px;"><span class="status-pill ${d.statusClass}">${d.status}</span></div>
                 `;
                 grid.appendChild(card);
             });
         }
 
-        // --- DETALHES COM FETCH API ---
         async function abrirDetalhes(obj) {
             deputadoAtualId = obj.id;
             const drawer = document.getElementById('drawer-detalhes');
-            
-            // Dados Básicos (Já temos)
             document.getElementById('detalhe-foto').src = obj.urlFoto;
             document.getElementById('detalhe-nome').innerText = obj.nome;
             document.getElementById('detalhe-partido').innerText = `${obj.siglaPartido} - ${obj.siglaUf}`;
             document.getElementById('detalhe-fin-emp').innerText = formatarMoeda(obj.financeiro.emp);
             document.getElementById('detalhe-fin-pag').innerText = formatarMoeda(obj.financeiro.pag);
-            
-            // CRM (LocalStorage)
             const crm = obj.crm || {};
             document.getElementById('crm-responsavel').value = crm.responsavel || "";
             document.getElementById('crm-obs').value = crm.obs || "";
-
-            // Resetar campos de detalhe enquanto carrega
+            
             document.getElementById('detalhe-nome-civil').innerText = "Carregando...";
             document.getElementById('detalhe-nascimento').innerText = "...";
-            document.getElementById('detalhe-email').innerText = "...";
-            document.getElementById('detalhe-telefone').innerText = "...";
-            document.getElementById('detalhe-gabinete').innerText = "...";
-
             drawer.style.display = 'flex';
 
-            // --- FETCH DETALHADO (Dados Pessoais) ---
             try {
                 const res = await fetch(`https://dadosabertos.camara.leg.br/api/v2/deputados/${obj.id}`);
                 const json = await res.json();
                 const dados = json.dados;
-                
-                // Formatar Data
                 let dataNasc = "--";
                 if(dados.dataNascimento) {
-                    const partes = dados.dataNascimento.split('-');
-                    dataNasc = `${partes[2]}/${partes[1]}/${partes[0]}`;
+                    const p = dados.dataNascimento.split('-');
+                    dataNasc = `${p[2]}/${p[1]}/${p[0]}`;
                 }
-
                 document.getElementById('detalhe-nome-civil').innerText = dados.nomeCivil;
                 document.getElementById('detalhe-nascimento').innerText = dataNasc;
-                document.getElementById('detalhe-email').innerText = dados.ultimoStatus.gabinete.email || "Não informado";
-                document.getElementById('detalhe-telefone').innerText = dados.ultimoStatus.gabinete.telefone || "Não informado";
-                document.getElementById('detalhe-gabinete').innerText = `Sala ${dados.ultimoStatus.gabinete.sala}, Anexo ${dados.ultimoStatus.gabinete.anexo || ''}`;
-
-            } catch (e) {
-                console.error("Erro ao buscar detalhes", e);
-                document.getElementById('detalhe-nome-civil').innerText = "Não disponível";
-            }
+                document.getElementById('detalhe-email').innerText = dados.ultimoStatus.gabinete.email || "--";
+                document.getElementById('detalhe-telefone').innerText = dados.ultimoStatus.gabinete.telefone || "--";
+                document.getElementById('detalhe-gabinete').innerText = `Sala ${dados.ultimoStatus.gabinete.sala}, Anexo ${dados.ultimoStatus.gabinete.anexo}`;
+            } catch (e) { document.getElementById('detalhe-nome-civil').innerText = "Indisponível"; }
         }
 
         function salvarCRM() {
             if(!deputadoAtualId) return;
-            const dados = {
-                responsavel: document.getElementById('crm-responsavel').value,
-                obs: document.getElementById('crm-obs').value
-            };
+            const dados = { responsavel: document.getElementById('crm-responsavel').value, obs: document.getElementById('crm-obs').value };
             localStorage.setItem(`sga_crm_${deputadoAtualId}`, JSON.stringify(dados));
-            alert("Dados salvos com sucesso.");
+            alert("Dados salvos.");
             document.getElementById('drawer-detalhes').style.display = 'none';
             iniciarSistema();
         }
@@ -658,32 +654,24 @@
         function switchView(view) {
             document.getElementById('view-table').style.display = view === 'table' ? 'block' : 'none';
             document.getElementById('view-carometro').style.display = view === 'carometro' ? 'grid' : 'none';
-            
             document.getElementById('btn-view-table').className = view === 'table' ? 'btn-view active' : 'btn-view';
             document.getElementById('btn-view-grid').className = view === 'carometro' ? 'btn-view active' : 'btn-view';
-
             document.getElementById('menu-painel').className = view === 'table' ? 'nav-link active' : 'nav-link';
             document.getElementById('menu-carometro').className = view === 'carometro' ? 'nav-link active' : 'nav-link';
         }
 
         function filtrarGlobal() {
             const termo = document.getElementById('filtro-global').value.toUpperCase();
-            
-            // Filtro Tabela
             const linhas = document.querySelectorAll('#tbody-dados tr');
             linhas.forEach(l => l.style.display = l.innerText.toUpperCase().includes(termo) ? '' : 'none');
-
-            // Filtro Carômetro
             const cards = document.querySelectorAll('.profile-card');
             cards.forEach(c => c.style.display = c.innerText.toUpperCase().includes(termo) ? '' : 'none');
         }
 
-        // Utils
-        function formatarMoeda(v) { return v.toLocaleString('pt-BR', {style:'currency', currency:'BRL'}); }
         function abrirModal(id) { document.getElementById(id).style.display = 'flex'; }
         function fecharModal(e, id) { if(!e || e.target.id === id) document.getElementById(id).style.display = 'none'; }
         function fecharDrawer(e, force) { if(force || e.target.id === 'drawer-detalhes') document.getElementById('drawer-detalhes').style.display = 'none'; }
-
+        function formatarMoeda(v) { return v.toLocaleString('pt-BR', {style:'currency', currency:'BRL'}); }
     </script>
 </body>
 </html>
