@@ -9,38 +9,33 @@
         .container { max-width: 1200px; margin: auto; background: white; padding: 25px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
         h1 { color: #003366; border-bottom: 3px solid #ffd700; padding-bottom: 10px; margin-bottom: 25px; }
         
-        /* Dashboard Financeiro */
         .resumo-financeiro { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 30px; }
         .card { padding: 20px; border-radius: 10px; color: white; text-align: center; }
         .empenhado { background: #2c3e50; }
         .pago { background: #27ae60; }
         .bancada { background: #8e44ad; }
         .card h2 { margin: 0; font-size: 1rem; opacity: 0.9; }
-        .card p { font-size: 1.4rem; font-weight: bold; margin: 10px 0 0; }
+        .card p { font-size: 1.3rem; font-weight: bold; margin: 10px 0 0; }
 
-        /* Alerta de Atualização */
-        #alert-box { display: none; background: #fff3cd; border: 1px solid #ffeeba; color: #856404; padding: 15px; border-radius: 8px; margin-bottom: 20px; animation: slideDown 0.5s ease-out; }
-        @keyframes slideDown { from { transform: translateY(-20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        #alert-box { display: none; background: #d4edda; border: 1px solid #c3e6cb; color: #155724; padding: 15px; border-radius: 8px; margin-bottom: 20px; }
 
         .links-rapidos { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 30px; }
         .btn { padding: 12px 20px; border-radius: 8px; text-decoration: none; color: white; font-weight: bold; font-size: 0.85rem; transition: 0.3s; border: none; cursor: pointer; }
         .btn-sei { background: #721c24; }
         .btn-siop { background: #155724; }
         .btn-camara { background: #004a8d; }
-        .btn:hover { opacity: 0.8; transform: translateY(-2px); }
 
-        .busca-bloco { background: #f8f9fa; padding: 15px; border-radius: 10px; margin-bottom: 20px; border-left: 5px solid #004a8d; display: flex; gap: 10px; align-items: center; }
+        .busca-bloco { background: #f8f9fa; padding: 15px; border-radius: 10px; margin-bottom: 20px; border-left: 5px solid #004a8d; display: flex; gap: 10px; }
         input { padding: 10px; border: 1px solid #ddd; border-radius: 8px; flex: 1; }
         
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        table { width: 100%; border-collapse: collapse; }
         th { background: #003366; color: white; padding: 12px; text-align: left; }
         td { padding: 10px; border-bottom: 1px solid #eee; }
-        .tag-bancada { background: #e8daef; color: #8e44ad; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: bold; }
     </style>
 </head>
 <body>
 
-<div id="alert-box"><strong>🔔 Nova Atualização:</strong> O sistema detectou novas movimentações de emendas para o MEC.</div>
+<div id="alert-box"></div>
 
 <div class="container">
     <h1>🏛️ Centro de Comando Orçamentário - MEC</h1>
@@ -48,17 +43,17 @@
     <div class="links-rapidos">
         <a href="https://sei.mec.gov.br/" target="_blank" class="btn btn-sei">Acessar SEI MEC</a>
         <a href="https://www.siop.planejamento.gov.br/" target="_blank" class="btn btn-siop">Painel SIOP</a>
-        <button onclick="carregarFinanceiro()" class="btn" style="background:#666">🔄 Atualizar Dados</button>
+        <button onclick="location.reload()" class="btn" style="background:#666">🔄 Recarregar Dados</button>
     </div>
 
     <div class="resumo-financeiro">
-        <div class="card empenhado"><h2>Total Empenhado</h2><p id="v-empenhado">R$ 0,00</p></div>
-        <div class="card pago"><h2>Total Pago</h2><p id="v-pago">R$ 0,00</p></div>
-        <div class="card bancada"><h2>Emendas de Bancada (RP7)</h2><p id="v-bancada">R$ 0,00</p></div>
+        <div class="card empenhado"><h2>Empenhado Total (MEC)</h2><p id="v-empenhado">R$ 0,00</p></div>
+        <div class="card pago"><h2>Pago Total (MEC)</h2><p id="v-pago">R$ 0,00</p></div>
+        <div class="card bancada"><h2>Emendas de Bancada</h2><p id="v-bancada">R$ 0,00</p></div>
     </div>
 
     <div class="busca-bloco">
-        <input type="text" id="filtro" placeholder="Filtrar Parlamentar ou UF..." onkeyup="filtrarTabela()">
+        <input type="text" id="filtro" placeholder="Buscar parlamentar ou estado..." onkeyup="filtrarTabela()">
         <input type="text" id="numEmenda" placeholder="Nº Emenda..." style="max-width: 150px;">
         <button onclick="buscarEmenda()" class="btn btn-camara">Buscar</button>
     </div>
@@ -66,9 +61,9 @@
     <table id="tabelaPrincipal">
         <thead>
             <tr>
-                <th>Origem (Parlamentar/Bancada)</th>
-                <th>UF / Partido</th>
-                <th>Ações de Monitoramento</th>
+                <th>Parlamentar / UF</th>
+                <th>Partido</th>
+                <th>Ações</th>
             </tr>
         </thead>
         <tbody id="lista-corpo"></tbody>
@@ -78,72 +73,83 @@
 <script>
     const API_KEY = "2e820c7589765e7414b397836e6d1976";
     const ORGAO_MEC = "26000";
-    let ultimaQuantidade = localStorage.getItem('totalEmendas') || 0;
 
-    async function carregarFinanceiro() {
+    function formatarMoeda(valor) {
+        return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    }
+
+    function tratarValor(texto) {
+        if (!texto) return 0;
+        return parseFloat(texto.replace(/\./g, '').replace(',', '.'));
+    }
+
+    async function carregarDados() {
+        // Buscando emendas com paginação maior para capturar valores reais
         const url = `https://api.portaldatransparencia.gov.br/api-de-dados/emendas?codigoOrgao=${ORGAO_MEC}&ano=2026&pagina=1`;
         
         try {
             const res = await fetch(url, { headers: { "chave-api-dados": API_KEY } });
-            const dados = await res.json();
+            const emendas = await res.json();
             
-            if (dados.length > ultimaQuantidade && ultimaQuantidade != 0) {
-                document.getElementById('alert-box').style.display = 'block';
-            }
-            localStorage.setItem('totalEmendas', dados.length);
-
             let totalE = 0, totalP = 0, totalB = 0;
-            dados.forEach(e => {
-                let v = parseFloat(e.valorEmpenhado.replace('.','').replace(',','.'));
-                totalE += v;
-                if(e.tipoEmenda.includes("Bancada")) totalB += v;
-                totalP += parseFloat(e.valorPago.replace('.','').replace(',','.'));
+
+            emendas.forEach(e => {
+                let vEmp = tratarValor(e.valorEmpenhado);
+                let vPag = tratarValor(e.valorPago);
+                
+                totalE += vEmp;
+                totalP += vPag;
+                if (e.tipoEmenda.includes("Bancada")) totalB += vEmp;
             });
 
-            document.getElementById('v-empenhado').innerText = "R$ " + totalE.toLocaleString('pt-BR');
-            document.getElementById('v-pago').innerText = "R$ " + totalP.toLocaleString('pt-BR');
-            document.getElementById('v-bancada').innerText = "R$ " + totalB.toLocaleString('pt-BR');
-        } catch (e) { console.error("Erro na API", e); }
+            document.getElementById('v-empenhado').innerText = formatarMoeda(totalE);
+            document.getElementById('v-pago').innerText = formatarMoeda(totalP);
+            document.getElementById('v-bancada').innerText = formatarMoeda(totalB);
+
+            // Verificar atualizações
+            const ultimaContagem = localStorage.getItem('contagemEmendas');
+            if (ultimaContagem && emendas.length > ultimaContagem) {
+                const box = document.getElementById('alert-box');
+                box.innerText = `🔔 Novas emendas detectadas! Total agora: ${emendas.length}`;
+                box.style.display = 'block';
+            }
+            localStorage.setItem('contagemEmendas', emendas.length);
+
+        } catch (e) {
+            console.error("Erro na API", e);
+        }
     }
 
-    async function carregarParlamentares() {
+    async function carregarListaParlamentares() {
         const res = await fetch("https://dadosabertos.camara.leg.br/api/v2/deputados?ordem=ASC&ordenarPor=nome");
         const json = await res.json();
         const tbody = document.getElementById('lista-corpo');
         
         json.dados.forEach(d => {
-            const linkTransp = `https://portaldatransparencia.gov.br/emendas?nomeParlamentar=${encodeURIComponent(d.nome)}&orgao=${ORGAO_MEC}&ano=2026`;
+            const link = `https://portaldatransparencia.gov.br/emendas?nomeParlamentar=${encodeURIComponent(d.nome)}&orgao=${ORGAO_MEC}&ano=2026`;
             tbody.innerHTML += `
                 <tr>
-                    <td><strong>${d.nome}</strong></td>
-                    <td>${d.siglaUf} / ${d.siglaPartido}</td>
-                    <td>
-                        <a href="${linkTransp}" target="_blank" style="color:#007bff; text-decoration:none;">🔗 Detalhar no Portal</a>
-                    </td>
+                    <td><strong>${d.nome}</strong> (${d.siglaUf})</td>
+                    <td>${d.siglaPartido}</td>
+                    <td><a href="${link}" target="_blank" style="color:#007bff; font-weight:bold; text-decoration:none;">🔗 Ver Emendas MEC</a></td>
                 </tr>`;
         });
-        
-        // Adicionando exemplo de Bancada fixa (RP7)
-        tbody.innerHTML = `
-            <tr style="background:#f4ebfa">
-                <td><strong>BANCADA DE SÃO PAULO</strong> <span class="tag-bancada">BANCADA REGIONAL</span></td>
-                <td>SP</td>
-                <td><a href="https://portaldatransparencia.gov.br/emendas?ufId=SP&orgao=${ORGAO_MEC}&ano=2026" target="_blank" style="color:#8e44ad; font-weight:bold;">🔗 Ver Emendas de Bancada</a></td>
-            </tr>` + tbody.innerHTML;
     }
 
     function buscarEmenda() {
         const num = document.getElementById('numEmenda').value;
-        window.open(`https://www.camara.leg.br/internet/deputado/RelData_Emendas.asp?numEmenda=${num}&ano=2026`, '_blank');
+        if(num) window.open(`https://www.camara.leg.br/internet/deputado/RelData_Emendas.asp?numEmenda=${num}&ano=2026`, '_blank');
     }
 
     function filtrarTabela() {
         let filter = document.getElementById("filtro").value.toUpperCase();
         let rows = document.getElementById("lista-corpo").getElementsByTagName("tr");
-        for (let row of rows) { row.style.display = row.textContent.toUpperCase().includes(filter) ? "" : "none"; }
+        for (let row of rows) {
+            row.style.display = row.innerText.toUpperCase().includes(filter) ? "" : "none";
+        }
     }
 
-    window.onload = () => { carregarFinanceiro(); carregarParlamentares(); };
+    window.onload = () => { carregarDados(); carregarListaParlamentares(); };
 </script>
 </body>
 </html>
