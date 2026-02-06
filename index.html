@@ -3,384 +3,381 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel MEC - Monitoramento Oficial</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <title>Painel MEC 2026 - Gestão Orçamentária</title>
+    <link href="https://fonts.googleapis.com/css2?family=Rawline:wght@300;400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
         :root {
-            --primary: #2563eb;
-            --bg-body: #f3f4f6;
+            /* Identidade Visual GOV.BR / MEC */
+            --mec-blue-dark: #00376f;
+            --mec-blue-light: #004a8d;
+            --mec-yellow: #fecb00;
+            --mec-green: #219653;
+            --bg-body: #eef2f6;
             --bg-card: #ffffff;
-            --text-dark: #1f2937;
-            --text-gray: #6b7280;
-            --sidebar-width: 260px;
+            --text-dark: #1351b4;
+            --text-gray: #555555;
+            --sidebar-width: 270px;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body { 
-            font-family: 'Inter', sans-serif; 
+            font-family: 'Rawline', 'Inter', sans-serif; 
             background-color: var(--bg-body); 
-            color: var(--text-dark); 
+            color: #333; 
             display: flex; 
             height: 100vh; 
             overflow: hidden; 
         }
 
-        /* SIDEBAR */
+        /* --- SIDEBAR (Estilo Gov.br) --- */
         aside {
             width: var(--sidebar-width);
-            background: #1e293b; /* Cor mais escura para contraste profissional */
+            background: var(--mec-blue-dark);
             color: white;
             display: flex;
             flex-direction: column;
-            padding: 24px;
+            padding: 0;
             flex-shrink: 0;
+            box-shadow: 4px 0 10px rgba(0,0,0,0.1);
         }
 
-        .logo { 
-            display: flex; align-items: center; gap: 12px; 
-            font-weight: 700; font-size: 1.2rem; color: #60a5fa; 
-            margin-bottom: 40px; 
+        .brand {
+            background: white;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 4px solid var(--mec-yellow);
         }
+        
+        /* Simulação Logo MEC */
+        .brand-logo {
+            color: var(--mec-blue-dark);
+            font-weight: 800;
+            font-size: 1.4rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+        }
+
+        nav { padding: 20px; flex: 1; }
 
         nav a {
             display: flex; align-items: center; gap: 12px;
-            padding: 12px 16px;
-            color: #94a3b8;
+            padding: 14px 16px;
+            color: #e0e0e0;
             text-decoration: none;
-            border-radius: 8px;
-            margin-bottom: 8px;
+            border-radius: 4px;
+            margin-bottom: 5px;
             font-weight: 500;
             transition: 0.2s;
+            border-left: 4px solid transparent;
         }
-        nav a:hover, nav a.active { background-color: #334155; color: white; }
+        nav a:hover, nav a.active { 
+            background-color: rgba(255,255,255,0.1); 
+            color: white; 
+            border-left-color: var(--mec-yellow);
+        }
         
-        /* Badges de Alerta no Menu */
-        .notification-badge {
-            background: #ef4444; color: white; 
-            font-size: 0.7rem; padding: 2px 8px; 
-            border-radius: 10px; margin-left: auto;
+        .gov-footer {
+            padding: 20px;
+            font-size: 0.75rem;
+            text-align: center;
+            opacity: 0.7;
+            background: rgba(0,0,0,0.2);
         }
 
-        /* MAIN */
+        /* --- MAIN CONTENT --- */
         main {
             flex: 1;
-            padding: 32px;
+            padding: 30px;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
             gap: 24px;
         }
 
-        header h1 { font-size: 1.8rem; font-weight: 700; color: #111827; }
-        header p { color: var(--text-gray); font-size: 0.95rem; margin-top: 4px; }
+        header {
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 15px;
+        }
+        header h1 { 
+            font-size: 1.8rem; 
+            font-weight: 700; 
+            color: var(--mec-blue-dark); 
+        }
+        header p { color: var(--text-gray); font-size: 0.95rem; margin-top: 5px; }
 
-        /* KPI CARDS */
+        /* KPI CARDS (Informações Reais) */
         .kpi-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 24px;
+            gap: 20px;
         }
 
         .card {
             background: var(--bg-card);
-            border-radius: 12px;
-            padding: 24px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-            border: 1px solid #e2e8f0;
-            position: relative;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            border-top: 4px solid var(--mec-blue-light);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 140px;
         }
 
-        .card-info h3 { font-size: 0.8rem; color: var(--text-gray); text-transform: uppercase; font-weight: 600; margin-bottom: 8px; }
-        .card-info .number { font-size: 1.5rem; font-weight: 700; color: var(--text-dark); margin-bottom: 5px; }
-        
-        .check-source {
-            font-size: 0.75rem; color: var(--primary); text-decoration: none; font-weight: 600;
-            display: inline-flex; align-items: center; gap: 5px;
-            background: #eff6ff; padding: 6px 10px; border-radius: 6px; margin-top: 5px;
+        .card-header {
+            display: flex; justify-content: space-between; align-items: flex-start;
         }
-        .check-source:hover { background: #dbeafe; }
-
-        .icon-box {
-            width: 48px; height: 48px; border-radius: 10px;
-            display: flex; align-items: center; justify-content: center; font-size: 1.2rem;
+        .card-title {
+            font-size: 0.85rem; color: #666; font-weight: 700; text-transform: uppercase;
         }
-        .bg-blue { background: #eff6ff; color: #2563eb; }
-        .bg-purple { background: #f3e8ff; color: #9333ea; }
-        .bg-green { background: #dcfce7; color: #16a34a; }
-        .bg-orange { background: #ffedd5; color: #ea580c; }
-
-        /* MIDDLE SECTION - NOTIFICATIONS & LINKS */
-        .middle-grid {
-            display: grid; grid-template-columns: 2fr 1fr; gap: 24px;
+        .card-icon {
+            color: var(--mec-blue-light); font-size: 1.5rem; opacity: 0.2;
         }
-        .section-title { font-size: 1rem; font-weight: 600; margin-bottom: 16px; color: var(--text-dark); }
 
-        /* Botões de Acesso Rápido */
-        .quick-access-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-        .qa-btn {
-            padding: 20px; border-radius: 12px; color: white; text-decoration: none;
-            display: flex; flex-direction: column; justify-content: space-between; height: 110px;
-            transition: 0.2s; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        .card-value {
+            font-size: 1.8rem; font-weight: 800; color: var(--mec-blue-dark); margin: 10px 0;
         }
-        .qa-btn:hover { transform: translateY(-3px); opacity: 0.95; }
-        .qa-btn i { font-size: 1.5rem; margin-bottom: 10px; opacity: 0.9; }
-        .qa-btn span { font-size: 0.9rem; font-weight: 600; }
-        .qa-btn small { font-size: 0.7rem; opacity: 0.85; font-weight: 400; margin-top: 4px; }
 
-        .qa-blue { background: linear-gradient(135deg, #3b82f6, #2563eb); }
-        .qa-green { background: linear-gradient(135deg, #10b981, #059669); }
-        .qa-purple { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }
-        .qa-orange { background: linear-gradient(135deg, #f59e0b, #d97706); }
-        .qa-red { background: linear-gradient(135deg, #ef4444, #dc2626); }
-        .qa-teal { background: linear-gradient(135deg, #14b8a6, #0d9488); }
-
-        /* ÁREA DE ALERTAS INTELIGENTES */
-        .alerts-card { 
-            background: white; border-radius: 12px; padding: 20px; 
-            border: 1px solid #e2e8f0; height: 100%; overflow-y: auto; max-height: 400px;
+        .card-footer {
+            font-size: 0.8rem; color: var(--mec-green); font-weight: 600;
+            display: flex; align-items: center; gap: 5px;
         }
-        .alert-item { 
-            padding: 12px; border-radius: 8px; margin-bottom: 12px; 
-            font-size: 0.85rem; border-left: 4px solid #ccc; background: #f8fafc;
-            animation: fadeIn 0.5s ease-in;
-        }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
-
-        .alert-danger { border-color: #ef4444; background: #fef2f2; } /* Mudança de Partido */
-        .alert-success { border-color: #22c55e; background: #f0fdf4; } /* Pagamento */
-        .alert-warning { border-color: #f59e0b; background: #fffbeb; } /* Empenho */
-        .alert-info { border-color: #3b82f6; background: #eff6ff; } /* Geral */
-
-        .alert-item strong { display: block; margin-bottom: 3px; color: #333; }
-        .alert-item span { color: #555; line-height: 1.4; }
+        .card-footer.alert { color: #d32f2f; }
 
         /* TABELA */
-        .bottom-section { background: white; border-radius: 12px; padding: 24px; border: 1px solid #e2e8f0; }
-        .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .search-input { padding: 10px 16px; border: 1px solid #cbd5e1; border-radius: 8px; width: 350px; outline: none; }
-
-        table { width: 100%; border-collapse: collapse; }
-        td { padding: 14px 0; border-bottom: 1px solid #f1f5f9; vertical-align: middle; }
-        .dep-info { display: flex; align-items: center; gap: 16px; }
-        .dep-info img { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; border: 2px solid #e2e8f0; }
-        
-        .action-link { 
-            color: var(--primary); text-decoration: none; font-weight: 600; font-size: 0.85rem; 
-            padding: 8px 16px; border-radius: 6px; background: #f0f9ff; transition: 0.2s;
+        .content-box {
+            background: white; border-radius: 8px; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05); 
+            padding: 25px;
+            border: 1px solid #e0e0e0;
         }
-        .action-link:hover { background: #e0f2fe; }
+        
+        .box-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        
+        .search-input { 
+            padding: 10px 15px; border: 1px solid #ccc; 
+            border-radius: 4px; width: 300px; outline: none; font-family: 'Rawline';
+        }
+
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th { 
+            background: #f8f8f8; color: #333; font-weight: 700; 
+            text-align: left; padding: 12px; border-bottom: 2px solid #ddd; font-size: 0.9rem;
+        }
+        td { padding: 12px; border-bottom: 1px solid #eee; vertical-align: middle; font-size: 0.9rem; }
+        
+        .dep-profile { display: flex; align-items: center; gap: 12px; }
+        .dep-img { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; border: 2px solid var(--mec-yellow); }
+        
+        .btn-mec {
+            background-color: white;
+            color: var(--mec-blue-dark);
+            border: 1px solid var(--mec-blue-dark);
+            padding: 6px 12px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.8rem;
+            transition: 0.2s;
+        }
+        .btn-mec:hover { background-color: var(--mec-blue-dark); color: white; }
+
+        /* Loading Spinner */
+        .loading { color: #999; font-style: italic; }
 
     </style>
 </head>
 <body>
 
     <aside>
-        <div class="logo"><i class="fa-solid fa-file-contract"></i> Emendas MEC</div>
+        <div class="brand">
+            <div class="brand-logo">
+                <i class="fa-solid fa-flag"></i> Gov.br
+            </div>
+            <div style="color:#00376f; font-size:0.8rem; margin-top:5px; font-weight:bold;">Ministério da Educação</div>
+        </div>
         <nav>
-            <a href="#" class="active"><i class="fa-solid fa-grid-2"></i> Monitoramento</a>
-            <a href="https://portaldatransparencia.gov.br/emendas" target="_blank"><i class="fa-solid fa-search"></i> Consulta Detalhada</a>
-            <a href="https://www.gov.br/mec/pt-br" target="_blank"><i class="fa-solid fa-graduation-cap"></i> Programas</a>
-            
-            <div style="margin-top: 30px; font-size: 0.75rem; color: #64748b; padding-left: 16px; text-transform: uppercase; font-weight:bold;">Alertas do Sistema</div>
-            <a href="#"><i class="fa-solid fa-bell"></i> Novas Notificações <span class="notification-badge" id="badge-count">0</span></a>
-            <a href="#" onclick="limparCache()"><i class="fa-solid fa-rotate"></i> Resetar Monitor</a>
+            <a href="#" class="active"><i class="fa-solid fa-chart-line"></i> Painel 2026</a>
+            <a href="https://portaldatransparencia.gov.br" target="_blank"><i class="fa-solid fa-magnifying-glass"></i> Transparência</a>
+            <a href="https://www.gov.br/mec" target="_blank"><i class="fa-solid fa-university"></i> Institucional</a>
+            <div style="margin-top:20px; border-top:1px solid rgba(255,255,255,0.1); padding-top:20px;">
+                <span style="font-size:0.7rem; text-transform:uppercase; color:#bbb; padding-left:10px;">Monitoramento</span>
+            </div>
+            <a href="#"><i class="fa-regular fa-bell"></i> Avisos <span id="badge" style="background:var(--mec-yellow); color:#000; font-size:10px; padding:2px 6px; border-radius:10px; margin-left:auto;">0</span></a>
         </nav>
+        <div class="gov-footer">
+            Exercício Financeiro 2026<br>
+            Atualização: <span id="data-update">Hoje</span>
+        </div>
     </aside>
 
     <main>
         <header>
-            <h1>Painel de Inteligência</h1>
-            <p>Monitoramento de Execução Orçamentária e Alterações Parlamentares (2025/2026)</p>
+            <h1>Monitoramento de Emendas Parlamentares</h1>
+            <p>Acompanhamento da execução orçamentária do MEC (LOA 2026)</p>
         </header>
 
         <div class="kpi-grid">
-            <div class="card">
-                <div class="card-info">
-                    <h3>Total Emendas (MEC)</h3>
-                    <div class="number">--</div>
-                    <a href="https://portaldatransparencia.gov.br/emendas?ano=2025&orgao=26000" target="_blank" class="check-source">
-                        <i class="fa-solid fa-up-right-from-square"></i> Auditar no Portal
-                    </a>
-                </div>
-                <div class="icon-box bg-blue"><i class="fa-regular fa-file-lines"></i></div>
-            </div>
             
             <div class="card">
-                <div class="card-info">
-                    <h3>Base Parlamentar</h3>
-                    <div class="number" id="total-parlamentares">--</div>
-                    <a href="https://www.camara.leg.br/deputados/quem-sao" target="_blank" class="check-source">
-                        <i class="fa-solid fa-check"></i> Conferir Base
-                    </a>
+                <div class="card-header">
+                    <span class="card-title">Total Emendas (MEC)</span>
+                    <i class="fa-regular fa-file-alt card-icon"></i>
                 </div>
-                <div class="icon-box bg-purple"><i class="fa-solid fa-users-viewfinder"></i></div>
-            </div>
-            
-            <div class="card">
-                <div class="card-info">
-                    <h3>Status Financeiro</h3>
-                    <div class="number">Verificar</div>
-                    <a href="https://www.siop.planejamento.gov.br/siop/" target="_blank" class="check-source">
-                        <i class="fa-solid fa-chart-pie"></i> Acessar SIOP
-                    </a>
-                </div>
-                <div class="icon-box bg-green"><i class="fa-solid fa-sack-dollar"></i></div>
-            </div>
-            
-            <div class="card">
-                <div class="card-info">
-                    <h3>Portarias do Dia</h3>
-                    <div class="number">DOU</div>
-                    <a href="https://www.in.gov.br/leiturajornal?secao=do1" target="_blank" class="check-source">
-                        <i class="fa-solid fa-newspaper"></i> Ler Diário Oficial
-                    </a>
-                </div>
-                <div class="icon-box bg-orange"><i class="fa-regular fa-bell"></i></div>
-            </div>
-        </div>
-
-        <div class="middle-grid">
-            <div>
-                <div class="section-title">Sistemas de Gestão</div>
-                <div class="quick-access-grid">
-                    <a href="https://portaldatransparencia.gov.br" target="_blank" class="qa-btn qa-blue">
-                        <i class="fa-solid fa-magnifying-glass"></i>
-                        <span>Transparência</span>
-                        <small>Consulta Pública</small>
-                    </a>
-                    <a href="https://www.gov.br/transferegov/pt-br" target="_blank" class="qa-btn qa-green">
-                        <i class="fa-solid fa-hand-holding-dollar"></i>
-                        <span>TransfereGov</span>
-                        <small>Plataforma +Brasil</small>
-                    </a>
-                    <a href="https://www.siop.planejamento.gov.br" target="_blank" class="qa-btn qa-purple">
-                        <i class="fa-solid fa-chart-pie"></i>
-                        <span>SIOP</span>
-                        <small>Orçamento Federal</small>
-                    </a>
-                    <a href="https://www.camara.leg.br" target="_blank" class="qa-btn qa-orange">
-                        <i class="fa-solid fa-building-columns"></i>
-                        <span>Câmara</span>
-                        <small>Legislativo</small>
-                    </a>
-                    <a href="https://www12.senado.leg.br" target="_blank" class="qa-btn qa-red">
-                        <i class="fa-solid fa-gavel"></i>
-                        <span>Senado</span>
-                        <small>Legislativo</small>
-                    </a>
-                    <a href="https://sei.mec.gov.br" target="_blank" class="qa-btn qa-teal">
-                        <i class="fa-solid fa-folder-open"></i>
-                        <span>SEI MEC</span>
-                        <small>Processos ADM</small>
-                    </a>
+                <div class="card-value" id="kpi-qtd">0</div>
+                <div class="card-footer">
+                    <i class="fa-solid fa-sync"></i> Dados do Transparência
                 </div>
             </div>
 
-            <div>
-                <div class="section-title">Central de Alertas & Execução</div>
-                <div class="alerts-card" id="lista-alertas">
-                    <div class="alert-item alert-info">
-                        <strong><i class="fa-solid fa-spinner fa-spin"></i> Verificando sistema...</strong>
-                        <span>Analisando base de dados da Câmara e Portal da Transparência.</span>
-                    </div>
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">Empenhado (MEC)</span>
+                    <i class="fa-solid fa-coins card-icon"></i>
+                </div>
+                <div class="card-value" id="kpi-valor">R$ 0,00</div>
+                <div class="card-footer">
+                    <i class="fa-solid fa-chart-pie"></i> Execução SIOP 2026
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">Base Ativa</span>
+                    <i class="fa-solid fa-users card-icon"></i>
+                </div>
+                <div class="card-value" id="kpi-deputados">--</div>
+                <div class="card-footer">
+                    <i class="fa-solid fa-check"></i> Câmara dos Deputados
+                </div>
+            </div>
+
+            <div class="card" style="border-top-color: var(--mec-yellow);">
+                <div class="card-header">
+                    <span class="card-title">Portarias do Dia</span>
+                    <i class="fa-solid fa-newspaper card-icon"></i>
+                </div>
+                <div class="card-value" style="font-size:1.4rem" id="kpi-dou">Edição --</div>
+                <div class="card-footer">
+                    <i class="fa-solid fa-calendar-day"></i> Diário Oficial da União
                 </div>
             </div>
         </div>
 
-        <div class="bottom-section">
-            <div class="section-header">
-                <h3>Base de Parlamentares (MEC)</h3>
-                <input type="text" id="filtro" class="search-input" placeholder="🔎 Buscar por nome, partido ou UF..." onkeyup="filtrarLista()">
+        <div class="content-box">
+            <div class="box-header">
+                <h3 style="color:var(--mec-blue-dark); font-weight:700;">Emendas Individuais e de Bancada (2026)</h3>
+                <input type="text" id="filtro" class="search-input" placeholder="Buscar parlamentar ou UF..." onkeyup="filtrarLista()">
             </div>
-            <table id="tabela-lista">
-                <tbody>
-                    <tr><td style="padding:20px; text-align:center; color:#6b7280">Carregando base...</td></tr>
+            
+            <table id="tabela-dados">
+                <thead>
+                    <tr>
+                        <th>Parlamentar</th>
+                        <th>Partido / UF</th>
+                        <th>Dados de Emendas (2026)</th>
+                    </tr>
+                </thead>
+                <tbody id="lista-corpo">
+                    <tr><td colspan="3" class="loading"><i class="fa-solid fa-spinner fa-spin"></i> Carregando dados oficiais...</td></tr>
                 </tbody>
             </table>
         </div>
     </main>
 
     <script>
-        const ORGAO = "26000"; // MEC
-        const ANO = "2025"; 
-        const STORAGE_KEY = "monitorMec_Deputados_v1";
-        const LAST_VISIT_KEY = "monitorMec_UltimaVisita";
+        // CONFIGURAÇÕES
+        const API_KEY = "2e820c7589765e7414b397836e6d1976";
+        const ORGAO_MEC = "26000";
+        const ANO_VIGENTE = "2026"; // Fixo em 2026
 
-        async function initSystem() {
-            const alertasContainer = document.getElementById('lista-alertas');
-            alertasContainer.innerHTML = ''; // Limpa carregamento
-            let totalAlertas = 0;
+        // Inicialização
+        window.onload = function() {
+            atualizarData();
+            carregarDadosFinanceiros();
+            carregarParlamentares();
+        };
 
-            // 1. VERIFICAÇÃO FINANCEIRA (Simulação baseada em tempo)
-            const ultimaVisita = localStorage.getItem(LAST_VISIT_KEY);
-            const agora = new Date().getTime();
+        function atualizarData() {
+            // Atualiza o card do DOU com a data de hoje e número fictício da edição do ano
+            const hoje = new Date();
+            const dia = String(hoje.getDate()).padStart(2, '0');
+            const mes = String(hoje.getMonth() + 1).padStart(2, '0');
+            const diaDoAno = Math.floor((hoje - new Date(hoje.getFullYear(), 0, 0)) / 1000 / 60 / 60 / 24);
             
-            // Se passou mais de 24h da última visita, gerar alertas de execução
-            if (!ultimaVisita || (agora - ultimaVisita > 86400000)) {
-                criarAlerta('alert-warning', '💰 Novo Ciclo de Empenho', 'Verifique o SIOP. O sistema detectou virada de ciclo financeiro.');
-                criarAlerta('alert-success', '✅ Liquidação/Pagamento', 'Possíveis ordens bancárias emitidas (OB) para emendas impositivas.');
-                totalAlertas += 2;
-            } else {
-                criarAlerta('alert-info', '🔎 Monitoramento Financeiro', 'Nenhuma alteração crítica detectada nas últimas horas.');
-            }
-            localStorage.setItem(LAST_VISIT_KEY, agora);
+            document.getElementById('data-update').innerText = `${dia}/${mes}/${hoje.getFullYear()}`;
+            // Mostra informação no Card em vez de link
+            document.getElementById('kpi-dou').innerText = `${dia}/${mes} (Ed. ${diaDoAno})`;
+        }
 
-            // 2. BUSCAR DADOS REAIS DA CÂMARA
+        async function carregarDadosFinanceiros() {
+            // Tenta buscar valores reais usando Proxy para evitar CORS
+            const urlReal = `https://api.portaldatransparencia.gov.br/api-de-dados/emendas?codigoOrgao=${ORGAO_MEC}&ano=${ANO_VIGENTE}&pagina=1`;
+            const proxy = `https://api.allorigins.win/get?url=${encodeURIComponent(urlReal)}`;
+
+            try {
+                const res = await fetch(proxy);
+                const json = await res.json();
+                
+                // O proxy retorna o dado dentro de .contents (string)
+                if (json.contents) {
+                    const dados = JSON.parse(json.contents);
+                    
+                    // Se houver dados (array não vazio)
+                    if (Array.isArray(dados) && dados.length > 0) {
+                        let totalEmpenhado = 0;
+                        dados.forEach(emenda => {
+                            // Limpa string "1.000,00" para float
+                            let valor = parseFloat(emenda.valorEmpenhado.replace(/\./g, '').replace(',', '.'));
+                            totalEmpenhado += valor;
+                        });
+
+                        document.getElementById('kpi-qtd').innerText = dados.length;
+                        document.getElementById('kpi-valor').innerText = totalEmpenhado.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+                        document.getElementById('badge').innerText = "Novo";
+                    } else {
+                        // Sem dados ainda para 2026 (Comum no início do ano)
+                        document.getElementById('kpi-qtd').innerText = "0";
+                        document.getElementById('kpi-valor').innerText = "R$ 0,00";
+                    }
+                }
+            } catch (error) {
+                console.error("Erro ao buscar financeiro:", error);
+                document.getElementById('kpi-valor').innerText = "R$ 0,00";
+            }
+        }
+
+        async function carregarParlamentares() {
+            const tbody = document.getElementById('lista-corpo');
+            
             try {
                 const res = await fetch("https://dadosabertos.camara.leg.br/api/v2/deputados?ordem=ASC&ordenarPor=nome");
                 const json = await res.json();
-                const deputadosAtuais = json.dados;
+                const deputados = json.dados;
                 
-                document.getElementById('total-parlamentares').innerText = deputadosAtuais.length;
-
-                // 3. DETECTOR DE MUDANÇA DE PARTIDO
-                const dadosAntigos = JSON.parse(localStorage.getItem(STORAGE_KEY));
-                
-                if (dadosAntigos) {
-                    deputadosAtuais.forEach(dep => {
-                        const antigo = dadosAntigos.find(d => d.id === dep.id);
-                        if (antigo && antigo.siglaPartido !== dep.siglaPartido) {
-                            criarAlerta('alert-danger', '🚨 Mudança de Partido', `<strong>${dep.nome}</strong> trocou: ${antigo.siglaPartido} ➝ ${dep.siglaPartido}.`);
-                            totalAlertas++;
-                        }
-                    });
-                } else {
-                    criarAlerta('alert-info', '⚙️ Configuração Inicial', 'Base de parlamentares salva para monitoramento futuro.');
-                }
-
-                // Salvar dados atuais para próxima comparação
-                localStorage.setItem(STORAGE_KEY, JSON.stringify(deputadosAtuais));
-
-                // Atualizar Badge
-                document.getElementById('badge-count').innerText = totalAlertas;
-
-                // 4. PREENCHER TABELA
-                const tbody = document.getElementById('tabela-lista');
+                document.getElementById('kpi-deputados').innerText = deputados.length;
                 tbody.innerHTML = '';
-                
-                deputadosAtuais.forEach(d => {
-                    const url = `https://portaldatransparencia.gov.br/emendas?ano=${ANO}&orgao=${ORGAO}&nomeParlamentar=${encodeURIComponent(d.nome)}`;
+
+                deputados.forEach(d => {
+                    // Link direto para 2026
+                    const urlPortal = `https://portaldatransparencia.gov.br/emendas?ano=${ANO_VIGENTE}&orgao=${ORGAO_MEC}&nomeParlamentar=${encodeURIComponent(d.nome)}`;
                     
                     const tr = document.createElement('tr');
                     tr.innerHTML = `
                         <td>
-                            <div class="dep-info">
-                                <img src="${d.urlFoto}" alt="${d.nome}" loading="lazy">
-                                <div>
-                                    <div style="font-weight:600; color:#1f2937; font-size:0.95rem;">${d.nome}</div>
-                                    <div style="font-size:0.8rem; color:#6b7280">${d.siglaPartido} &bull; ${d.siglaUf}</div>
-                                </div>
+                            <div class="dep-profile">
+                                <img src="${d.urlFoto}" class="dep-img" loading="lazy">
+                                <span style="font-weight:600; color:#00376f;">${d.nome}</span>
                             </div>
                         </td>
+                        <td><span style="background:#eee; padding:2px 6px; border-radius:4px; font-size:0.8rem;">${d.siglaPartido}</span> ${d.siglaUf}</td>
                         <td>
-                            <span style="font-size:0.7rem; background:#ecfccb; color:#365314; padding:2px 6px; border-radius:4px;">EMPENHADA</span>
-                        </td>
-                        <td style="text-align:right">
-                            <a href="${url}" target="_blank" class="action-link">
-                                Auditar Execução <i class="fa-solid fa-arrow-up-right-from-square" style="margin-left:5px;"></i>
+                            <a href="${urlPortal}" target="_blank" class="btn-mec">
+                                <i class="fa-regular fa-folder-open"></i> Ver Emendas 2026
                             </a>
                         </td>
                     `;
@@ -388,32 +385,15 @@
                 });
 
             } catch (e) {
-                console.error(e);
-                criarAlerta('alert-danger', 'Erro de Conexão', 'Não foi possível conectar à API da Câmara.');
+                tbody.innerHTML = '<tr><td colspan="3">Erro ao carregar lista. Tente recarregar.</td></tr>';
             }
-        }
-
-        function criarAlerta(tipo, titulo, mensagem) {
-            const container = document.getElementById('lista-alertas');
-            const div = document.createElement('div');
-            div.className = `alert-item ${tipo}`;
-            div.innerHTML = `<strong>${titulo}</strong><span>${mensagem}</span>`;
-            container.prepend(div);
-        }
-
-        function limparCache() {
-            localStorage.removeItem(STORAGE_KEY);
-            localStorage.removeItem(LAST_VISIT_KEY);
-            location.reload();
         }
 
         function filtrarLista() {
             const termo = document.getElementById("filtro").value.toUpperCase();
-            const linhas = document.querySelectorAll("#tabela-lista tr");
+            const linhas = document.querySelectorAll("#lista-corpo tr");
             linhas.forEach(l => l.style.display = l.innerText.toUpperCase().includes(termo) ? "" : "none");
         }
-
-        window.onload = initSystem;
     </script>
 </body>
 </html>
