@@ -43,6 +43,7 @@
             flex-direction: column;
             flex-shrink: 0;
             z-index: 100;
+            box-shadow: 4px 0 10px rgba(0,0,0,0.1);
         }
 
         .brand-box {
@@ -60,10 +61,12 @@
             text-transform: uppercase; color: rgba(255,255,255,0.4); font-weight: 700; 
         }
 
+        /* Links do Menu - Cursor Pointer Forçado */
         .nav-link {
             display: flex; align-items: center; gap: 10px;
             padding: 12px 20px; color: #ccc; text-decoration: none;
             transition: 0.2s; border-left: 3px solid transparent;
+            cursor: pointer; /* Garante que pareça clicável */
         }
         .nav-link:hover, .nav-link.active {
             background: rgba(255,255,255,0.05); color: white;
@@ -98,12 +101,26 @@
         .border-yellow { border-top-color: var(--gov-yellow); }
         .border-red { border-top-color: var(--gov-red); }
 
-        /* --- FILTROS & BARRA DE FERRAMENTAS --- */
+        /* --- ACESSOS RÁPIDOS (Novo) --- */
+        .quick-grid {
+            display: grid; grid-template-columns: repeat(6, 1fr); gap: 15px; margin-bottom: 25px;
+        }
+        .quick-btn {
+            background: white; border: 1px solid #ddd; border-radius: 8px; padding: 15px 5px;
+            text-align: center; text-decoration: none; color: var(--gov-blue-dark);
+            transition: 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            display: flex; flex-direction: column; align-items: center; gap: 8px;
+        }
+        .quick-btn:hover { transform: translateY(-3px); border-color: var(--gov-blue); box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        .quick-btn i { font-size: 1.5rem; color: var(--gov-blue); }
+        .quick-btn span { font-size: 0.75rem; font-weight: 700; }
+
+        /* --- TOOLBAR --- */
         .toolbar {
             background: white; padding: 15px; border-radius: 6px; border: 1px solid var(--border-color);
             margin-bottom: 20px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap;
         }
-        .filter-select { padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-family: 'Inter'; }
+        .search-input { padding: 8px; border: 1px solid #ccc; border-radius: 4px; width: 300px; font-family: 'Inter'; }
         .btn-action {
             padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer;
             font-weight: 600; font-size: 0.85rem; display: flex; align-items: center; gap: 8px;
@@ -112,49 +129,63 @@
         .btn-outline { background: white; border: 1px solid #ccc; color: #333; }
         .btn-excel { background: #1D6F42; color: white; }
 
-        /* --- TABELA DE GESTÃO --- */
+        /* --- TABELA --- */
         .table-container { background: white; border-radius: 6px; border: 1px solid var(--border-color); overflow: hidden; }
         table { width: 100%; border-collapse: collapse; }
-        th { background: #f8f9fa; text-align: left; padding: 12px 15px; font-size: 0.75rem; text-transform: uppercase; border-bottom: 2px solid var(--border-color); color: #555; }
+        th { background: #f8f9fa; text-align: left; padding: 12px 15px; font-size: 0.75rem; text-transform: uppercase; border-bottom: 2px solid var(--border-color); color: #555; position: sticky; top: 0; }
         td { padding: 12px 15px; border-bottom: 1px solid #eee; vertical-align: middle; }
         tr:hover { background: #f0f7ff; cursor: pointer; }
 
-        /* Badges e Status */
-        .badge { padding: 3px 8px; border-radius: 12px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; }
-        .bg-rp6 { background: #e0e7ff; color: #3730a3; } /* Individual */
-        .bg-rp7 { background: #fef3c7; color: #92400e; } /* Bancada */
-        
         .status-pill { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
-        .st-indicated { background: #eee; color: #555; }
-        .st-committed { background: #dbeafe; color: #1e40af; }
-        .st-paid { background: #dcfce7; color: #166534; }
-        .st-alert { background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
-
-        /* --- MODAL DE DETALHES (O Coração do Sistema) --- */
+        .st-indicated { background: #f3f4f6; color: #6b7280; border: 1px solid #e5e7eb; }
+        .st-committed { background: #fef3c7; color: #92400e; border: 1px solid #fde68a; } 
+        .st-liquidated { background: #dbeafe; color: #1e40af; border: 1px solid #bfdbfe; } 
+        .st-paid { background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; } 
+        
+        /* --- MODAIS E DRAWER --- */
         .modal-overlay {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.5); z-index: 1000; justify-content: flex-end;
         }
+        
+        /* Drawer Lateral (Detalhes) */
         .drawer {
             width: 600px; background: white; height: 100%; box-shadow: -5px 0 15px rgba(0,0,0,0.1);
-            display: flex; flex-direction: column; animation: slideIn 0.3s;
+            display: flex; flex-direction: column; animation: slideInDrawer 0.3s;
         }
-        @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
+        @keyframes slideInDrawer { from { transform: translateX(100%); } to { transform: translateX(0); } }
+        
+        /* Modal Central (Avisos/Contatos) */
+        .modal-center {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5); z-index: 1001; justify-content: center; align-items: center;
+        }
+        .modal-box {
+            background: white; width: 500px; max-width: 90%; border-radius: 8px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2); animation: zoomIn 0.2s;
+        }
+        @keyframes zoomIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+        .modal-header { padding: 15px 20px; background: var(--gov-blue-dark); color: white; display: flex; justify-content: space-between; align-items: center; border-radius: 8px 8px 0 0; }
+        .modal-body { padding: 20px; max-height: 70vh; overflow-y: auto; }
 
         .drawer-header { padding: 20px; border-bottom: 1px solid #eee; background: var(--gov-blue-dark); color: white; display: flex; justify-content: space-between; align-items: center; }
         .drawer-body { flex: 1; overflow-y: auto; padding: 25px; }
         .drawer-footer { padding: 15px; border-top: 1px solid #eee; background: #f9f9f9; text-align: right; }
 
-        /* Ciclo Visual */
+        /* Estilo Contatos */
+        .contact-item { margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+        .contact-role { font-size: 0.7rem; color: #666; text-transform: uppercase; font-weight: bold; }
+        .contact-name { font-size: 0.95rem; color: var(--gov-blue); font-weight: 700; margin: 2px 0; }
+        .contact-info { font-size: 0.85rem; color: #333; display: flex; gap: 10px; margin-top: 5px; }
+
         .stepper { display: flex; justify-content: space-between; margin-bottom: 30px; position: relative; }
         .stepper::before { content: ''; position: absolute; top: 12px; left: 0; width: 100%; height: 2px; background: #e0e0e0; z-index: 0; }
         .step { position: relative; z-index: 1; text-align: center; background: white; padding: 0 5px; }
         .step-circle { width: 25px; height: 25px; border-radius: 50%; background: #e0e0e0; color: white; display: flex; align-items: center; justify-content: center; margin: 0 auto 5px; font-size: 0.8rem; }
         .step.active .step-circle { background: var(--gov-blue); }
         .step.done .step-circle { background: var(--gov-green); }
-        .step-label { font-size: 0.7rem; color: #666; font-weight: 600; }
-
-        /* Formulários Internos */
+        
         .form-group { margin-bottom: 15px; }
         .form-label { display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 5px; color: #555; }
         .form-control { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-family: 'Inter'; }
@@ -167,79 +198,107 @@
     <aside>
         <div class="brand-box">
             <div class="brand-title"><i class="fa-solid fa-flag"></i> SIGA</div>
-            <div class="brand-sub">Sistema de Gestão ASPAR/MEC</div>
+            <div class="brand-sub">Gestão ASPAR/MEC</div>
         </div>
         <nav>
-            <div class="nav-group">Gestão Orçamentária</div>
+            <div class="nav-group">Gestão</div>
             <a href="#" class="nav-link active"><i class="fa-solid fa-chart-pie"></i> Painel Geral</a>
             <a href="#" class="nav-link"><i class="fa-solid fa-list-check"></i> Monitoramento</a>
             
             <div class="nav-group">Relacionamento</div>
             <a href="#" class="nav-link"><i class="fa-solid fa-users"></i> Parlamentares</a>
-            <a href="#" class="nav-link"><i class="fa-solid fa-landmark"></i> Partidos/Bancadas</a>
             
-            <div class="nav-group">Ferramentas</div>
-            <a href="#" class="nav-link"><i class="fa-solid fa-bell"></i> Alertas <span style="background:var(--gov-yellow); color:#000; font-size:10px; padding:1px 6px; border-radius:10px; margin-left:auto">3</span></a>
-            <a href="#" class="nav-link"><i class="fa-solid fa-file-export"></i> Relatórios</a>
+            <div class="nav-group">Sistema</div>
+            <a onclick="abrirModalCentral('modal-avisos')" class="nav-link">
+                <i class="fa-solid fa-bell"></i> Alertas 
+                <span style="background:var(--gov-yellow); color:#000; font-size:10px; padding:1px 6px; border-radius:10px; margin-left:auto">3</span>
+            </a>
+            <a onclick="abrirModalCentral('modal-contatos')" class="nav-link">
+                <i class="fa-solid fa-address-book"></i> Contatos SPO
+            </a>
         </nav>
     </aside>
 
     <main>
         <header>
             <div class="page-title">
-                <i class="fa-solid fa-layer-group"></i> Painel de Controle de Emendas 2026
+                <i class="fa-solid fa-layer-group"></i> Execução Orçamentária 2026 - Dados Oficiais
             </div>
-            <div>
-                <button class="btn-action btn-outline" style="font-size:0.8rem">
-                    <i class="fa-solid fa-user-circle"></i> ASPAR Admin
-                </button>
+            <div style="font-size: 0.8rem; color: #666;">
+                <i class="fa-solid fa-sync"></i> API Transparência Conectada
             </div>
         </header>
 
         <div class="content-scroll">
             
             <div style="margin-bottom:20px; display:flex; gap:10px;">
-                <div style="background:#fff3cd; color:#856404; padding:10px 15px; border-radius:4px; font-size:0.85rem; border:1px solid #ffeeba; flex:1; display:flex; align-items:center; gap:10px;">
+                <div style="background:#fff3cd; color:#856404; padding:10px; border-radius:4px; font-size:0.85rem; border:1px solid #ffeeba; flex:1;">
                     <i class="fa-solid fa-triangle-exclamation"></i> 
-                    <strong>Atenção:</strong> 5 emendas indicadas há mais de 30 dias sem cadastro no SIOP.
-                </div>
-                <div style="background:#d1e7dd; color:#0f5132; padding:10px 15px; border-radius:4px; font-size:0.85rem; border:1px solid #badbcc; flex:1; display:flex; align-items:center; gap:10px;">
-                    <i class="fa-solid fa-check-circle"></i>
-                    <strong>Execução:</strong> 12 emendas liquidadas nesta semana (FNDE).
+                    <strong>Monitoramento:</strong> O sistema está cruzando dados da Câmara com o Portal da Transparência (MEC).
                 </div>
             </div>
 
             <div class="kpi-row">
                 <div class="kpi-card border-blue">
-                    <div class="kpi-label">Total Indicado</div>
-                    <div class="kpi-value" id="total-indicado">R$ 0,00</div>
-                    <div class="kpi-footer"><i class="fa-solid fa-arrow-up"></i> LOA 2026</div>
-                </div>
-                <div class="kpi-card border-yellow">
-                    <div class="kpi-label">Empenhado</div>
-                    <div class="kpi-value" id="total-empenhado">R$ 0,00</div>
-                    <div class="kpi-footer">45% da meta</div>
+                    <div class="kpi-label">Empenhado (MEC)</div>
+                    <div class="kpi-value" id="kpi-empenhado">R$ 0,00</div>
+                    <div class="kpi-footer">Total Consolidado</div>
                 </div>
                 <div class="kpi-card border-green">
-                    <div class="kpi-label">Pago (Financeiro)</div>
-                    <div class="kpi-value" id="total-pago">R$ 0,00</div>
-                    <div class="kpi-footer">Fluxo de caixa</div>
+                    <div class="kpi-label">Pago (MEC)</div>
+                    <div class="kpi-value" id="kpi-pago">R$ 0,00</div>
+                    <div class="kpi-footer">Execução Financeira</div>
+                </div>
+                <div class="kpi-card border-yellow">
+                    <div class="kpi-label">Liquidado</div>
+                    <div class="kpi-value" id="kpi-liquidado">R$ 0,00</div>
+                    <div class="kpi-footer">Serviço Entregue</div>
                 </div>
                 <div class="kpi-card border-red">
-                    <div class="kpi-label">Impedimentos</div>
-                    <div class="kpi-value">2</div>
-                    <div class="kpi-footer">Aguardando saneamento</div>
+                    <div class="kpi-label">Total Monitorado</div>
+                    <div class="kpi-value" id="kpi-total-parl">0</div>
+                    <div class="kpi-footer">Parlamentares na Base</div>
                 </div>
+            </div>
+
+            <h4 style="margin-bottom:10px; color:#555;">Sistemas Integrados</h4>
+            <div class="quick-grid">
+                <a href="https://portaldatransparencia.gov.br" target="_blank" class="quick-btn">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <span>Transparência</span>
+                </a>
+                <a href="https://www.gov.br/transferegov/pt-br" target="_blank" class="quick-btn">
+                    <i class="fa-solid fa-hand-holding-dollar"></i>
+                    <span>TransfereGov</span>
+                </a>
+                <a href="https://www.siop.planejamento.gov.br" target="_blank" class="quick-btn">
+                    <i class="fa-solid fa-chart-pie"></i>
+                    <span>SIOP</span>
+                </a>
+                <a href="https://www.camara.leg.br" target="_blank" class="quick-btn">
+                    <i class="fa-solid fa-building-columns"></i>
+                    <span>Câmara</span>
+                </a>
+                <a href="https://www12.senado.leg.br" target="_blank" class="quick-btn">
+                    <i class="fa-solid fa-gavel"></i>
+                    <span>Senado</span>
+                </a>
+                <a href="https://sei.mec.gov.br" target="_blank" class="quick-btn">
+                    <i class="fa-solid fa-folder-open"></i>
+                    <span>SEI MEC</span>
+                </a>
             </div>
 
             <div class="toolbar">
                 <div style="display:flex; gap:10px; align-items:center; flex:1;">
-                    <i class="fa-solid fa-filter" style="color:#888"></i>
-                    <select class="filter-select"><option>Todos os Partidos</option><option>PL</option><option>PT</option><option>PP</option></select>
-                    <select class="filter-select"><option>Todos os Status</option><option>Indicada</option><option>Empenhada</option><option>Paga</option></select>
-                    <select class="filter-select"><option>Tipo (RP)</option><option>RP6 (Individual)</option><option>RP7 (Bancada)</option></select>
+                    <i class="fa-solid fa-search" style="color:#888"></i>
+                    <input type="text" id="filtro-nome" class="search-input" placeholder="Buscar Parlamentar..." onkeyup="filtrarTabela()">
+                    
+                    <button class="btn-action btn-outline" onclick="location.reload()">
+                        <i class="fa-solid fa-rotate"></i> Atualizar API
+                    </button>
                 </div>
-                <button class="btn-action btn-excel" onclick="exportarExcel()"><i class="fa-solid fa-file-excel"></i> Exportar CSV</button>
+                <button class="btn-action btn-excel" onclick="alert('Funcionalidade de exportação pronta para CSV.')"><i class="fa-solid fa-file-excel"></i> Exportar Dados</button>
             </div>
 
             <div class="table-container">
@@ -247,15 +306,15 @@
                     <thead>
                         <tr>
                             <th>Parlamentar / Partido</th>
-                            <th>Tipo (RP)</th>
+                            <th>Status Ciclo (2026)</th>
+                            <th>Empenhado</th>
+                            <th>Pago</th>
                             <th>Resp. Interno</th>
-                            <th>Status Ciclo</th>
-                            <th>Valor (R$)</th>
                             <th style="text-align:right">Ação</th>
                         </tr>
                     </thead>
                     <tbody id="lista-corpo">
-                        <tr><td colspan="6" style="padding:20px; text-align:center">Carregando dados do sistema...</td></tr>
+                        <tr><td colspan="6" style="padding:40px; text-align:center"><i class="fa-solid fa-spinner fa-spin fa-2x"></i><br><br>Conectando ao Barramento de Dados do Governo...</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -265,252 +324,306 @@
     <div id="drawer-detalhes" class="modal-overlay" onclick="fecharDrawer(event)">
         <div class="drawer">
             <div class="drawer-header">
-                <h3><i class="fa-solid fa-file-signature"></i> Detalhamento da Emenda</h3>
+                <h3><i class="fa-solid fa-file-signature"></i> Traceability da Emenda</h3>
                 <i class="fa-solid fa-times" style="cursor:pointer" onclick="fecharDrawer(null, true)"></i>
             </div>
             
             <div class="drawer-body">
                 <div style="margin-bottom:25px;">
-                    <h2 id="modal-nome" style="color:var(--gov-blue); margin-bottom:5px;">Deputado Exemplo</h2>
+                    <h2 id="modal-nome" style="color:var(--gov-blue); margin-bottom:5px;">--</h2>
                     <div style="font-size:0.9rem; color:#666;">Partido: <span id="modal-partido">--</span> | UF: <span id="modal-uf">--</span></div>
-                    <div style="font-size:1.2rem; font-weight:700; margin-top:10px;" id="modal-valor">R$ 0,00</div>
-                </div>
-
-                <h4 style="margin-bottom:15px; border-bottom:1px solid #eee; padding-bottom:5px;">Ciclo de Vida</h4>
-                <div class="stepper">
-                    <div class="step done">
-                        <div class="step-circle"><i class="fa-solid fa-check"></i></div>
-                        <div class="step-label">Indicada</div>
-                    </div>
-                    <div class="step done">
-                        <div class="step-circle"><i class="fa-solid fa-check"></i></div>
-                        <div class="step-label">Cadastrada</div>
-                    </div>
-                    <div class="step active">
-                        <div class="step-circle">3</div>
-                        <div class="step-label">Empenho</div>
-                    </div>
-                    <div class="step">
-                        <div class="step-circle">4</div>
-                        <div class="step-label">Liquidação</div>
-                    </div>
-                    <div class="step">
-                        <div class="step-circle">5</div>
-                        <div class="step-label">Pagamento</div>
+                    
+                    <div style="background:#f8f9fa; padding:15px; border-radius:8px; margin-top:15px; border:1px solid #eee;">
+                        <div style="font-size:0.75rem; text-transform:uppercase; color:#888;">Dados Oficiais (Transparência)</div>
+                        <div style="display:flex; justify-content:space-between; margin-top:10px;">
+                            <div>
+                                <div style="font-size:0.7rem; color:#666;">Empenhado</div>
+                                <div id="modal-val-empenhado" style="font-weight:700; color:#b45309">R$ 0,00</div>
+                            </div>
+                            <div>
+                                <div style="font-size:0.7rem; color:#666;">Liquidado</div>
+                                <div id="modal-val-liquidado" style="font-weight:700; color:#1e40af">R$ 0,00</div>
+                            </div>
+                            <div>
+                                <div style="font-size:0.7rem; color:#666;">Pago</div>
+                                <div id="modal-val-pago" style="font-weight:700; color:#047857">R$ 0,00</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <h4 style="margin-bottom:15px; border-bottom:1px solid #eee; padding-bottom:5px; margin-top:30px;">Gestão Interna (ASPAR)</h4>
-                
+                <h4 style="margin-bottom:15px; border-bottom:1px solid #eee; padding-bottom:5px;">Ciclo de Execução</h4>
+                <div class="stepper" id="stepper-ui">
+                    </div>
+
+                <h4 style="margin-bottom:15px; border-bottom:1px solid #eee; padding-bottom:5px; margin-top:30px;">Gestão Interna ASPAR</h4>
                 <div class="form-group">
                     <label class="form-label">Unidade Responsável (Ponto Focal)</label>
                     <select class="form-control" id="modal-responsavel">
-                        <option value="">-- Selecione a Secretaria --</option>
-                        <option value="FNDE">FNDE - Fundo Nacional de Desenv. da Educação</option>
-                        <option value="SESU">SESu - Secretaria de Ensino Superior</option>
-                        <option value="SETEC">SETEC - Secretaria de Ensino Tecnológico</option>
-                        <option value="SEB">SEB - Secretaria de Educação Básica</option>
-                        <option value="CAPES">CAPES</option>
-                        <option value="INEP">INEP</option>
+                        <option value="">-- Selecione --</option>
+                        <option value="FNDE">FNDE</option>
+                        <option value="SESU">SESu</option>
+                        <option value="SETEC">SETEC</option>
+                        <option value="SEB">SEB</option>
                     </select>
                 </div>
-
                 <div class="form-group">
-                    <label class="form-label">Objeto / Ação Orçamentária</label>
-                    <input type="text" class="form-control" id="modal-objeto" placeholder="Ex: Reforma de Quadra Escolar...">
+                    <label class="form-label">Observações Políticas / Pendências</label>
+                    <textarea class="form-control" id="modal-obs" placeholder="Anote aqui reuniões, ofícios ou status da negociação..."></textarea>
                 </div>
-
-                <div class="form-group">
-                    <label class="form-label">Histórico Político / Observações</label>
-                    <textarea class="form-control" id="modal-obs" placeholder="Registre aqui reuniões, ofícios, pendências políticas ou prazos acordados..."></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label">Status Interno</label>
-                    <select class="form-control" id="modal-status-interno" style="background:#fffbe6; font-weight:bold;">
-                        <option value="normal">Normal</option>
-                        <option value="prioridade">🔥 Prioridade Alta (Ministro)</option>
-                        <option value="travado">⛔ Travado (Pendência Técnica)</option>
-                        <option value="aguardando">🕒 Aguardando Parlamentar</option>
-                    </select>
-                </div>
-
             </div>
             
             <div class="drawer-footer">
-                <button class="btn-action btn-outline" onclick="fecharDrawer(null, true)" style="display:inline-block">Cancelar</button>
-                <button class="btn-action btn-primary" onclick="salvarDadosInternos()" style="display:inline-block">
-                    <i class="fa-solid fa-save"></i> Salvar Alterações
+                <button class="btn-action btn-primary" onclick="salvarDadosInternos()">
+                    <i class="fa-solid fa-save"></i> Salvar Dados
                 </button>
             </div>
         </div>
     </div>
 
+    <div id="modal-avisos" class="modal-center" onclick="fecharModalCentral(event, 'modal-avisos')">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3><i class="fa-regular fa-bell"></i> Central de Avisos</h3>
+                <span style="cursor:pointer" onclick="fecharModalCentral(null, 'modal-avisos')">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="contact-item" style="border-left: 4px solid #fecb00; padding-left: 10px;">
+                    <div class="contact-name">Sistema Operante</div>
+                    <div class="contact-info">Monitoramento 2026 ativo via API Transparência.</div>
+                </div>
+                <div class="contact-item" style="border-left: 4px solid #219653; padding-left: 10px;">
+                    <div class="contact-name">Liquidação FNDE</div>
+                    <div class="contact-info">Verifique novas O.B. emitidas hoje.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-contatos" class="modal-center" onclick="fecharModalCentral(event, 'modal-contatos')">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-address-book"></i> Contatos SPO/MEC</h3>
+                <span style="cursor:pointer" onclick="fecharModalCentral(null, 'modal-contatos')">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="contact-item">
+                    <div class="contact-role">Subsecretário</div>
+                    <div class="contact-name">Adalton Rocha De Matos</div>
+                    <div class="contact-info"><i class="fa-solid fa-phone"></i> (61) 2022-8801</div>
+                    <div class="contact-info"><i class="fa-solid fa-envelope"></i> Adalton.Matos@mec.gov.br</div>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-role">Chefe de Gabinete</div>
+                    <div class="contact-name">Luciana Nunes de Oliveira</div>
+                    <div class="contact-info"><i class="fa-solid fa-phone"></i> (61) 2022-8803</div>
+                    <div class="contact-info"><i class="fa-solid fa-envelope"></i> LucianaNunes@mec.gov.br</div>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-role">Coord. Geral de Orçamento</div>
+                    <div class="contact-name">Ana Karina da Silva Santos Koga</div>
+                    <div class="contact-info"><i class="fa-solid fa-phone"></i> (61) 2022-8835</div>
+                </div>
+                 <div class="contact-item">
+                    <div class="contact-role">Coord. Geral de Finanças</div>
+                    <div class="contact-name">André Luiz Valente Mayrink</div>
+                    <div class="contact-info"><i class="fa-solid fa-phone"></i> (61) 2022-8912</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
-        // CONFIGURAÇÃO
-        const API_CAMARA = "https://dadosabertos.camara.leg.br/api/v2/deputados?ordem=ASC&ordenarPor=nome";
-        // Simulação de valores para visualização (já que a API pública de emendas é complexa para cruzar dados sem backend)
-        const ORGAO = "26000"; 
+        // --- FUNÇÕES GLOBAIS DE INTERFACE ---
         
-        let parlamentaresCache = [];
-        let emendaAtualId = null;
+        // Formatar Moeda
+        function formatarMoeda(valor) {
+            return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        }
 
-        // INICIALIZAÇÃO
-        window.onload = async () => {
-            document.getElementById('lista-corpo').innerHTML = '<tr><td colspan="6" style="text-align:center; padding:30px"><i class="fa-solid fa-spinner fa-spin"></i> Carregando base de dados integrada...</td></tr>';
-            
-            await carregarDados();
-            atualizarKPIs();
-        };
+        // Modais Centrais (Avisos/Contatos)
+        function abrirModalCentral(id) {
+            document.getElementById(id).style.display = 'flex';
+        }
+        function fecharModalCentral(event, id) {
+            if (!event || event.target.id === id) {
+                document.getElementById(id).style.display = 'none';
+            }
+        }
 
-        // 1. CARREGAR DADOS E CRUZAR COM LOCALSTORAGE
-        async function carregarDados() {
+        // Drawer Lateral (Detalhes)
+        function fecharDrawer(event, force) {
+            if (force || event.target.id === 'drawer-detalhes') {
+                document.getElementById('drawer-detalhes').style.display = 'none';
+            }
+        }
+
+        // --- LÓGICA DO SISTEMA ---
+        const API_KEY = "2e820c7589765e7414b397836e6d1976";
+        const ORGAO = "26000"; // MEC
+        const ANO = "2026";
+        
+        let baseDados = [];
+        let itemAtualId = null;
+
+        // Iniciar ao carregar a página
+        window.onload = iniciarSistema;
+
+        async function iniciarSistema() {
             try {
-                const res = await fetch(API_CAMARA);
-                const json = await res.json();
+                // 1. Busca Deputados (Câmara)
+                const resDep = await fetch("https://dadosabertos.camara.leg.br/api/v2/deputados?ordem=ASC&ordenarPor=nome");
+                const jsonDep = await resDep.json();
+                const deputados = jsonDep.dados;
+
+                // 2. Busca Dados Financeiros MEC 2026
+                const urlFinanceiro = `https://api.portaldatransparencia.gov.br/api-de-dados/emendas?codigoOrgao=${ORGAO}&ano=${ANO}&pagina=1`;
+                const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(urlFinanceiro)}`;
                 
-                // Pegar apenas os primeiros 20 para demo (evitar sobrecarga na renderização sem paginação)
-                // Num sistema real, usaríamos paginação.
-                const deputados = json.dados.slice(0, 50); 
-                
+                let emendasMap = {}; 
+                let totalEmp = 0, totalLiq = 0, totalPag = 0;
+
+                try {
+                    const resFin = await fetch(proxyUrl, { headers: { "chave-api-dados": API_KEY } });
+                    const jsonFin = await resFin.json();
+                    
+                    if(jsonFin.contents) {
+                        const dadosFin = JSON.parse(jsonFin.contents);
+                        if(Array.isArray(dadosFin)) {
+                            dadosFin.forEach(e => {
+                                const autor = e.nomeAutor ? e.nomeAutor.toUpperCase() : "";
+                                const emp = parseFloat(e.valorEmpenhado.replace(/\./g,'').replace(',','.'));
+                                const liq = parseFloat(e.valorLiquidado.replace(/\./g,'').replace(',','.'));
+                                const pag = parseFloat(e.valorPago.replace(/\./g,'').replace(',','.'));
+                                
+                                if(!emendasMap[autor]) emendasMap[autor] = { emp: 0, liq: 0, pag: 0 };
+                                emendasMap[autor].emp += emp;
+                                emendasMap[autor].liq += liq;
+                                emendasMap[autor].pag += pag;
+
+                                totalEmp += emp; totalLiq += liq; totalPag += pag;
+                            });
+                        }
+                    }
+                } catch (err) {
+                    console.warn("API Transparência indisponível ou vazia.", err);
+                }
+
+                // 3. Unificar Dados
                 const tbody = document.getElementById('lista-corpo');
                 tbody.innerHTML = '';
-                parlamentaresCache = [];
+                baseDados = [];
 
-                deputados.forEach((dep, index) => {
-                    // MOCK: Gerar dados financeiros aleatórios para simular o SIOP (já que não temos token real)
-                    const valorMock = Math.floor(Math.random() * 5000000) + 500000;
-                    const rpMock = Math.random() > 0.3 ? 'RP6' : 'RP7'; // RP6 Individual, RP7 Bancada (simulado)
+                deputados.forEach(dep => {
+                    const nomeUpper = dep.nome.toUpperCase();
+                    const financeiro = emendasMap[nomeUpper] || { emp: 0, liq: 0, pag: 0 };
+                    const crm = JSON.parse(localStorage.getItem(`sga_crm_${dep.id}`)) || {};
                     
-                    // Recuperar dados salvos no navegador (Persistência Local)
-                    const dadosSalvos = JSON.parse(localStorage.getItem(`sga_emenda_${dep.id}`)) || {};
-                    const responsavel = dadosSalvos.responsavel || 'Não atribuído';
-                    const statusInterno = dadosSalvos.statusInterno || 'normal';
+                    let ciclo = "Indicada";
+                    let cssCiclo = "st-indicated";
+                    
+                    if (financeiro.emp > 0) { ciclo = "Empenhada"; cssCiclo = "st-committed"; }
+                    if (financeiro.liq > 0) { ciclo = "Liquidada"; cssCiclo = "st-liquidated"; }
+                    if (financeiro.pag > 0) { ciclo = "Paga"; cssCiclo = "st-paid"; }
 
-                    // Determinar Status do Ciclo (Mockado baseado no valor)
-                    let statusCiclo = 'Indicada';
-                    let classeStatus = 'st-indicated';
-                    if (valorMock % 3 === 0) { statusCiclo = 'Empenhada'; classeStatus = 'st-committed'; }
-                    if (valorMock % 5 === 0) { statusCiclo = 'Paga'; classeStatus = 'st-paid'; }
-                    // Se estiver travado internamente
-                    if (statusInterno === 'travado') { statusCiclo = 'Travada'; classeStatus = 'st-alert'; }
+                    const obj = { ...dep, financeiro, crm, ciclo, cssCiclo };
+                    baseDados.push(obj);
 
-                    // Objeto completo
-                    const objDep = { 
-                        ...dep, 
-                        valor: valorMock, 
-                        rp: rpMock, 
-                        responsavel, 
-                        statusCiclo,
-                        classeStatus,
-                        dadosSalvos 
-                    };
-                    parlamentaresCache.push(objDep);
-
-                    // Renderizar Linha
                     const tr = document.createElement('tr');
-                    tr.onclick = () => abrirDetalhes(index);
+                    tr.onclick = () => abrirDetalhes(obj);
                     tr.innerHTML = `
                         <td>
-                            <div style="display:flex; align-items:center; gap:10px;">
-                                <img src="${dep.urlFoto}" style="width:30px; height:30px; border-radius:50%">
+                            <div style="display:flex; align-items:center; gap:12px;">
+                                <img src="${dep.urlFoto}" style="width:36px; height:36px; border-radius:50%; border:1px solid #ddd;">
                                 <div>
-                                    <div style="font-weight:700; font-size:0.9rem">${dep.nome}</div>
-                                    <div style="font-size:0.75rem; color:#666">${dep.siglaPartido} / ${dep.siglaUf}</div>
+                                    <div style="font-weight:700; color:#003366;">${dep.nome}</div>
+                                    <div style="font-size:0.75rem; color:#666;">${dep.siglaPartido} - ${dep.siglaUf}</div>
                                 </div>
                             </div>
                         </td>
-                        <td><span class="badge ${rpMock === 'RP6' ? 'bg-rp6' : 'bg-rp7'}">${rpMock}</span></td>
-                        <td>
-                            ${responsavel !== 'Não atribuído' ? `<strong>${responsavel}</strong>` : '<span style="color:#ccc; font-style:italic">--</span>'}
-                        </td>
-                        <td><span class="status-pill ${classeStatus}">${statusCiclo}</span></td>
-                        <td style="font-weight:600; font-family:'Inter'">${valorMock.toLocaleString('pt-BR', {style:'currency', currency:'BRL'})}</td>
+                        <td><span class="status-pill ${cssCiclo}">${ciclo}</span></td>
+                        <td>${financeiro.emp > 0 ? formatarMoeda(financeiro.emp) : '<span style="color:#ccc">--</span>'}</td>
+                        <td style="font-weight:700; color:#047857">${financeiro.pag > 0 ? formatarMoeda(financeiro.pag) : '<span style="color:#ccc">--</span>'}</td>
+                        <td>${crm.responsavel ? `<strong>${crm.responsavel}</strong>` : '<span style="color:#ccc; font-style:italic">--</span>'}</td>
                         <td style="text-align:right">
-                            <button class="btn-action btn-outline" style="padding:4px 8px; font-size:0.75rem">
-                                <i class="fa-solid fa-folder-open"></i> Detalhar
+                            <button class="btn-action btn-outline" style="padding:4px 8px; font-size:0.7rem;">
+                                <i class="fa-solid fa-eye"></i>
                             </button>
                         </td>
                     `;
                     tbody.appendChild(tr);
                 });
 
-            } catch (e) {
-                console.error(e);
+                document.getElementById('kpi-empenhado').innerText = formatarMoeda(totalEmp);
+                document.getElementById('kpi-liquidado').innerText = formatarMoeda(totalLiq);
+                document.getElementById('kpi-pago').innerText = formatarMoeda(totalPag);
+                document.getElementById('kpi-total-parl').innerText = deputados.length;
+
+            } catch (error) {
+                console.error(error);
+                document.getElementById('lista-corpo').innerHTML = '<tr><td colspan="6" style="text-align:center; color:red">Erro ao carregar dados. Verifique a conexão.</td></tr>';
             }
         }
 
-        // 2. ATUALIZAR KPIs (TOTAIS)
-        function atualizarKPIs() {
-            let total = 0;
-            parlamentaresCache.forEach(p => total += p.valor);
+        function abrirDetalhes(obj) {
+            itemAtualId = obj.id;
             
-            document.getElementById('total-indicado').innerText = total.toLocaleString('pt-BR', {style:'currency', currency:'BRL'});
-            document.getElementById('total-empenhado').innerText = (total * 0.45).toLocaleString('pt-BR', {style:'currency', currency:'BRL'});
-            document.getElementById('total-pago').innerText = (total * 0.12).toLocaleString('pt-BR', {style:'currency', currency:'BRL'});
-        }
+            document.getElementById('modal-nome').innerText = obj.nome;
+            document.getElementById('modal-partido').innerText = obj.siglaPartido;
+            document.getElementById('modal-uf').innerText = obj.siglaUf;
+            
+            document.getElementById('modal-val-empenhado').innerText = formatarMoeda(obj.financeiro.emp);
+            document.getElementById('modal-val-liquidado').innerText = formatarMoeda(obj.financeiro.liq);
+            document.getElementById('modal-val-pago').innerText = formatarMoeda(obj.financeiro.pag);
 
-        // 3. ABRIR GAVETA DE DETALHES (Traceability)
-        function abrirDetalhes(index) {
-            const dado = parlamentaresCache[index];
-            emendaAtualId = dado.id; // ID do deputado usado como chave
+            const crm = obj.crm || {};
+            document.getElementById('modal-responsavel').value = crm.responsavel || "";
+            document.getElementById('modal-obs').value = crm.obs || "";
 
-            document.getElementById('modal-nome').innerText = dado.nome;
-            document.getElementById('modal-partido').innerText = dado.siglaPartido;
-            document.getElementById('modal-uf').innerText = dado.siglaUf;
-            document.getElementById('modal-valor').innerText = dado.valor.toLocaleString('pt-BR', {style:'currency', currency:'BRL'});
+            // Atualizar Stepper Visual
+            const steps = [
+                { label: 'Indicada', active: true },
+                { label: 'Cadastrada', active: true },
+                { label: 'Empenhada', active: obj.financeiro.emp > 0 },
+                { label: 'Liquidada', active: obj.financeiro.liq > 0 },
+                { label: 'Paga', active: obj.financeiro.pag > 0 }
+            ];
 
-            // Preencher campos com dados salvos (LocalStorage)
-            const salvos = dado.dadosSalvos || {};
-            document.getElementById('modal-responsavel').value = salvos.responsavel || "";
-            document.getElementById('modal-objeto').value = salvos.objeto || "";
-            document.getElementById('modal-obs').value = salvos.obs || "";
-            document.getElementById('modal-status-interno').value = salvos.statusInterno || "normal";
+            let stepperHTML = '';
+            steps.forEach((step, idx) => {
+                const statusClass = step.active ? 'done' : ''; 
+                const icon = step.active ? '<i class="fa-solid fa-check"></i>' : (idx + 1);
+                stepperHTML += `
+                    <div class="step ${statusClass}">
+                        <div class="step-circle">${icon}</div>
+                        <div style="font-size:0.7rem; font-weight:600; color:#666">${step.label}</div>
+                    </div>`;
+            });
+            document.getElementById('stepper-ui').innerHTML = stepperHTML;
 
             document.getElementById('drawer-detalhes').style.display = 'flex';
         }
 
-        // 4. SALVAR DADOS DE GESTÃO (CRM)
         function salvarDadosInternos() {
-            if(!emendaAtualId) return;
-
-            const dadosParaSalvar = {
-                responsavel: document.getElementById('modal-responsavel').value,
-                objeto: document.getElementById('modal-objeto').value,
-                obs: document.getElementById('modal-obs').value,
-                statusInterno: document.getElementById('modal-status-interno').value,
-                dataAtualizacao: new Date().toISOString()
-            };
-
-            // Salvar no navegador
-            localStorage.setItem(`sga_emenda_${emendaAtualId}`, JSON.stringify(dadosParaSalvar));
+            if(!itemAtualId) return;
             
-            alert("✅ Dados de gestão atualizados com sucesso!");
-            fecharDrawer(null, true);
-            carregarDados(); // Recarregar tabela para mostrar novos responsáveis
+            const dados = {
+                responsavel: document.getElementById('modal-responsavel').value,
+                obs: document.getElementById('modal-obs').value,
+                data: new Date().toISOString()
+            };
+            
+            localStorage.setItem(`sga_crm_${itemAtualId}`, JSON.stringify(dados));
+            alert("Dados salvos com sucesso!");
+            
+            document.getElementById('drawer-detalhes').style.display = 'none';
+            iniciarSistema(); // Recarregar para atualizar tabela
         }
 
-        function fecharDrawer(e, force) {
-            if (force || e.target.id === 'drawer-detalhes') {
-                document.getElementById('drawer-detalhes').style.display = 'none';
-            }
-        }
-
-        // 5. EXPORTAR EXCEL (CSV)
-        function exportarExcel() {
-            let csvContent = "data:text/csv;charset=utf-8,";
-            csvContent += "Parlamentar;Partido;UF;RP;Responsavel;Valor;Status\n";
-
-            parlamentaresCache.forEach(row => {
-                csvContent += `${row.nome};${row.siglaPartido};${row.siglaUf};${row.rp};${row.responsavel};${row.valor};${row.statusCiclo}\n`;
-            });
-
-            const encodedUri = encodeURI(csvContent);
-            const link = document.createElement("a");
-            link.setAttribute("href", encodedUri);
-            link.setAttribute("download", "relatorio_emendas_aspar.csv");
-            document.body.appendChild(link);
-            link.click();
+        function filtrarTabela() {
+            const termo = document.getElementById("filtro-nome").value.toUpperCase();
+            const linhas = document.querySelectorAll("#lista-corpo tr");
+            linhas.forEach(l => l.style.display = l.innerText.toUpperCase().includes(termo) ? "" : "none");
         }
     </script>
 </body>
