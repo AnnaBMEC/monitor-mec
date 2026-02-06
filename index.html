@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SGA - Sistema de Gestão ASPAR v7.1</title>
+    <title>SGA - Sistema de Gestão ASPAR v7.3</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Rawline:wght@300;400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -130,8 +130,8 @@
         .qc-cyan { background: linear-gradient(135deg, #00A8CC 0%, #007A94 100%); }
         .qc-dou { background: linear-gradient(135deg, #1f2937 0%, #111827 100%); }
 
-        /* Views (Tabela, Grid, Docs) */
-        .view-section { display: none; } /* Ocultar por padrão */
+        /* Views */
+        .view-section { display: none; }
         
         /* Tabela */
         .table-card { background: white; border-radius: 8px; border: 1px solid #e0e0e0; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
@@ -149,6 +149,7 @@
         /* Grids (Carômetro e Bancadas) */
         .grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
         
+        /* Card Parlamentar */
         .profile-card {
             background: white; border: 1px solid #e0e0e0; border-radius: 12px; padding: 24px;
             text-align: center; cursor: pointer; transition: 0.2s; position: relative;
@@ -164,24 +165,28 @@
             text-align: center; cursor: default; transition: 0.2s;
         }
         .bancada-card:hover { border-color: var(--mec-blue); transform: translateY(-4px); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
-        .uf-sigla { font-size: 2.5rem; font-weight: 800; color: #E6E8EB; line-height: 1; }
-        .uf-name { font-size: 1.1rem; font-weight: 700; color: var(--mec-blue); }
+        .uf-sigla { font-size: 3rem; font-weight: 800; color: #E6E8EB; line-height: 1; }
+        .uf-name { font-size: 1.1rem; font-weight: 700; color: var(--mec-blue); margin-top: -15px; margin-bottom: 10px; display: block; }
         .btn-filter-uf { margin-top: 15px; background: var(--mec-blue); color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; width: 100%; font-weight: 600;}
 
-        /* --- DOCUMENTOS --- */
+        /* --- DOCUMENTOS (NOVO ESTILO) --- */
         .docs-layout { display: grid; grid-template-columns: 350px 1fr; gap: 24px; }
-        .doc-form-card { background: white; border-radius: 8px; padding: 24px; border: 1px solid #e0e0e0; height: fit-content; }
+        .doc-form-card { background: white; border-radius: 8px; padding: 24px; border: 1px solid #e0e0e0; height: fit-content; border-top: 4px solid var(--mec-yellow); }
         .doc-list-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 16px; }
-        .doc-card { background: white; border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; display: flex; flex-direction: column; }
+        .doc-card { background: white; border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; display: flex; flex-direction: column; position: relative; transition: 0.2s; }
+        .doc-card:hover { border-color: var(--mec-blue); box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
         .doc-icon { font-size: 2rem; color: var(--mec-blue); margin-bottom: 15px; }
-        .doc-title { font-weight: 700; color: #333; margin-bottom: 8px; }
-        .doc-desc { font-size: 0.85rem; color: #666; margin-bottom: 15px; flex: 1; }
-        .btn-delete-doc { color: #d32f2f; cursor: pointer; float: right; }
+        .doc-type { font-size: 0.65rem; text-transform: uppercase; color: #888; font-weight: 800; letter-spacing: 0.5px; margin-bottom: 5px; }
+        .doc-title { font-weight: 700; color: #333; margin-bottom: 8px; line-height: 1.3; }
+        .doc-desc { font-size: 0.85rem; color: #666; margin-bottom: 15px; flex: 1; font-family: 'Inter'; }
+        .doc-meta { font-size: 0.75rem; color: #999; border-top: 1px solid #eee; padding-top: 10px; display: flex; justify-content: space-between; align-items: center; }
+        .btn-delete-doc { color: #d32f2f; cursor: pointer; float: right; padding: 5px; }
+        .btn-delete-doc:hover { background: #fee2e2; border-radius: 4px; }
 
-        /* Form Elements */
-        .form-label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px; }
+        /* Form */
+        .form-label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px; color: var(--text-main); }
         .form-control { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; margin-bottom: 15px; font-family: 'Inter'; }
-        .btn-save { background: var(--mec-blue); color: white; border: none; padding: 12px; border-radius: 6px; font-weight: 600; cursor: pointer; width: 100%; }
+        .btn-save { background: var(--mec-blue); color: white; border: none; padding: 12px; border-radius: 6px; font-weight: 600; cursor: pointer; width: 100%; transition: 0.2s; }
         .btn-save:hover { background: var(--mec-blue-hover); }
 
         /* Modais */
@@ -220,8 +225,8 @@
 
     <aside>
         <div class="brand-box">
-            <div class="brand-gov">SGA</div>
-            <div class="brand-dept">Sistema de Gestão ASPAR</div>
+            <div class="brand-gov">SGA ASPAR</div>
+            <div class="brand-dept">EMENDAS</div>
         </div>
 
         <nav>
@@ -230,7 +235,7 @@
                 <i class="fa-solid fa-chart-line"></i> Painel Geral
             </a>
             <a onclick="trocarTela('documentos')" class="nav-link" id="link-documentos">
-                <i class="fa-solid fa-folder-plus"></i> Documentos
+                <i class="fa-solid fa-file-arrow-up"></i> Documentos Externos
             </a>
             
             <div class="nav-label">Relacionamento</div>
@@ -350,22 +355,31 @@
             </div>
 
             <div id="view-documentos" class="view-section" style="display:none;">
-                <div class="section-title">Central de Documentos & Atos</div>
+                <div class="section-title">Central de Documentos Externos</div>
                 <div class="docs-layout">
                     <div class="doc-form-card">
                         <h4 style="margin-bottom:20px; color:var(--mec-blue);">Anexar Novo Documento</h4>
-                        <label class="form-label">Título</label>
-                        <input type="text" id="doc-titulo" class="form-control" placeholder="Ex: Portaria FNDE nº 123">
-                        <label class="form-label">Tipo</label>
+                        
+                        <label class="form-label">Título do Documento</label>
+                        <input type="text" id="doc-titulo" class="form-control" placeholder="Ex: Ofício nº 123/2026 - Gabinete Dep...">
+                        
+                        <label class="form-label">Origem / Tipo</label>
                         <select id="doc-tipo" class="form-control">
+                            <option value="Ofício Externo">Ofício Externo</option>
                             <option value="Portaria">Portaria</option>
                             <option value="Nota Técnica">Nota Técnica</option>
-                            <option value="Comunicado">Comunicado</option>
+                            <option value="Outros">Outros</option>
                         </select>
-                        <label class="form-label">Descrição</label>
-                        <textarea id="doc-desc" class="form-control" style="height:100px;"></textarea>
-                        <button class="btn-save" onclick="adicionarDocumento()"><i class="fa-solid fa-upload"></i> Anexar</button>
+
+                        <label class="form-label">Conteúdo / Descrição</label>
+                        <textarea id="doc-desc" class="form-control" style="height:100px;" placeholder="Escreva aqui um resumo ou despacho sobre o documento..."></textarea>
+
+                        <label class="form-label">Anexo (Simulado)</label>
+                        <input type="file" class="form-control" id="doc-file">
+
+                        <button class="btn-save" onclick="adicionarDocumento()"><i class="fa-solid fa-cloud-arrow-up"></i> Salvar Documento</button>
                     </div>
+
                     <div class="doc-list-grid" id="lista-documentos">
                         </div>
                 </div>
@@ -550,31 +564,48 @@
             });
         }
 
-        // --- DOCS ---
+        // --- DOCS EXTERNOS ---
         function adicionarDocumento() {
             const titulo = document.getElementById('doc-titulo').value;
             const tipo = document.getElementById('doc-tipo').value;
             const desc = document.getElementById('doc-desc').value;
+            const fileInput = document.getElementById('doc-file');
+            
             if(!titulo) return alert("Digite um título.");
 
-            const docs = JSON.parse(localStorage.getItem('sga_docs')) || [];
-            docs.unshift({ id: Date.now(), titulo, tipo, desc, data: new Date().toLocaleDateString() });
-            localStorage.setItem('sga_docs', JSON.stringify(docs));
+            const docs = JSON.parse(localStorage.getItem('sga_docs_ext')) || [];
+            docs.unshift({ 
+                id: Date.now(), 
+                titulo, tipo, desc, 
+                data: new Date().toLocaleDateString(),
+                file: fileInput.files.length > 0 ? fileInput.files[0].name : 'Anexo.pdf'
+            });
+            localStorage.setItem('sga_docs_ext', JSON.stringify(docs));
             renderizarDocumentos();
+            
+            // Limpa form
+            document.getElementById('doc-titulo').value = '';
+            document.getElementById('doc-desc').value = '';
         }
 
         function renderizarDocumentos() {
             const lista = document.getElementById('lista-documentos');
-            const docs = JSON.parse(localStorage.getItem('sga_docs')) || [];
-            if(docs.length === 0) { lista.innerHTML = '<div style="color:#888; grid-column:span 3; text-align:center;">Nenhum documento.</div>'; return; }
+            const docs = JSON.parse(localStorage.getItem('sga_docs_ext')) || [];
+            
+            if(docs.length === 0) { lista.innerHTML = '<div style="color:#888; grid-column:span 3; text-align:center;">Nenhum documento anexado.</div>'; return; }
+            
             lista.innerHTML = '';
             docs.forEach(doc => {
+                let icon = 'fa-file-lines';
+                if(doc.tipo === 'Ofício Externo') icon = 'fa-envelope-open-text';
+                
                 lista.innerHTML += `
                     <div class="doc-card">
-                        <i class="fa-solid fa-file-pdf doc-icon"></i>
+                        <i class="fa-solid ${icon} doc-icon"></i>
                         <div class="doc-type">${doc.tipo}</div>
                         <div class="doc-title">${doc.titulo}</div>
                         <div class="doc-desc">${doc.desc}</div>
+                        <div style="font-size:0.8rem; color:#00376F; margin-bottom:10px;"><i class="fa-solid fa-paperclip"></i> ${doc.file}</div>
                         <div class="doc-meta"><span>${doc.data}</span><i class="fa-solid fa-trash btn-delete-doc" onclick="deletarDoc(${doc.id})"></i></div>
                     </div>
                 `;
@@ -582,18 +613,23 @@
         }
 
         function deletarDoc(id) {
-            let docs = JSON.parse(localStorage.getItem('sga_docs')) || [];
+            if(!confirm('Excluir?')) return;
+            let docs = JSON.parse(localStorage.getItem('sga_docs_ext')) || [];
             docs = docs.filter(d => d.id !== id);
-            localStorage.setItem('sga_docs', JSON.stringify(docs));
+            localStorage.setItem('sga_docs_ext', JSON.stringify(docs));
             renderizarDocumentos();
         }
 
-        // --- NAV & MODALS ---
+        // --- NAVEGAÇÃO ---
         function trocarTela(tela) {
             document.querySelectorAll('.view-section').forEach(el => el.style.display = 'none');
             document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active'));
             
-            document.getElementById('view-' + tela).style.display = tela === 'carometro' || tela === 'bancadas' ? 'grid' : 'block';
+            // Se for carometro ou bancadas, display é grid, senão block
+            let disp = 'block';
+            if(tela === 'carometro' || tela === 'bancadas') disp = 'grid';
+            
+            document.getElementById('view-' + tela).style.display = disp;
             document.getElementById('link-' + tela).classList.add('active');
         }
 
@@ -617,7 +653,6 @@
 
         // --- DETALHES ---
         async function abrirDetalhes(idObj) {
-            // Se vier do onclick na TR, o parametro é o ID, então achamos o objeto
             const obj = typeof idObj === 'object' ? idObj : baseDados.find(d => d.id === idObj);
             if(!obj) return;
 
@@ -632,7 +667,7 @@
             document.getElementById('crm-responsavel').value = crm.responsavel || "";
             document.getElementById('crm-obs').value = crm.obs || "";
 
-            // Fetch Detalhes
+            // Fetch
             try {
                 const res = await fetch(`https://dadosabertos.camara.leg.br/api/v2/deputados/${obj.id}`);
                 const json = await res.json();
