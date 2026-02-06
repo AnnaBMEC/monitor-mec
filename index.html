@@ -3,84 +3,123 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ASPAR Emendas - Monitoramento 2026</title>
+    <title>Layout Institucional Padrão MEC</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
         :root {
-            /* Paleta de Cores Governamental Moderna */
-            --primary: #003366;       /* Azul Escuro MEC */
-            --primary-light: #004a8d; /* Azul Médio */
-            --accent: #fecb00;        /* Amarelo Gov */
-            --bg-body: #f3f4f6;       /* Cinza muito suave (fundo) */
-            --bg-card: #ffffff;       /* Branco puro */
-            --text-main: #1f2937;     /* Cinza quase preto */
-            --text-muted: #6b7280;    /* Cinza médio */
+            /* Paleta Oficial MEC / Governo */
+            --mec-blue-primary: #003366;
+            --mec-blue-light: #004a8d;
+            --mec-green: #219653;
+            --mec-yellow: #fecb00;
             
-            /* Cores dos Ícones (Estilo Flat) */
-            --icon-bg-blue: #eff6ff; --icon-color-blue: #2563eb;
-            --icon-bg-green: #dcfce7; --icon-color-green: #16a34a;
-            --icon-bg-purple: #f3e8ff; --icon-color-purple: #9333ea;
-            --icon-bg-orange: #ffedd5; --icon-color-orange: #ea580c;
-
-            --sidebar-width: 260px;
-            --radius-card: 16px;      /* Arredondamento moderno */
+            /* Tons Neutros */
+            --bg-body: #f8f9fa;
+            --bg-card: #ffffff;
+            --text-primary: #1f2937;
+            --text-secondary: #6b7280;
+            --border-color: #e5e7eb;
+            
+            /* Dimensões */
+            --sidebar-width: 280px;
+            --card-radius: 12px;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        body { 
-            font-family: 'Inter', sans-serif; 
-            background-color: var(--bg-body); 
-            color: var(--text-main); 
-            display: flex; 
-            height: 100vh; 
-            overflow: hidden; 
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-primary);
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
         }
 
-        /* --- SIDEBAR ESQUERDA --- */
+        /* --- MENU LATERAL (Fundo Claro) --- */
         aside {
             width: var(--sidebar-width);
-            background: var(--primary);
-            color: white;
+            background-color: var(--bg-card);
+            border-right: 1px solid var(--border-color);
             display: flex;
             flex-direction: column;
             flex-shrink: 0;
-            z-index: 100;
         }
 
-        .brand {
-            padding: 30px 24px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
+        .brand-area {
+            padding: 24px;
+            border-bottom: 1px solid var(--border-color);
+            border-top: 4px solid var(--mec-yellow); /* Detalhe Institucional */
         }
-        .brand h2 { font-size: 1.25rem; font-weight: 700; display: flex; align-items: center; gap: 10px; letter-spacing: -0.5px; }
-        .brand small { display: block; margin-top: 4px; opacity: 0.7; font-size: 0.75rem; letter-spacing: 1px; text-transform: uppercase; }
-
-        nav { flex: 1; padding: 24px 16px; overflow-y: auto; }
         
-        .nav-label { font-size: 0.7rem; text-transform: uppercase; color: rgba(255,255,255,0.5); font-weight: 600; margin-bottom: 10px; padding-left: 12px; margin-top: 20px; }
+        .brand-title {
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: var(--mec-blue-primary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: flex; align-items: center; gap: 10px;
+        }
+        
+        .brand-subtitle {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-top: 5px;
+            font-weight: 500;
+        }
 
-        nav a {
-            display: flex; align-items: center; gap: 12px;
-            padding: 12px;
-            color: rgba(255,255,255,0.8);
+        nav {
+            flex: 1;
+            padding: 24px 16px;
+            overflow-y: auto;
+        }
+
+        .nav-category {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            font-weight: 700;
+            margin-bottom: 12px;
+            padding-left: 12px;
+            margin-top: 16px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            color: var(--text-primary);
             text-decoration: none;
             border-radius: 8px;
             margin-bottom: 4px;
             font-weight: 500;
             transition: all 0.2s;
-            cursor: pointer;
         }
-        nav a:hover, nav a.active { background: rgba(255,255,255,0.1); color: white; transform: translateX(4px); }
-        nav a i { width: 20px; text-align: center; }
 
-        .sidebar-footer { padding: 20px; font-size: 0.75rem; text-align: center; opacity: 0.6; border-top: 1px solid rgba(255,255,255,0.1); }
+        .nav-item:hover {
+            background-color: #f3f4f6;
+            color: var(--mec-blue-light);
+        }
 
-        /* --- CONTEÚDO PRINCIPAL --- */
+        .nav-item.active {
+            background-color: #eff6ff;
+            color: var(--mec-blue-primary);
+            font-weight: 600;
+        }
+        
+        .nav-icon {
+            width: 20px;
+            text-align: center;
+            color: var(--mec-blue-light);
+        }
+
+        /* --- ÁREA PRINCIPAL --- */
         main {
             flex: 1;
-            padding: 32px;
+            padding: 40px;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
@@ -88,406 +127,253 @@
         }
 
         /* Topo */
-        header { display: flex; justify-content: space-between; align-items: flex-end; }
-        header h1 { font-size: 1.75rem; font-weight: 700; color: #111827; letter-spacing: -0.5px; }
-        header p { color: var(--text-muted); margin-top: 4px; font-size: 0.95rem; }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+        
+        .page-title h1 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--mec-blue-primary);
+            letter-spacing: -0.5px;
+        }
+        
+        .page-title p {
+            color: var(--text-secondary);
+            margin-top: 6px;
+            font-size: 1rem;
+        }
 
-        /* CARDS GRANDES E ARREDONDADOS */
-        .kpi-grid {
+        /* Grid de Cards */
+        .cards-grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
             gap: 24px;
         }
 
         .card {
             background: var(--bg-card);
-            border-radius: var(--radius-card);
+            border-radius: var(--card-radius);
             padding: 24px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border-color);
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
-            height: 160px;
+            gap: 16px;
             transition: transform 0.2s;
-            position: relative; overflow: hidden;
         }
-        .card:hover { transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05); }
+        
+        .card:hover {
+            transform: translateY(-2px);
+            border-color: var(--mec-blue-light);
+        }
 
-        .card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
-        
-        .card-label { font-size: 0.85rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
-        
-        .card-value { font-size: 2rem; font-weight: 700; color: #111827; letter-spacing: -1px; }
-        
-        .card-footer { font-size: 0.85rem; font-weight: 500; display: flex; align-items: center; gap: 6px; margin-top: auto; }
-
-        /* Ícones Coloridos (Estilo Moderno) */
-        .icon-box {
-            width: 48px; height: 48px;
+        /* Ícones Coloridos nos Cards (Estilo Flat) */
+        .card-icon-box {
+            width: 50px;
+            height: 50px;
             border-radius: 12px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 1.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 8px;
         }
-        .ib-blue { background: var(--icon-bg-blue); color: var(--icon-color-blue); }
-        .ib-green { background: var(--icon-bg-green); color: var(--icon-color-green); }
-        .ib-purple { background: var(--icon-bg-purple); color: var(--icon-color-purple); }
-        .ib-orange { background: var(--icon-bg-orange); color: var(--icon-color-orange); }
-
-        /* Links Rápidos */
-        .quick-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 16px; }
-        .quick-btn {
-            background: white; border-radius: 12px; padding: 20px 10px;
-            text-align: center; text-decoration: none; color: var(--text-main);
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-            transition: all 0.2s; border: 1px solid transparent;
-            display: flex; flex-direction: column; align-items: center; gap: 10px;
-        }
-        .quick-btn:hover { border-color: var(--primary-light); transform: translateY(-2px); box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
-        .quick-btn i { font-size: 1.5rem; color: var(--primary-light); opacity: 0.9; }
-        .quick-btn span { font-size: 0.85rem; font-weight: 600; }
-
-        /* TABELA LIMPA */
-        .table-container {
-            background: white; border-radius: var(--radius-card);
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-            padding: 24px;
-            border: 1px solid #e5e7eb;
-        }
-        .table-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
-        .table-header h3 { font-size: 1.1rem; font-weight: 700; color: #111827; }
         
-        .search-input { 
-            padding: 10px 16px; border: 1px solid #d1d5db; border-radius: 8px; 
-            width: 320px; outline: none; transition: 0.2s; font-size: 0.9rem;
-        }
-        .search-input:focus { border-color: var(--primary-light); box-shadow: 0 0 0 3px rgba(0, 74, 141, 0.1); }
+        /* Variações de Cores dos Ícones */
+        .icon-blue { background-color: #eff6ff; color: var(--mec-blue-primary); }
+        .icon-green { background-color: #dcfce7; color: var(--mec-green); }
+        .icon-yellow { background-color: #fefce8; color: #ca8a04; }
+        .icon-indigo { background-color: #eef2ff; color: #4f46e5; }
 
-        table { width: 100%; border-collapse: collapse; }
-        th { text-align: left; padding: 12px 16px; color: var(--text-muted); font-weight: 600; font-size: 0.85rem; border-bottom: 1px solid #e5e7eb; text-transform: uppercase; }
-        td { padding: 16px; border-bottom: 1px solid #f3f4f6; vertical-align: middle; color: #374151; font-size: 0.9rem; }
+        .card-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .card-desc {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        /* Seção de Conteúdo Genérica */
+        .content-section {
+            background: var(--bg-card);
+            border-radius: var(--card-radius);
+            border: 1px solid var(--border-color);
+            padding: 32px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        .section-header {
+            margin-bottom: 24px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 16px;
+        }
+
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--mec-blue-primary);
+        }
+
+        /* Elementos Genéricos de Lista (Placeholder) */
+        .generic-list-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 0;
+            border-bottom: 1px solid var(--bg-body);
+        }
+        .generic-list-item:last-child { border-bottom: none; }
         
-        .avatar-group { display: flex; align-items: center; gap: 12px; }
-        .avatar { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid #e5e7eb; }
+        .item-info { display: flex; align-items: center; gap: 16px; }
+        .placeholder-icon { width: 36px; height: 36px; background-color: #f3f4f6; border-radius: 50%; }
+        .placeholder-text-group { display: flex; flex-direction: column; gap: 4px; }
+        .placeholder-line-lg { width: 120px; height: 10px; background-color: #e5e7eb; border-radius: 4px; }
+        .placeholder-line-sm { width: 80px; height: 8px; background-color: #f3f4f6; border-radius: 4px; }
         
-        .btn-action {
-            background: #f3f4f6; color: var(--primary); font-weight: 600; font-size: 0.8rem;
-            padding: 8px 16px; border-radius: 6px; text-decoration: none; transition: 0.2s;
+        .tag {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            background-color: #f3f4f6;
+            color: var(--text-secondary);
         }
-        .btn-action:hover { background: var(--primary); color: white; }
-
-        /* MODAL */
-        .modal-overlay {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.5); backdrop-filter: blur(2px); z-index: 1000;
-            justify-content: center; align-items: center;
-        }
-        .modal-box {
-            background: white; width: 500px; max-width: 90%;
-            border-radius: 16px; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-            overflow: hidden; animation: zoomIn 0.2s ease-out;
-        }
-        .modal-header { background: var(--primary); color: white; padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; }
-        .modal-body { padding: 24px; max-height: 70vh; overflow-y: auto; }
-        .close-btn { cursor: pointer; font-size: 1.2rem; opacity: 0.8; }
-        .close-btn:hover { opacity: 1; }
-
-        .contact-card { background: #f9fafb; border: 1px solid #e5e7eb; padding: 16px; border-radius: 12px; margin-bottom: 12px; }
-        .contact-role { font-size: 0.7rem; text-transform: uppercase; color: var(--text-muted); font-weight: 700; letter-spacing: 0.5px; }
-        .contact-name { font-size: 1rem; font-weight: 700; color: var(--primary); margin: 4px 0 8px 0; }
-        .contact-detail { font-size: 0.9rem; display: flex; align-items: center; gap: 8px; margin-bottom: 4px; color: #4b5563; }
-        .contact-detail i { color: var(--primary-light); width: 16px; }
-
-        @keyframes zoomIn { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
     </style>
 </head>
 <body>
 
     <aside>
-        <div class="brand">
-            <h2><i class="fa-solid fa-building-columns"></i> ASPAR</h2>
-            <small>Ministério da Educação</small>
+        <div class="brand-area">
+            <div class="brand-title">
+                <i class="fa-solid fa-building-columns"></i>
+                SIGLA
+            </div>
+            <div class="brand-subtitle">Ministério da Educação</div>
         </div>
-        
+
         <nav>
-            <div class="nav-label">Painel Principal</div>
-            <a href="#" class="active"><i class="fa-solid fa-chart-pie"></i> Dashboard 2026</a>
-            <a href="https://portaldatransparencia.gov.br" target="_blank"><i class="fa-solid fa-magnifying-glass"></i> Transparência</a>
-            
-            <div class="nav-label">Ferramentas</div>
-            <a onclick="abrirModal('modal-avisos')">
-                <i class="fa-regular fa-bell"></i> Avisos
-                <span id="badge" style="background:var(--accent); color:#111; font-size:10px; font-weight:700; padding:2px 8px; border-radius:12px; margin-left:auto;">1</span>
+            <div class="nav-category">Principal</div>
+            <a href="#" class="nav-item active">
+                <div class="nav-icon"><i class="fa-solid fa-layer-group"></i></div>
+                Painel Geral
             </a>
-            <a onclick="abrirModal('modal-contatos')">
-                <i class="fa-solid fa-address-book"></i> Contatos SPO
+            <a href="#" class="nav-item">
+                <div class="nav-icon"><i class="fa-solid fa-folder-open"></i></div>
+                Seção Administrativa
+            </a>
+            
+            <div class="nav-category">Ferramentas</div>
+            <a href="#" class="nav-item">
+                <div class="nav-icon"><i class="fa-solid fa-magnifying-glass"></i></div>
+                Consulta
+            </a>
+            <a href="#" class="nav-item">
+                <div class="nav-icon"><i class="fa-regular fa-file-lines"></i></div>
+                Relatórios
+            </a>
+            <a href="#" class="nav-item">
+                <div class="nav-icon"><i class="fa-regular fa-bell"></i></div>
+                Alertas do Sistema
+            </a>
+            
+            <div class="nav-category">Configurações</div>
+            <a href="#" class="nav-item">
+                <div class="nav-icon"><i class="fa-solid fa-users"></i></div>
+                Contatos
             </a>
         </nav>
-
-        <div class="sidebar-footer">
-            &copy; 2026 MEC / ASPAR<br>
-            <span id="data-update">Atualizado hoje</span>
-        </div>
     </aside>
 
     <main>
         <header>
-            <div>
-                <h1>Monitoramento de Emendas</h1>
-                <p>Acompanhamento da execução orçamentária e parlamentar - LOA 2026</p>
+            <div class="page-title">
+                <h1>Título da Página</h1>
+                <p>Subtítulo institucional descritivo do sistema</p>
             </div>
-            </header>
+        </header>
 
-        <div class="kpi-grid">
+        <div class="cards-grid">
             <div class="card">
-                <div class="card-top">
-                    <span class="card-label">Total Emendas (MEC)</span>
-                    <div class="icon-box ib-blue"><i class="fa-regular fa-file-alt"></i></div>
+                <div class="card-icon-box icon-blue">
+                    <i class="fa-solid fa-file-contract"></i>
                 </div>
-                <div class="card-value" id="kpi-qtd">0</div>
-                <div class="card-footer" style="color:var(--icon-color-blue)">
-                    <i class="fa-solid fa-sync"></i> Dados Transparência
-                </div>
+                <div class="card-title">Título do Card</div>
+                <div class="card-desc">Descrição breve sobre o conteúdo desta seção.</div>
             </div>
 
             <div class="card">
-                <div class="card-top">
-                    <span class="card-label">Empenhado</span>
-                    <div class="icon-box ib-green"><i class="fa-solid fa-coins"></i></div>
+                <div class="card-icon-box icon-green">
+                    <i class="fa-solid fa-check-circle"></i>
                 </div>
-                <div class="card-value" id="kpi-valor">R$ 0,00</div>
-                <div class="card-footer" style="color:var(--icon-color-green)">
-                    <i class="fa-solid fa-chart-line"></i> SIOP 2026
-                </div>
+                <div class="card-title">Status do Sistema</div>
+                <div class="card-desc">Informação genérica sobre o estado atual.</div>
             </div>
 
             <div class="card">
-                <div class="card-top">
-                    <span class="card-label">Base Parlamentar</span>
-                    <div class="icon-box ib-purple"><i class="fa-solid fa-users"></i></div>
+                <div class="card-icon-box icon-indigo">
+                    <i class="fa-solid fa-users"></i>
                 </div>
-                <div class="card-value" id="kpi-deputados">--</div>
-                <div class="card-footer" style="color:var(--icon-color-purple)">
-                    <i class="fa-solid fa-check-circle"></i> Ativos
-                </div>
+                <div class="card-title">Seção de Pessoas</div>
+                <div class="card-desc">Texto ilustrativo sobre o grupo de usuários.</div>
             </div>
 
             <div class="card">
-                <div class="card-top">
-                    <span class="card-label">Portarias DOU</span>
-                    <div class="icon-box ib-orange"><i class="fa-solid fa-newspaper"></i></div>
+                <div class="card-icon-box icon-yellow">
+                    <i class="fa-regular fa-star"></i>
                 </div>
-                <div class="card-value" style="font-size:1.5rem" id="kpi-dou">Edição --</div>
-                <div class="card-footer" style="color:var(--icon-color-orange)">
-                    <i class="fa-solid fa-calendar-day"></i> Vigente Hoje
-                </div>
+                <div class="card-title">Destaques</div>
+                <div class="card-desc">Resumo de informações importantes.</div>
             </div>
         </div>
 
-        <div class="quick-grid">
-            <a href="https://portaldatransparencia.gov.br" target="_blank" class="quick-btn">
-                <i class="fa-solid fa-magnifying-glass"></i> <span>Transparência</span>
-            </a>
-            <a href="https://www.gov.br/transferegov/pt-br" target="_blank" class="quick-btn">
-                <i class="fa-solid fa-hand-holding-dollar"></i> <span>TransfereGov</span>
-            </a>
-            <a href="https://www.siop.planejamento.gov.br" target="_blank" class="quick-btn">
-                <i class="fa-solid fa-chart-pie"></i> <span>SIOP</span>
-            </a>
-            <a href="https://www.camara.leg.br" target="_blank" class="quick-btn">
-                <i class="fa-solid fa-building-columns"></i> <span>Câmara</span>
-            </a>
-            <a href="https://www12.senado.leg.br" target="_blank" class="quick-btn">
-                <i class="fa-solid fa-gavel"></i> <span>Senado</span>
-            </a>
-            <a href="https://sei.mec.gov.br" target="_blank" class="quick-btn">
-                <i class="fa-solid fa-folder-open"></i> <span>SEI MEC</span>
-            </a>
-        </div>
-
-        <div class="table-container">
-            <div class="table-header">
-                <h3>Detalhamento por Parlamentar</h3>
-                <input type="text" id="filtro" class="search-input" placeholder="Buscar por nome, partido ou UF..." onkeyup="filtrarLista()">
+        <div class="content-section">
+            <div class="section-header">
+                <div class="section-title">Seção de Listagem</div>
             </div>
-            
-            <table id="tabela-dados">
-                <thead>
-                    <tr>
-                        <th>Parlamentar</th>
-                        <th>Partido / UF</th>
-                        <th style="text-align:right">Ação</th>
-                    </tr>
-                </thead>
-                <tbody id="lista-corpo">
-                    <tr><td colspan="3" style="text-align:center; padding:30px; color:#999"><i class="fa-solid fa-spinner fa-spin"></i> Conectando à API Gov...</td></tr>
-                </tbody>
-            </table>
+
+            <div class="generic-list-item">
+                <div class="item-info">
+                    <div class="placeholder-icon"></div>
+                    <div class="placeholder-text-group">
+                        <div class="placeholder-line-lg"></div>
+                        <div class="placeholder-line-sm"></div>
+                    </div>
+                </div>
+                <div class="tag">Status</div>
+            </div>
+
+            <div class="generic-list-item">
+                <div class="item-info">
+                    <div class="placeholder-icon"></div>
+                    <div class="placeholder-text-group">
+                        <div class="placeholder-line-lg"></div>
+                        <div class="placeholder-line-sm"></div>
+                    </div>
+                </div>
+                <div class="tag">Status</div>
+            </div>
+
+            <div class="generic-list-item">
+                <div class="item-info">
+                    <div class="placeholder-icon"></div>
+                    <div class="placeholder-text-group">
+                        <div class="placeholder-line-lg"></div>
+                        <div class="placeholder-line-sm"></div>
+                    </div>
+                </div>
+                <div class="tag">Status</div>
+            </div>
+
         </div>
     </main>
 
-    <div id="modal-avisos" class="modal-overlay" onclick="fecharModal(event, 'modal-avisos')">
-        <div class="modal-box">
-            <div class="modal-header">
-                <h3><i class="fa-regular fa-bell"></i> Central de Avisos</h3>
-                <span class="close-btn" onclick="fecharModal(null, 'modal-avisos')">&times;</span>
-            </div>
-            <div class="modal-body">
-                <div class="contact-card" style="border-left: 4px solid #fecb00;">
-                    <div class="contact-name" style="color:#b45309">Sistema Operante</div>
-                    <div class="contact-detail">Monitoramento do exercício financeiro de 2026 ativo.</div>
-                </div>
-                <div class="contact-card" style="border-left: 4px solid #219653;">
-                    <div class="contact-name" style="color:#15803d">Portarias FNDE</div>
-                    <div class="contact-detail">Verifique o DOU diariamente para novas publicações de repasse.</div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="modal-contatos" class="modal-overlay" onclick="fecharModal(event, 'modal-contatos')">
-        <div class="modal-box">
-            <div class="modal-header">
-                <h3><i class="fa-solid fa-address-book"></i> Contatos SPO/MEC</h3>
-                <span class="close-btn" onclick="fecharModal(null, 'modal-contatos')">&times;</span>
-            </div>
-            <div class="modal-body">
-                
-                <div style="background:#f0f9ff; padding:12px; border-radius:8px; margin-bottom:20px; font-size:0.9rem; color:#0c4a6e; border:1px solid #bae6fd;">
-                    <strong><i class="fa-solid fa-location-dot"></i> Endereço:</strong><br>
-                    Esplanada dos Ministérios, Bloco L, Anexo, 1º Andar, Brasília (DF)
-                </div>
-
-                <div class="contact-card">
-                    <div class="contact-role">Subsecretário</div>
-                    <div class="contact-name">Adalton Rocha De Matos</div>
-                    <div class="contact-detail"><i class="fa-solid fa-phone"></i> (61) 2022-8801</div>
-                    <div class="contact-detail"><i class="fa-solid fa-envelope"></i> Adalton.Matos@mec.gov.br</div>
-                </div>
-
-                <div class="contact-card">
-                    <div class="contact-role">Chefe de Gabinete</div>
-                    <div class="contact-name">Luciana Nunes de Oliveira</div>
-                    <div class="contact-detail"><i class="fa-solid fa-phone"></i> (61) 2022-8803</div>
-                    <div class="contact-detail"><i class="fa-solid fa-envelope"></i> LucianaNunes@mec.gov.br</div>
-                </div>
-
-                <div class="contact-card">
-                    <div class="contact-role">Coord. Geral de Orçamento</div>
-                    <div class="contact-name">Ana Karina da Silva Santos Koga</div>
-                    <div class="contact-detail"><i class="fa-solid fa-phone"></i> (61) 2022-8835</div>
-                    <div class="contact-detail"><i class="fa-solid fa-envelope"></i> anakarina@mec.gov.br</div>
-                </div>
-
-                <div class="contact-card">
-                    <div class="contact-role">Coord. Geral de Finanças</div>
-                    <div class="contact-name">André Luiz Valente Mayrink</div>
-                    <div class="contact-detail"><i class="fa-solid fa-phone"></i> (61) 2022-8912</div>
-                    <div class="contact-detail"><i class="fa-solid fa-envelope"></i> andremayrink@mec.gov.br</div>
-                </div>
-
-                <div class="contact-card">
-                    <div class="contact-role">Coord. Geral de Planejamento</div>
-                    <div class="contact-name">Carolina Cristina Martins Cavalcante</div>
-                    <div class="contact-detail"><i class="fa-solid fa-phone"></i> (61) 2022-8814</div>
-                    <div class="contact-detail"><i class="fa-solid fa-envelope"></i> CarolinaCristina@mec.gov.br</div>
-                </div>
-
-                <div class="contact-card">
-                    <div class="contact-role">Coord. Geral Suporte à Gestão</div>
-                    <div class="contact-name">Evilen Campos</div>
-                    <div class="contact-detail"><i class="fa-solid fa-phone"></i> (61) 2022-8872</div>
-                    <div class="contact-detail"><i class="fa-solid fa-envelope"></i> EvilenCampos@mec.gov.br</div>
-                </div>
-
-            </div>
-        </div>
-    </div>
-
-    <script>
-        const ORGAO_MEC = "26000";
-        const ANO_VIGENTE = "2026";
-
-        function abrirModal(id) { document.getElementById(id).style.display = 'flex'; }
-        function fecharModal(event, id) { if (!event || event.target.id === id) document.getElementById(id).style.display = 'none'; }
-
-        window.onload = function() {
-            atualizarData();
-            carregarDadosFinanceiros();
-            carregarParlamentares();
-        };
-
-        function atualizarData() {
-            const hoje = new Date();
-            const dia = String(hoje.getDate()).padStart(2, '0');
-            const mes = String(hoje.getMonth() + 1).padStart(2, '0');
-            const diaDoAno = Math.floor((hoje - new Date(hoje.getFullYear(), 0, 0)) / 1000 / 60 / 60 / 24);
-            document.getElementById('data-update').innerText = `${dia}/${mes}/${hoje.getFullYear()}`;
-            document.getElementById('kpi-dou').innerText = `${dia}/${mes} (Ed. ${diaDoAno})`;
-        }
-
-        async function carregarDadosFinanceiros() {
-            const urlReal = `https://api.portaldatransparencia.gov.br/api-de-dados/emendas?codigoOrgao=${ORGAO_MEC}&ano=${ANO_VIGENTE}&pagina=1`;
-            const proxy = `https://api.allorigins.win/get?url=${encodeURIComponent(urlReal)}`;
-
-            try {
-                const res = await fetch(proxy);
-                const json = await res.json();
-                if (json.contents) {
-                    const dados = JSON.parse(json.contents);
-                    if (Array.isArray(dados) && dados.length > 0) {
-                        let totalEmpenhado = 0;
-                        dados.forEach(emenda => {
-                            let valor = parseFloat(emenda.valorEmpenhado.replace(/\./g, '').replace(',', '.'));
-                            totalEmpenhado += valor;
-                        });
-                        document.getElementById('kpi-qtd').innerText = dados.length;
-                        document.getElementById('kpi-valor').innerText = totalEmpenhado.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-                        document.getElementById('badge').innerText = "Novo";
-                    }
-                }
-            } catch (error) { console.error("Sem dados financeiros ainda", error); }
-        }
-
-        async function carregarParlamentares() {
-            const tbody = document.getElementById('lista-corpo');
-            try {
-                const res = await fetch("https://dadosabertos.camara.leg.br/api/v2/deputados?ordem=ASC&ordenarPor=nome");
-                const json = await res.json();
-                const deputados = json.dados;
-                
-                document.getElementById('kpi-deputados').innerText = deputados.length;
-                tbody.innerHTML = '';
-
-                deputados.forEach(d => {
-                    const urlPortal = `https://portaldatransparencia.gov.br/emendas?ano=${ANO_VIGENTE}&orgao=${ORGAO_MEC}&nomeParlamentar=${encodeURIComponent(d.nome)}`;
-                    const tr = document.createElement('tr');
-                    tr.innerHTML = `
-                        <td>
-                            <div class="avatar-group">
-                                <img src="${d.urlFoto}" class="avatar" loading="lazy">
-                                <span style="font-weight:600; color:#1f2937;">${d.nome}</span>
-                            </div>
-                        </td>
-                        <td><span style="background:#f3f4f6; padding:4px 8px; border-radius:6px; font-size:0.8rem; font-weight:600;">${d.siglaPartido}</span> ${d.siglaUf}</td>
-                        <td style="text-align:right">
-                            <a href="${urlPortal}" target="_blank" class="btn-action">
-                                Emendas 2026 <i class="fa-solid fa-arrow-up-right-from-square" style="margin-left:5px"></i>
-                            </a>
-                        </td>
-                    `;
-                    tbody.appendChild(tr);
-                });
-            } catch (e) {
-                tbody.innerHTML = '<tr><td colspan="3">Erro ao conectar com API da Câmara.</td></tr>';
-            }
-        }
-
-        function filtrarLista() {
-            const termo = document.getElementById("filtro").value.toUpperCase();
-            const linhas = document.querySelectorAll("#lista-corpo tr");
-            linhas.forEach(l => l.style.display = l.innerText.toUpperCase().includes(termo) ? "" : "none");
-        }
-    </script>
 </body>
 </html>
