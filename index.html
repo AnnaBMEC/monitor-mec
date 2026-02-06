@@ -3,114 +3,206 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SGA - Sistema de Gestão ASPAR v6.1</title>
+    <title>SGA - Sistema de Gestão ASPAR v6.2</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Rawline:wght@300;400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rawline:wght@300;400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
         :root {
-            /* Paleta Institucional MEC */
-            --mec-blue-dark: #00376F;   /* Azul Oficial */
-            --mec-blue-mid: #005CA9;    /* Azul Claro Gov */
-            --mec-yellow: #FDB913;      /* Amarelo Ouro */
-            --bg-body: #f0f2f5;
-            --text-primary: #141C24;
-            --sidebar-width: 270px;
-            --header-height: 70px;
+            /* --- IDENTIDADE VISUAL MEC (Oficial) --- */
+            --mec-blue: #00376F;        /* Azul Principal */
+            --mec-blue-hover: #002855;  /* Azul Escuro */
+            --mec-yellow: #FDB913;      /* Amarelo Ouro (Detalhes) */
+            --mec-green: #008000;       /* Verde */
+            --mec-light: #FFFFFF;
+            
+            /* UI Sistema */
+            --bg-body: #F2F4F8;         /* Fundo levemente acinzentado */
+            --text-main: #333333;
+            --text-muted: #666666;
+            --border-light: #E0E0E0;
+            
+            --sidebar-width: 280px;     /* Um pouco mais largo para elegância */
+            --header-height: 72px;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: 'Rawline', 'Inter', sans-serif;
+            font-family: 'Rawline', sans-serif; /* Fonte Oficial do Gov */
             background-color: var(--bg-body);
-            color: var(--text-primary);
+            color: var(--text-main);
             display: flex;
             height: 100vh;
             overflow: hidden;
             font-size: 15px;
         }
 
-        /* --- SIDEBAR --- */
+        /* --- SIDEBAR (NOVO LAYOUT FLUIDO MEC) --- */
         aside {
             width: var(--sidebar-width);
-            background: linear-gradient(180deg, var(--mec-blue-dark) 0%, #002855 100%);
+            background-color: var(--mec-blue);
             color: white;
             display: flex;
             flex-direction: column;
             flex-shrink: 0;
             z-index: 100;
-            box-shadow: 4px 0 15px rgba(0,0,0,0.1);
+            box-shadow: 4px 0 20px rgba(0,0,0,0.15);
         }
 
+        /* Cabeçalho do Menu - Estilo Gov.br */
         .brand-box {
-            height: var(--header-height);
-            display: flex; align-items: center; padding: 0 24px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            background: rgba(0,0,0,0.1);
+            height: 90px; /* Mais alto para imponência */
+            display: flex; 
+            flex-direction: column;
+            justify-content: center;
+            padding: 0 24px;
+            background-color: var(--mec-blue-hover);
+            border-bottom: 4px solid var(--mec-yellow); /* Assinatura Visual */
         }
-        .brand-logo { font-family: 'Rawline'; font-weight: 800; font-size: 1.4rem; letter-spacing: 0.5px; }
-        .brand-sub { font-size: 0.75rem; font-weight: 300; opacity: 0.8; margin-left: 10px; border-left: 1px solid rgba(255,255,255,0.3); padding-left: 10px; line-height: 1.1; }
+        
+        .brand-gov {
+            font-family: 'Rawline';
+            font-weight: 800;
+            font-size: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+        .brand-dept {
+            font-family: 'Rawline';
+            font-weight: 400;
+            font-size: 0.85rem;
+            opacity: 0.9;
+            letter-spacing: 0.5px;
+        }
 
-        nav { padding: 20px 12px; flex: 1; overflow-y: auto; }
+        /* Navegação Fluida */
+        nav { 
+            padding: 25px 16px; 
+            flex: 1; 
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 8px; /* Espaço fluido entre itens */
+        }
         
         .nav-label { 
-            font-size: 0.75rem; text-transform: uppercase; color: rgba(255,255,255,0.5); 
-            font-weight: 600; padding: 0 12px; margin: 20px 0 8px 0; letter-spacing: 0.5px;
+            font-size: 0.75rem; 
+            text-transform: uppercase; 
+            color: rgba(255,255,255,0.6); 
+            font-weight: 700; 
+            padding: 0 12px; 
+            margin: 20px 0 5px 0; 
+            letter-spacing: 1px;
+            font-family: 'Inter', sans-serif; /* Inter para textos pequenos fica melhor */
         }
 
-        /* Estilo dos Links do Menu */
         .nav-link {
-            display: flex; align-items: center; gap: 12px;
-            padding: 12px 16px; color: rgba(255,255,255,0.9); text-decoration: none;
-            transition: all 0.2s; border-radius: 6px; cursor: pointer;
-            font-weight: 500; margin-bottom: 4px; user-select: none;
+            display: flex; 
+            align-items: center; 
+            gap: 15px;
+            padding: 14px 20px; 
+            color: rgba(255,255,255,0.9); 
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); /* Animação fluida */
+            border-radius: 6px; 
+            cursor: pointer;
+            font-weight: 500;
+            position: relative;
+            overflow: hidden;
         }
-        .nav-link:hover { background: rgba(255,255,255,0.1); color: white; transform: translateX(3px); }
+
+        /* Efeito Hover Fluido */
+        .nav-link:hover { 
+            background-color: rgba(255,255,255,0.1); 
+            padding-left: 25px; /* Deslocamento suave */
+            color: white;
+        }
+
+        /* Estado Ativo - Identidade MEC */
         .nav-link.active {
-            background: var(--mec-blue-mid); color: white; font-weight: 600;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+            background-color: white;
+            color: var(--mec-blue);
+            font-weight: 700;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
-        .nav-link i { width: 22px; text-align: center; font-size: 1.1rem; }
+        
+        /* Tarja Amarela no Ativo */
+        .nav-link.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 5px;
+            background-color: var(--mec-yellow);
+        }
 
-        .badge-new { background: var(--mec-yellow); color: #000; font-size: 0.7rem; font-weight: 700; padding: 2px 8px; border-radius: 12px; margin-left: auto; }
+        .nav-link i { 
+            width: 20px; 
+            text-align: center; 
+            font-size: 1.1rem; 
+        }
 
-        /* --- MAIN --- */
+        /* Badge Novo */
+        .badge-new { 
+            background: var(--mec-yellow); 
+            color: var(--mec-blue); 
+            font-size: 0.65rem; 
+            font-weight: 800; 
+            padding: 3px 8px; 
+            border-radius: 12px; 
+            margin-left: auto;
+            text-transform: uppercase;
+        }
+
+        /* Rodapé do Menu */
+        .menu-footer {
+            padding: 20px;
+            font-size: 0.75rem;
+            text-align: center;
+            opacity: 0.5;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        /* --- CONTEÚDO PRINCIPAL (Mantendo estrutura, limpando visual) --- */
         main { flex: 1; display: flex; flex-direction: column; overflow: hidden; position: relative; }
 
         header {
-            height: var(--header-height); background: white; border-bottom: 1px solid #e0e0e0;
+            height: var(--header-height); background: white; border-bottom: 1px solid var(--border-light);
             padding: 0 32px; display: flex; align-items: center; justify-content: space-between;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
         }
-        .header-title { display: flex; align-items: center; gap: 12px; color: var(--mec-blue-dark); font-weight: 700; font-size: 1.25rem; }
-        .header-meta { font-size: 0.85rem; color: #666; display: flex; gap: 20px; align-items: center; }
+        .header-title { display: flex; align-items: center; gap: 12px; color: var(--mec-blue); font-weight: 700; font-size: 1.3rem; }
+        .header-meta { font-size: 0.85rem; color: #555; display: flex; gap: 20px; align-items: center; }
 
         .content-area { flex: 1; overflow-y: auto; padding: 32px; max-width: 1600px; margin: 0 auto; width: 100%; }
 
-        /* --- KPI CARDS --- */
+        /* KPI Cards */
         .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-bottom: 32px; }
         .kpi-card {
-            background: white; border-radius: 12px; padding: 24px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.04); border: 1px solid #e0e0e0;
+            background: white; border-radius: 8px; padding: 24px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.03); border: 1px solid #eee; border-bottom: 4px solid transparent;
             position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between;
             height: 140px; transition: transform 0.2s;
         }
         .kpi-card:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
-        .kpi-card::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; }
         
-        .kpi-blue::before { background: var(--mec-blue-mid); }
-        .kpi-green::before { background: #008000; }
-        .kpi-yellow::before { background: var(--mec-yellow); }
-        .kpi-dark::before { background: var(--mec-blue-dark); }
+        .kpi-blue { border-bottom-color: var(--mec-blue); }
+        .kpi-green { border-bottom-color: var(--mec-green); }
+        .kpi-yellow { border-bottom-color: var(--mec-yellow); }
+        .kpi-dark { border-bottom-color: #333; }
 
-        .kpi-label { font-size: 0.8rem; text-transform: uppercase; font-weight: 700; color: #666; }
-        .kpi-value { font-size: 1.8rem; font-weight: 700; color: var(--text-primary); margin: 8px 0; }
+        .kpi-label { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px; color: #666; font-weight: 600; }
+        .kpi-value { font-size: 1.8rem; font-weight: 700; color: var(--text-main); margin: 8px 0; }
+        .kpi-icon { position: absolute; right: 20px; top: 20px; font-size: 2rem; opacity: 0.05; }
         .kpi-sub { font-size: 0.8rem; color: #889; display: flex; align-items: center; gap: 6px; }
 
-        /* --- ACESSOS RÁPIDOS (Novo Layout Card) --- */
-        .section-title { font-size: 1rem; font-weight: 700; color: var(--mec-blue-dark); margin-bottom: 16px; }
+        /* Acessos Rápidos - Cards Coloridos */
+        .section-title { font-size: 1rem; font-weight: 700; color: var(--mec-blue); margin-bottom: 16px; border-left: 4px solid var(--mec-yellow); padding-left: 10px; }
         
         .quick-grid-cards {
             display: grid;
@@ -121,49 +213,53 @@
 
         .quick-card {
             display: flex; flex-direction: column; justify-content: space-between;
-            padding: 20px; height: 130px; border-radius: 12px;
-            text-decoration: none; color: white; transition: transform 0.2s, box-shadow 0.2s;
+            padding: 20px; height: 130px; border-radius: 10px;
+            text-decoration: none; color: white; transition: all 0.2s;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1); position: relative; overflow: hidden;
         }
         .quick-card:hover { transform: translateY(-4px); box-shadow: 0 12px 20px rgba(0,0,0,0.15); opacity: 0.95; }
         
-        .qc-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 4px; line-height: 1.2; }
-        .qc-desc { font-size: 0.8rem; opacity: 0.9; font-weight: 400; }
+        .qc-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 4px; line-height: 1.2; font-family: 'Rawline'; }
+        .qc-desc { font-size: 0.8rem; opacity: 0.9; font-weight: 400; font-family: 'Inter'; }
         .qc-icon { position: absolute; bottom: 15px; right: 15px; font-size: 1.5rem; opacity: 0.3; }
         .qc-arrow { font-size: 0.9rem; align-self: flex-start; margin-top: auto; opacity: 0.8; }
 
-        /* Cores dos Cards (Baseadas na Imagem + Identidade) */
-        .qc-blue { background: linear-gradient(135deg, #2D72D9 0%, #1558B5 100%); } /* Transparência */
-        .qc-green { background: linear-gradient(135deg, #219653 0%, #17703C 100%); } /* TransfereGov */
-        .qc-purple { background: linear-gradient(135deg, #9B51E0 0%, #7B32BC 100%); } /* SIOP */
-        .qc-orange { background: linear-gradient(135deg, #F2994A 0%, #D97321 100%); } /* Câmara */
-        .qc-red { background: linear-gradient(135deg, #EB5757 0%, #C0392B 100%); }    /* Senado */
-        .qc-mec { background: linear-gradient(135deg, #00A8CC 0%, #007A94 100%); }    /* MEC */
+        /* Cores Institucionais para Cards */
+        .qc-blue { background: linear-gradient(135deg, #00376F 0%, #005CA9 100%); } /* Azul MEC */
+        .qc-green { background: linear-gradient(135deg, #219653 0%, #17703C 100%); }
+        .qc-purple { background: linear-gradient(135deg, #7B32BC 0%, #5E2690 100%); }
+        .qc-orange { background: linear-gradient(135deg, #D97321 0%, #B55D17 100%); }
+        .qc-red { background: linear-gradient(135deg, #C0392B 0%, #962D22 100%); }
+        .qc-cyan { background: linear-gradient(135deg, #00A8CC 0%, #007A94 100%); }
 
-        /* --- TOOLBAR --- */
+        /* Toolbar */
         .toolbar {
-            background: white; padding: 16px; border-radius: 12px; border: 1px solid #e0e0e0;
+            background: white; padding: 16px; border-radius: 8px; border: 1px solid #e0e0e0;
             margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center; gap: 16px;
         }
         .search-box { position: relative; flex: 1; max-width: 400px; }
         .search-box input {
-            width: 100%; padding: 12px 12px 12px 40px; border: 1px solid #ccc; border-radius: 8px;
+            width: 100%; padding: 12px 12px 12px 40px; border: 1px solid #ccc; border-radius: 6px;
             font-family: 'Inter'; font-size: 0.95rem; outline: none; transition: 0.2s;
         }
-        .search-box input:focus { border-color: var(--mec-blue-mid); box-shadow: 0 0 0 3px rgba(0, 92, 169, 0.1); }
+        .search-box input:focus { border-color: var(--mec-blue); box-shadow: 0 0 0 3px rgba(0, 55, 111, 0.1); }
         .search-box i { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #999; }
 
-        /* --- TABELA --- */
-        .table-card { background: white; border-radius: 12px; border: 1px solid #e0e0e0; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
+        .btn-toggle-view { display: flex; background: #f0f2f5; padding: 4px; border-radius: 6px; }
+        .btn-view { border: none; background: transparent; padding: 8px 14px; border-radius: 4px; cursor: pointer; color: #666; font-size: 0.9rem; font-weight: 500; font-family: 'Rawline'; }
+        .btn-view.active { background: white; color: var(--mec-blue); font-weight: 700; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+
+        /* Tabela */
+        .table-card { background: white; border-radius: 8px; border: 1px solid #e0e0e0; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
         table { width: 100%; border-collapse: collapse; }
-        th { background: #FAFBFC; text-align: left; padding: 16px 24px; font-size: 0.75rem; text-transform: uppercase; color: #666; font-weight: 700; border-bottom: 1px solid #e0e0e0; }
+        th { background: #FAFBFC; text-align: left; padding: 16px 24px; font-size: 0.75rem; text-transform: uppercase; color: #555; font-weight: 700; border-bottom: 1px solid #e0e0e0; }
         td { padding: 16px 24px; border-bottom: 1px solid #e0e0e0; vertical-align: middle; font-size: 0.95rem; }
         tr:last-child td { border-bottom: none; }
         tr:hover { background: #f8fbff; cursor: pointer; }
 
         .user-cell { display: flex; align-items: center; gap: 16px; }
         .user-avatar { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; border: 2px solid #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        .user-name { font-weight: 700; color: var(--mec-blue-dark); display: block; }
+        .user-name { font-weight: 700; color: var(--mec-blue); display: block; }
         .user-meta { font-size: 0.8rem; color: #666; }
 
         .status-pill { padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
@@ -171,47 +267,53 @@
         .st-blue { background: #e7f5ff; color: #004a8d; }
         .st-green { background: #d3f9d8; color: #0b7285; }
 
-        /* --- MODAIS & DRAWER --- */
-        .overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2000; backdrop-filter: blur(2px); }
-        
-        .modal-box { 
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            background: white; padding: 30px; border-radius: 12px; width: 500px; max-width: 90%;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.2); animation: zoomIn 0.2s;
-        }
-        
-        .drawer {
-            position: absolute; top: 0; right: 0; height: 100%; width: 700px; max-width: 90%;
-            background: white; box-shadow: -10px 0 30px rgba(0,0,0,0.1); display: flex; flex-direction: column;
-            animation: slideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
-        @keyframes zoomIn { from { transform: translate(-50%, -50%) scale(0.95); opacity: 0; } to { transform: translate(-50%, -50%) scale(1); opacity: 1; } }
-
-        .close-btn { position: absolute; top: 20px; right: 20px; cursor: pointer; font-size: 1.2rem; color: #666; }
-
-        /* --- BANCADAS & CARÔMETRO --- */
+        /* Grids */
         .grid-container { display: none; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
         .view-active { display: grid !important; }
         
         .profile-card {
             background: white; border: 1px solid #e0e0e0; border-radius: 12px; padding: 24px;
-            text-align: center; cursor: pointer; transition: 0.2s;
+            text-align: center; cursor: pointer; transition: 0.2s; position: relative;
         }
-        .profile-card:hover { border-color: var(--mec-blue-mid); transform: translateY(-4px); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
+        .profile-card:hover { border-color: var(--mec-blue); transform: translateY(-4px); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
         .profile-img { width: 90px; height: 90px; border-radius: 50%; margin-bottom: 16px; object-fit: cover; border: 3px solid #f0f0f0; }
+        .profile-name { font-weight: 700; color: var(--mec-blue); font-size: 1rem; margin-bottom: 4px; }
+        .profile-party { font-size: 0.85rem; color: #666; background: #f0f0f0; display: inline-block; padding: 2px 8px; border-radius: 12px; }
 
-        /* Contatos Lista */
-        .contact-group { margin-bottom: 20px; }
-        .contact-group-title { font-size: 0.85rem; color: var(--mec-blue-mid); text-transform: uppercase; font-weight: 700; border-bottom: 2px solid var(--mec-yellow); padding-bottom: 5px; margin-bottom: 10px; }
-        .contact-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #f5f5f5; }
-        .contact-row a { color: var(--mec-blue-light); text-decoration: none; font-weight: 600; }
+        /* Overlays */
+        .overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2000; backdrop-filter: blur(2px); }
+        .modal-box { 
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            background: white; padding: 0; border-radius: 8px; width: 550px; max-width: 90%;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.2); animation: zoomIn 0.2s; overflow: hidden; display: flex; flex-direction: column; max-height: 85vh;
+        }
+        .modal-header { background: var(--mec-blue); color: white; padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; }
+        .modal-body { padding: 25px; overflow-y: auto; }
+
+        /* Drawer */
+        .drawer {
+            position: absolute; top: 0; right: 0; height: 100%; width: 700px; max-width: 90%;
+            background: white; box-shadow: -10px 0 30px rgba(0,0,0,0.1); display: flex; flex-direction: column;
+            animation: slideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
+        @keyframes zoomIn { from { transform: translate(-50%, -50%) scale(0.95); opacity: 0; } to { transform: translate(-50%, -50%) scale(1); opacity: 1; } }
+
+        /* Contatos List */
+        .contact-group { margin-bottom: 25px; }
+        .contact-group-title { 
+            font-size: 0.8rem; color: var(--mec-blue); text-transform: uppercase; font-weight: 800; 
+            border-bottom: 2px solid var(--mec-yellow); padding-bottom: 5px; margin-bottom: 12px; letter-spacing: 0.5px;
+        }
+        .contact-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #f5f5f5; align-items: center; }
+        .contact-row a { color: var(--mec-blue); text-decoration: none; font-weight: 600; font-size: 0.9rem; border: 1px solid var(--mec-blue); padding: 4px 10px; border-radius: 4px; transition: 0.2s; }
+        .contact-row a:hover { background: var(--mec-blue); color: white; }
 
         /* Form */
         .form-label { display: block; font-size: 0.85rem; font-weight: 600; color: #333; margin-bottom: 6px; }
         .form-control { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 6px; margin-bottom: 20px; font-family: 'Inter'; }
-        .btn-save { background: var(--mec-blue-dark); color: white; border: none; padding: 12px 24px; border-radius: 6px; font-weight: 600; cursor: pointer; width: 100%; }
+        .btn-save { background: var(--mec-blue); color: white; border: none; padding: 12px 24px; border-radius: 6px; font-weight: 600; cursor: pointer; width: 100%; transition: 0.2s; }
+        .btn-save:hover { background: var(--mec-blue-hover); }
 
     </style>
 </head>
@@ -219,8 +321,8 @@
 
     <aside>
         <div class="brand-box">
-            <div class="brand-logo"><i class="fa-solid fa-flag"></i> ASPAR</div>
-            <div class="brand-sub">Sistema de Gestão<br>Parlamentar</div>
+            <div class="brand-gov">SGA</div>
+            <div class="brand-dept">Sistema de Gestão ASPAR</div>
         </div>
 
         <nav>
@@ -246,9 +348,13 @@
                 <i class="fa-solid fa-bell"></i> Avisos
             </a>
             <a onclick="abrirModal('modal-contatos')" class="nav-link">
-                <i class="fa-solid fa-address-book"></i> Contatos Úteis
+                <i class="fa-solid fa-phone"></i> Contatos Úteis
             </a>
         </nav>
+        
+        <div class="menu-footer">
+            &copy; 2026 Ministério da Educação
+        </div>
     </aside>
 
     <main>
@@ -259,7 +365,7 @@
             <div class="header-meta">
                 <span><i class="fa-solid fa-wifi"></i> Conectado: API Transparência</span>
                 <div style="display:flex; align-items:center; gap:8px;">
-                    <div style="width:32px; height:32px; background:#00376F; color:white; border-radius:50%; display:flex; align-items:center; justify-content:center;">VL</div>
+                    <div style="width:32px; height:32px; background:#00376F; color:white; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:bold;">VL</div>
                     <span style="font-weight:600;">Vinicius Leite</span>
                 </div>
             </div>
@@ -271,57 +377,33 @@
             <div class="quick-grid-cards">
                 
                 <a href="https://portaldatransparencia.gov.br" target="_blank" class="quick-card qc-blue">
-                    <div>
-                        <div class="qc-title">Portal da Transparência</div>
-                        <div class="qc-desc">Consulta de emendas</div>
-                    </div>
-                    <i class="fa-solid fa-magnifying-glass qc-icon"></i>
-                    <i class="fa-solid fa-arrow-right qc-arrow"></i>
+                    <div><div class="qc-title">Portal da Transparência</div><div class="qc-desc">Consulta de emendas</div></div>
+                    <i class="fa-solid fa-magnifying-glass qc-icon"></i><i class="fa-solid fa-arrow-right qc-arrow"></i>
                 </a>
 
                 <a href="https://www.gov.br/transferegov/pt-br" target="_blank" class="quick-card qc-green">
-                    <div>
-                        <div class="qc-title">TransfereGov</div>
-                        <div class="qc-desc">Plataforma +Brasil</div>
-                    </div>
-                    <i class="fa-solid fa-hand-holding-dollar qc-icon"></i>
-                    <i class="fa-solid fa-arrow-right qc-arrow"></i>
+                    <div><div class="qc-title">TransfereGov</div><div class="qc-desc">Plataforma +Brasil</div></div>
+                    <i class="fa-solid fa-hand-holding-dollar qc-icon"></i><i class="fa-solid fa-arrow-right qc-arrow"></i>
                 </a>
 
                 <a href="https://www.siop.planejamento.gov.br" target="_blank" class="quick-card qc-purple">
-                    <div>
-                        <div class="qc-title">SIOP</div>
-                        <div class="qc-desc">Sistema de Orçamento</div>
-                    </div>
-                    <i class="fa-solid fa-chart-pie qc-icon"></i>
-                    <i class="fa-solid fa-arrow-right qc-arrow"></i>
+                    <div><div class="qc-title">SIOP</div><div class="qc-desc">Sistema de Orçamento</div></div>
+                    <i class="fa-solid fa-chart-pie qc-icon"></i><i class="fa-solid fa-arrow-right qc-arrow"></i>
                 </a>
 
                 <a href="https://www.camara.leg.br" target="_blank" class="quick-card qc-orange">
-                    <div>
-                        <div class="qc-title">Câmara dos Deputados</div>
-                        <div class="qc-desc">Portal Legislativo</div>
-                    </div>
-                    <i class="fa-solid fa-building-columns qc-icon"></i>
-                    <i class="fa-solid fa-arrow-right qc-arrow"></i>
+                    <div><div class="qc-title">Câmara dos Deputados</div><div class="qc-desc">Portal Legislativo</div></div>
+                    <i class="fa-solid fa-building-columns qc-icon"></i><i class="fa-solid fa-arrow-right qc-arrow"></i>
                 </a>
 
                 <a href="https://www12.senado.leg.br" target="_blank" class="quick-card qc-red">
-                    <div>
-                        <div class="qc-title">Senado Federal</div>
-                        <div class="qc-desc">Portal Legislativo</div>
-                    </div>
-                    <i class="fa-solid fa-gavel qc-icon"></i>
-                    <i class="fa-solid fa-arrow-right qc-arrow"></i>
+                    <div><div class="qc-title">Senado Federal</div><div class="qc-desc">Portal Legislativo</div></div>
+                    <i class="fa-solid fa-gavel qc-icon"></i><i class="fa-solid fa-arrow-right qc-arrow"></i>
                 </a>
 
-                <a href="https://sei.mec.gov.br" target="_blank" class="quick-card qc-mec">
-                    <div>
-                        <div class="qc-title">SEI MEC</div>
-                        <div class="qc-desc">Processos Eletrônicos</div>
-                    </div>
-                    <i class="fa-solid fa-folder-open qc-icon"></i>
-                    <i class="fa-solid fa-arrow-right qc-arrow"></i>
+                <a href="https://sei.mec.gov.br" target="_blank" class="quick-card qc-cyan">
+                    <div><div class="qc-title">SEI MEC</div><div class="qc-desc">Processos Eletrônicos</div></div>
+                    <i class="fa-solid fa-folder-open qc-icon"></i><i class="fa-solid fa-arrow-right qc-arrow"></i>
                 </a>
 
             </div>
@@ -354,8 +436,10 @@
                     <i class="fa-solid fa-search"></i>
                     <input type="text" id="filtro-global" placeholder="Pesquisar por nome, partido ou UF..." onkeyup="filtrarGlobal()">
                 </div>
-                <div style="font-size:0.8rem; color:#666;">
-                    <i class="fa-solid fa-info-circle"></i> Use o menu para alternar visualizações
+                
+                <div class="btn-toggle-view">
+                    <button class="btn-view active" id="btn-view-table" onclick="switchView('table')"><i class="fa-solid fa-list"></i> Lista</button>
+                    <button class="btn-view" id="btn-view-grid" onclick="switchView('carometro')"><i class="fa-solid fa-border-all"></i> Carômetro</button>
                 </div>
             </div>
 
@@ -388,20 +472,20 @@
 
     <div id="modal-drawer" class="overlay" onclick="fecharModais(event)">
         <div class="drawer">
-            <div style="padding:24px; background:var(--mec-blue-dark); color:white; display:flex; justify-content:space-between; align-items:center;">
-                <h3 style="margin:0;"><i class="fa-solid fa-id-card"></i> Detalhes</h3>
+            <div class="modal-header">
+                <h3 style="margin:0; font-family:'Rawline';"><i class="fa-solid fa-id-card"></i> Detalhes</h3>
                 <i class="fa-solid fa-xmark" style="cursor:pointer;" onclick="fecharModais(null, true)"></i>
             </div>
             <div style="padding:30px; flex:1; overflow-y:auto;">
                 <div style="display:flex; gap:20px; align-items:center; margin-bottom:30px;">
                     <img id="detalhe-foto" src="" style="width:100px; height:100px; border-radius:50%; object-fit:cover; border:3px solid var(--mec-yellow);">
                     <div>
-                        <h2 id="detalhe-nome" style="color:var(--mec-blue-dark); margin-bottom:5px;">--</h2>
+                        <h2 id="detalhe-nome" style="color:var(--mec-blue); margin-bottom:5px;">--</h2>
                         <span id="detalhe-partido" style="background:#eee; padding:4px 10px; border-radius:4px; font-weight:600; font-size:0.8rem;">--</span>
                     </div>
                 </div>
 
-                <h4 style="border-bottom:1px solid #eee; padding-bottom:5px; margin-bottom:15px; color:var(--mec-blue-mid);">Dados Cadastrais</h4>
+                <h4 style="border-bottom:1px solid #eee; padding-bottom:5px; margin-bottom:15px; color:var(--mec-blue); font-family:'Rawline';">Dados Cadastrais</h4>
                 <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px; margin-bottom:30px;">
                     <div><span style="font-size:0.75rem; color:#888; font-weight:700;">NOME CIVIL</span><br><span id="det-nome-civil">--</span></div>
                     <div><span style="font-size:0.75rem; color:#888; font-weight:700;">NASCIMENTO</span><br><span id="det-nasc">--</span></div>
@@ -409,7 +493,7 @@
                     <div><span style="font-size:0.75rem; color:#888; font-weight:700;">TELEFONE</span><br><span id="det-tel">--</span></div>
                 </div>
 
-                <h4 style="border-bottom:1px solid #eee; padding-bottom:5px; margin-bottom:15px; color:var(--mec-blue-mid);">Gestão Interna (CRM)</h4>
+                <h4 style="border-bottom:1px solid #eee; padding-bottom:5px; margin-bottom:15px; color:var(--mec-blue); font-family:'Rawline';">Gestão Interna (CRM)</h4>
                 <label class="form-label">Unidade Responsável</label>
                 <select id="crm-responsavel" class="form-control">
                     <option value="">-- Selecione --</option>
@@ -427,79 +511,97 @@
 
     <div id="modal-outlook" class="overlay" onclick="fecharModais(event)">
         <div class="modal-box" style="text-align:center; padding:40px;">
-            <i class="fa-solid fa-envelope-open-text" style="font-size:3rem; color:var(--mec-blue-mid); margin-bottom:20px;"></i>
-            <h3>Acesso ao Outlook Web</h3>
+            <i class="fa-solid fa-envelope-open-text" style="font-size:3rem; color:var(--mec-blue); margin-bottom:20px;"></i>
+            <h3 style="font-family:'Rawline';">Acesso ao Outlook Web</h3>
             <p style="color:#666; margin-bottom:20px;">Redirecionando para o ambiente seguro da Microsoft.</p>
-            <a href="https://outlook.office.com/mail/" target="_blank" class="btn-save" style="display:inline-block; text-decoration:none;">Abrir E-mail</a>
+            <a href="https://outlook.office.com/mail/" target="_blank" class="btn-save" style="display:inline-block; text-decoration:none; width:auto;">Abrir E-mail</a>
         </div>
     </div>
 
     <div id="modal-avisos" class="overlay" onclick="fecharModais(event)">
         <div class="modal-box">
-            <div style="display:flex; justify-content:space-between; margin-bottom:20px;">
-                <h3>Central de Avisos</h3>
+            <div class="modal-header">
+                <h3 style="margin:0; font-family:'Rawline';">Central de Avisos</h3>
                 <i class="fa-solid fa-times" onclick="fecharModais(null, true)" style="cursor:pointer"></i>
             </div>
-            <div style="background:#fff3cd; padding:15px; border-left:4px solid #fecb00; border-radius:4px;">
-                <strong>Sistema Sincronizado</strong>
-                <p style="margin:5px 0 0; font-size:0.9rem;">Dados de 2026 carregados via Portal da Transparência.</p>
+            <div class="modal-body">
+                <div style="background:#fff3cd; padding:15px; border-left:4px solid #fecb00; border-radius:4px;">
+                    <strong style="color:#856404;">Monitoramento Ativo</strong>
+                    <p style="margin:5px 0 0; font-size:0.9rem; color:#856404;">Dados de 2026 carregados via Portal da Transparência.</p>
+                </div>
             </div>
         </div>
     </div>
 
     <div id="modal-contatos" class="overlay" onclick="fecharModais(event)">
-        <div class="modal-box" style="width:600px; max-height:80vh; overflow-y:auto;">
-            <div style="display:flex; justify-content:space-between; margin-bottom:20px;">
-                <h3>Diretório de Contatos</h3>
+        <div class="modal-box" style="width:600px; max-height:80vh;">
+            <div class="modal-header">
+                <h3 style="margin:0; font-family:'Rawline';">Diretório de Contatos</h3>
                 <i class="fa-solid fa-times" onclick="fecharModais(null, true)" style="cursor:pointer"></i>
             </div>
-            
-            <div class="contact-group">
-                <div class="contact-group-title">Sistemas & Autarquias</div>
-                <div class="contact-row">
-                    <span><strong>FNDE</strong> (0800 616161 Op.1)</span>
-                    <a href="https://www.gov.br/fnde/pt-br" target="_blank">Site</a>
-                </div>
-                <div class="contact-row">
-                    <span><strong>SISU</strong> (0800-616161)</span>
-                    <a href="https://sisu.mec.gov.br" target="_blank">Site</a>
-                </div>
-                <div class="contact-row">
-                    <span><strong>FIES</strong> (0800 104 0 104)</span>
-                    <a href="http://acessounico.mec.gov.br/fies" target="_blank">Site</a>
-                </div>
-            </div>
-
-            <div class="contact-group">
-                <div class="contact-group-title">Equipe SPO (Planejamento)</div>
-                <div class="contact-row">
-                    <div>
-                        <strong>Adalton Rocha</strong> (Subsecretário)<br>
-                        <small>(61) 2022-8801 | Adalton.Matos@mec.gov.br</small>
+            <div class="modal-body">
+                
+                <div class="contact-group">
+                    <div class="contact-group-title">Sistemas & Autarquias</div>
+                    <div class="contact-row">
+                        <span><strong>FNDE</strong> (0800 616161 Op.1)</span>
+                        <a href="https://www.gov.br/fnde/pt-br" target="_blank">Site</a>
+                    </div>
+                    <div class="contact-row">
+                        <span><strong>SISU</strong> (0800-616161)</span>
+                        <a href="https://sisu.mec.gov.br" target="_blank">Site</a>
+                    </div>
+                    <div class="contact-row">
+                        <span><strong>FIES</strong> (0800 104 0 104)</span>
+                        <a href="http://acessounico.mec.gov.br/fies" target="_blank">Site</a>
+                    </div>
+                    <div class="contact-row">
+                        <span><strong>SETEC</strong> (Secretaria)</span>
+                        <a href="https://www.gov.br/mec/pt-br/composicao/setec" target="_blank">Site</a>
                     </div>
                 </div>
-                <div class="contact-row">
-                    <div>
-                        <strong>Luciana Nunes</strong> (Chefe Gabinete)<br>
-                        <small>(61) 2022-8803 | LucianaNunes@mec.gov.br</small>
+
+                <div class="contact-group">
+                    <div class="contact-group-title">Equipe SPO (Planejamento)</div>
+                    <div class="contact-row">
+                        <div>
+                            <strong>Adalton Rocha</strong> (Subsecretário)<br>
+                            <small style="color:#666;">(61) 2022-8801 | Adalton.Matos@mec.gov.br</small>
+                        </div>
+                    </div>
+                    <div class="contact-row">
+                        <div>
+                            <strong>Luciana Nunes</strong> (Chefe Gabinete)<br>
+                            <small style="color:#666;">(61) 2022-8803 | LucianaNunes@mec.gov.br</small>
+                        </div>
+                    </div>
+                    <div class="contact-row">
+                        <div>
+                            <strong>Ana Karina</strong> (Coord. Orçamento)<br>
+                            <small style="color:#666;">(61) 2022-8835 | anakarina@mec.gov.br</small>
+                        </div>
+                    </div>
+                    <div class="contact-row">
+                        <div>
+                            <strong>André Luiz Mayrink</strong> (Finanças)<br>
+                            <small style="color:#666;">(61) 2022-8912 | andremayrink@mec.gov.br</small>
+                        </div>
                     </div>
                 </div>
-                <div class="contact-row">
-                    <div>
-                        <strong>Ana Karina</strong> (Coord. Orçamento)<br>
-                        <small>(61) 2022-8835 | anakarina@mec.gov.br</small>
+
+                <div class="contact-group">
+                    <div class="contact-group-title">Atendimento</div>
+                    <div class="contact-row">
+                        <span><strong>WhatsApp MEC</strong> ((11) 97715-4092)</span>
+                        <a href="https://wa.me/5511977154092" target="_blank">Iniciar</a>
+                    </div>
+                    <div class="contact-row">
+                        <span><strong>NAAI</strong> ((61) 2022-8199)</span>
+                        <a href="#">Ligar</a>
                     </div>
                 </div>
-            </div>
 
-            <div class="contact-group">
-                <div class="contact-group-title">Atendimento</div>
-                <div class="contact-row">
-                    <span><strong>WhatsApp MEC</strong> ((11) 97715-4092)</span>
-                    <a href="https://wa.me/5511977154092" target="_blank">Iniciar</a>
-                </div>
             </div>
-
         </div>
     </div>
 
@@ -516,12 +618,10 @@
 
         async function iniciarSistema() {
             try {
-                // 1. Busca Deputados
                 const res = await fetch("https://dadosabertos.camara.leg.br/api/v2/deputados?ordem=ASC&ordenarPor=nome");
                 const json = await res.json();
                 const deputados = json.dados;
 
-                // 2. Busca Financeiro (Proxy)
                 const urlFin = `https://api.portaldatransparencia.gov.br/api-de-dados/emendas?codigoOrgao=${ORGAO}&ano=${ANO}&pagina=1`;
                 const proxy = `https://api.allorigins.win/get?url=${encodeURIComponent(urlFin)}`;
                 
@@ -547,7 +647,6 @@
                     }
                 } catch(e) { console.log("Dados financeiros off"); }
 
-                // 3. Montar Base
                 baseDados = deputados.map(dep => {
                     const financeiro = finMap[dep.nome.toUpperCase()] || { emp: 0, liq: 0, pag: 0 };
                     const crm = JSON.parse(localStorage.getItem(`sga_crm_${dep.id}`)) || {};
@@ -578,7 +677,6 @@
             gridCarometro.innerHTML = '';
 
             baseDados.forEach(d => {
-                // Tabela
                 const tr = document.createElement('tr');
                 tr.onclick = () => abrirDetalhes(d);
                 tr.innerHTML = `
@@ -596,7 +694,6 @@
                 `;
                 tbody.appendChild(tr);
 
-                // Carômetro
                 const card = document.createElement('div');
                 card.className = 'profile-card';
                 card.onclick = () => abrirDetalhes(d);
@@ -626,7 +723,7 @@
                     <h2 style="color:#ddd; font-size:3rem; margin:0;">${uf}</h2>
                     <h4 style="margin:5px 0;">Bancada ${uf}</h4>
                     <span style="color:#666; font-size:0.8rem;">${deps.length} Parlamentares</span>
-                    <div style="margin-top:10px; font-weight:700; color:var(--mec-blue-dark);">${formatarMoeda(total)}</div>
+                    <div style="margin-top:10px; font-weight:700; color:var(--mec-blue);">${formatarMoeda(total)}</div>
                     <button class="btn-save" style="margin-top:10px; font-size:0.8rem; padding:6px;" onclick="filtrarUF('${uf}')">Filtrar</button>
                 `;
                 container.appendChild(card);
@@ -637,17 +734,14 @@
             deputadoAtualId = obj.id;
             const drawer = document.getElementById('modal-drawer');
             
-            // Dados Locais
             document.getElementById('detalhe-foto').src = obj.urlFoto;
             document.getElementById('detalhe-nome').innerText = obj.nome;
             document.getElementById('detalhe-partido').innerText = `${obj.siglaPartido} - ${obj.siglaUf}`;
             
-            // CRM
             const crm = obj.crm || {};
             document.getElementById('crm-responsavel').value = crm.responsavel || "";
             document.getElementById('crm-obs').value = crm.obs || "";
 
-            // Reset API
             document.getElementById('det-nome-civil').innerText = "...";
             document.getElementById('det-nasc').innerText = "...";
             document.getElementById('det-email').innerText = "...";
@@ -655,7 +749,6 @@
 
             drawer.style.display = 'block';
 
-            // Fetch Detalhes
             try {
                 const res = await fetch(`https://dadosabertos.camara.leg.br/api/v2/deputados/${obj.id}`);
                 const json = await res.json();
@@ -676,26 +769,33 @@
             iniciarSistema();
         }
 
-        // --- NAVEGAÇÃO ---
         function trocarTela(tela) {
+            // Esconde todas
             document.getElementById('tela-painel').style.display = 'none';
             document.getElementById('tela-carometro').style.display = 'none';
             document.getElementById('tela-bancadas').style.display = 'none';
-            document.getElementById('link-painel').classList.remove('active');
-            document.getElementById('link-carometro').classList.remove('active');
-            document.getElementById('link-bancadas').classList.remove('active');
+            
+            // Remove Active
+            document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active'));
+            document.getElementById('btn-view-table').classList.remove('active');
+            document.getElementById('btn-view-grid').classList.remove('active');
 
-            if(tela === 'painel') {
+            if(tela === 'painel' || tela === 'table') {
                 document.getElementById('tela-painel').style.display = 'block';
                 document.getElementById('link-painel').classList.add('active');
+                document.getElementById('btn-view-table').classList.add('active');
             } else if(tela === 'carometro') {
                 document.getElementById('tela-carometro').style.display = 'grid';
                 document.getElementById('link-carometro').classList.add('active');
+                document.getElementById('btn-view-grid').classList.add('active');
             } else if(tela === 'bancadas') {
                 document.getElementById('tela-bancadas').style.display = 'grid';
                 document.getElementById('link-bancadas').classList.add('active');
             }
         }
+        
+        // Alias para switchView chamar trocarTela
+        function switchView(viewName) { trocarTela(viewName); }
 
         function abrirModal(id) { document.getElementById(id).style.display = 'block'; }
         function fecharModais(e, force) {
