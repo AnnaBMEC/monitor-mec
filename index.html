@@ -3,21 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel Orçamentário MEC - 2026</title>
+    <title>Painel Orçamentário MEC - Oficial</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; margin: 0; padding: 20px; }
         .container { max-width: 1200px; margin: auto; background: white; padding: 25px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
         h1 { color: #003366; border-bottom: 3px solid #ffd700; padding-bottom: 10px; margin-bottom: 25px; }
         
-        .resumo-financeiro { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 30px; }
-        .card { padding: 20px; border-radius: 10px; color: white; text-align: center; }
-        .empenhado { background: #2c3e50; }
-        .pago { background: #27ae60; }
-        .bancada { background: #8e44ad; }
-        .card h2 { margin: 0; font-size: 1rem; opacity: 0.9; }
-        .card p { font-size: 1.3rem; font-weight: bold; margin: 10px 0 0; }
-
-        #alert-box { display: none; background: #d4edda; border: 1px solid #c3e6cb; color: #155724; padding: 15px; border-radius: 8px; margin-bottom: 20px; }
+        /* Gráfico */
+        .grafico-box { background: #fff; padding: 20px; border-radius: 12px; border: 1px solid #eee; margin-bottom: 30px; height: 350px; }
+        
+        /* Notificação */
+        #alert-box { display: none; background: #d1ecf1; border: 1px solid #bee5eb; color: #0c5460; padding: 15px; border-radius: 8px; margin-bottom: 20px; font-weight: bold; }
 
         .links-rapidos { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 30px; }
         .btn { padding: 12px 20px; border-radius: 8px; text-decoration: none; color: white; font-weight: bold; font-size: 0.85rem; transition: 0.3s; border: none; cursor: pointer; }
@@ -29,127 +26,125 @@
         input { padding: 10px; border: 1px solid #ddd; border-radius: 8px; flex: 1; }
         
         table { width: 100%; border-collapse: collapse; }
-        th { background: #003366; color: white; padding: 12px; text-align: left; }
-        td { padding: 10px; border-bottom: 1px solid #eee; }
+        th { background: #003366; color: white; padding: 12px; text-align: left; position: sticky; top: 0; }
+        td { padding: 10px; border-bottom: 1px solid #eee; vertical-align: middle; }
+        .foto-dep { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; border: 2px solid #004a8d; margin-right: 15px; }
+        .flex-cell { display: flex; align-items: center; }
+        .badge-uf { background: #eee; padding: 3px 8px; border-radius: 5px; font-size: 11px; font-weight: bold; color: #555; }
     </style>
 </head>
 <body>
 
-<div id="alert-box"></div>
+<div id="alert-box">🔔 Dados atualizados com sucesso via API da Transparência.</div>
 
 <div class="container">
-    <h1>🏛️ Centro de Comando Orçamentário - MEC</h1>
+    <h1>🏛️ Centro de Gestão Orçamentária MEC (2024-2026)</h1>
 
     <div class="links-rapidos">
-        <a href="https://sei.mec.gov.br/" target="_blank" class="btn btn-sei">Acessar SEI MEC</a>
-        <a href="https://www.siop.planejamento.gov.br/" target="_blank" class="btn btn-siop">Painel SIOP</a>
-        <button onclick="location.reload()" class="btn" style="background:#666">🔄 Recarregar Dados</button>
+        <a href="https://sei.mec.gov.br/" target="_blank" class="btn btn-sei">SEI MEC</a>
+        <a href="https://www.siop.planejamento.gov.br/" target="_blank" class="btn btn-siop">SIOP</a>
+        <button onclick="location.reload()" class="btn" style="background:#6c757d">🔄 Sincronizar Agora</button>
     </div>
 
-    <div class="resumo-financeiro">
-        <div class="card empenhado"><h2>Empenhado Total (MEC)</h2><p id="v-empenhado">R$ 0,00</p></div>
-        <div class="card pago"><h2>Pago Total (MEC)</h2><p id="v-pago">R$ 0,00</p></div>
-        <div class="card bancada"><h2>Emendas de Bancada</h2><p id="v-bancada">R$ 0,00</p></div>
+    <div class="grafico-box">
+        <canvas id="meuGrafico"></canvas>
     </div>
 
     <div class="busca-bloco">
-        <input type="text" id="filtro" placeholder="Buscar parlamentar ou estado..." onkeyup="filtrarTabela()">
-        <input type="text" id="numEmenda" placeholder="Nº Emenda..." style="max-width: 150px;">
-        <button onclick="buscarEmenda()" class="btn btn-camara">Buscar</button>
+        <input type="text" id="filtro" placeholder="Pesquisar Parlamentar, Estado ou Partido..." onkeyup="filtrarTabela()">
+        <input type="text" id="numEmenda" placeholder="Nº Emenda (ex: 12340005)" style="max-width: 180px;">
+        <button onclick="buscarEmenda()" class="btn btn-camara">Localizar</button>
     </div>
 
-    <table id="tabelaPrincipal">
+    <table id="tabelaDados">
         <thead>
             <tr>
-                <th>Parlamentar / UF</th>
-                <th>Partido</th>
-                <th>Ações</th>
+                <th>Parlamentar / Foto</th>
+                <th>Dados Políticos</th>
+                <th>Consultas Detalhadas</th>
             </tr>
         </thead>
-        <tbody id="lista-corpo"></tbody>
+        <tbody id="lista-corpo">
+            <tr><td colspan="3" style="text-align:center">Conectando aos Dados Abertos...</td></tr>
+        </tbody>
     </table>
 </div>
 
 <script>
-    const API_KEY = "2e820c7589765e7414b397836e6d1976";
-    const ORGAO_MEC = "26000";
+    const CHAVE = "2e820c7589765e7414b397836e6d1976";
+    const ORGAO = "26000";
+    let chart;
 
-    function formatarMoeda(valor) {
-        return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-    }
+    // Função para converter valores da API
+    const parseValor = (v) => v ? parseFloat(v.replace(/\./g, '').replace(',', '.')) : 0;
 
-    function tratarValor(texto) {
-        if (!texto) return 0;
-        return parseFloat(texto.replace(/\./g, '').replace(',', '.'));
-    }
-
-    async function carregarDados() {
-        // Buscando emendas com paginação maior para capturar valores reais
-        const url = `https://api.portaldatransparencia.gov.br/api-de-dados/emendas?codigoOrgao=${ORGAO_MEC}&ano=2026&pagina=1`;
-        
+    async function buscarValoresAno(ano) {
+        const url = `https://api.portaldatransparencia.gov.br/api-de-dados/emendas?codigoOrgao=${ORGAO}&ano=${ano}&pagina=1`;
         try {
-            const res = await fetch(url, { headers: { "chave-api-dados": API_KEY } });
-            const emendas = await res.json();
-            
-            let totalE = 0, totalP = 0, totalB = 0;
-
-            emendas.forEach(e => {
-                let vEmp = tratarValor(e.valorEmpenhado);
-                let vPag = tratarValor(e.valorPago);
-                
-                totalE += vEmp;
-                totalP += vPag;
-                if (e.tipoEmenda.includes("Bancada")) totalB += vEmp;
-            });
-
-            document.getElementById('v-empenhado').innerText = formatarMoeda(totalE);
-            document.getElementById('v-pago').innerText = formatarMoeda(totalP);
-            document.getElementById('v-bancada').innerText = formatarMoeda(totalB);
-
-            // Verificar atualizações
-            const ultimaContagem = localStorage.getItem('contagemEmendas');
-            if (ultimaContagem && emendas.length > ultimaContagem) {
-                const box = document.getElementById('alert-box');
-                box.innerText = `🔔 Novas emendas detectadas! Total agora: ${emendas.length}`;
-                box.style.display = 'block';
-            }
-            localStorage.setItem('contagemEmendas', emendas.length);
-
-        } catch (e) {
-            console.error("Erro na API", e);
-        }
+            const r = await fetch(url, { headers: { "chave-api-dados": CHAVE } });
+            const dados = await r.json();
+            return dados.reduce((acc, curr) => acc + parseValor(curr.valorEmpenhado), 0);
+        } catch { return 0; }
     }
 
-    async function carregarListaParlamentares() {
+    async function init() {
+        // Carregar Gráfico com Dados Reais
+        const [v24, v25, v26] = await Promise.all([buscarValoresAno(2024), buscarValoresAno(2025), buscarValoresAno(2026)]);
+        
+        const ctx = document.getElementById('meuGrafico').getContext('2d');
+        chart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Exercício 2024', 'Exercício 2025', 'Exercício 2026'],
+                datasets: [{
+                    label: 'Total Empenhado MEC (R$)',
+                    data: [v24, v25, v26],
+                    backgroundColor: ['#34495e', '#3498db', '#2ecc71']
+                }]
+            },
+            options: { maintainAspectRatio: false, responsive: true }
+        });
+
+        if (v26 > 0) document.getElementById('alert-box').style.display = 'block';
+
+        // Carregar Tabela com Fotos
         const res = await fetch("https://dadosabertos.camara.leg.br/api/v2/deputados?ordem=ASC&ordenarPor=nome");
         const json = await res.json();
         const tbody = document.getElementById('lista-corpo');
-        
+        tbody.innerHTML = '';
+
         json.dados.forEach(d => {
-            const link = `https://portaldatransparencia.gov.br/emendas?nomeParlamentar=${encodeURIComponent(d.nome)}&orgao=${ORGAO_MEC}&ano=2026`;
+            // URL corrigida: nome entre aspas e filtro de órgão garantido
+            const urlFinal = `https://portaldatransparencia.gov.br/emendas?ano=2026&orgao=${ORGAO}&nomeParlamentar=${encodeURIComponent('"' + d.nome + '"')}`;
+            
             tbody.innerHTML += `
                 <tr>
-                    <td><strong>${d.nome}</strong> (${d.siglaUf})</td>
-                    <td>${d.siglaPartido}</td>
-                    <td><a href="${link}" target="_blank" style="color:#007bff; font-weight:bold; text-decoration:none;">🔗 Ver Emendas MEC</a></td>
+                    <td>
+                        <div class="flex-cell">
+                            <img src="${d.urlFoto}" class="foto-dep" loading="lazy">
+                            <strong>${d.nome}</strong>
+                        </div>
+                    </td>
+                    <td><span class="badge-uf">${d.siglaUf}</span> ${d.siglaPartido}</td>
+                    <td>
+                        <a href="${urlFinal}" target="_blank" style="color:#004a8d; font-weight:bold; text-decoration:none;">🔎 Emendas MEC 2026</a>
+                    </td>
                 </tr>`;
         });
     }
 
     function buscarEmenda() {
-        const num = document.getElementById('numEmenda').value;
-        if(num) window.open(`https://www.camara.leg.br/internet/deputado/RelData_Emendas.asp?numEmenda=${num}&ano=2026`, '_blank');
+        const n = document.getElementById('numEmenda').value;
+        if(n) window.open(`https://www.camara.leg.br/internet/deputado/RelData_Emendas.asp?numEmenda=${n}&ano=2026`, '_blank');
     }
 
     function filtrarTabela() {
-        let filter = document.getElementById("filtro").value.toUpperCase();
-        let rows = document.getElementById("lista-corpo").getElementsByTagName("tr");
-        for (let row of rows) {
-            row.style.display = row.innerText.toUpperCase().includes(filter) ? "" : "none";
-        }
+        const val = document.getElementById("filtro").value.toUpperCase();
+        const rows = document.querySelectorAll("#lista-corpo tr");
+        rows.forEach(r => r.style.display = r.innerText.toUpperCase().includes(val) ? "" : "none");
     }
 
-    window.onload = () => { carregarDados(); carregarListaParlamentares(); };
+    window.onload = init;
 </script>
 </body>
 </html>
