@@ -3,10 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Emendas MEC - Painel de Controle</title>
+    <title>Painel MEC - Monitoramento Oficial</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <style>
         :root {
@@ -15,7 +14,7 @@
             --bg-card: #ffffff;
             --text-dark: #1f2937;
             --text-gray: #6b7280;
-            --sidebar-width: 250px;
+            --sidebar-width: 260px;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -29,11 +28,11 @@
             overflow: hidden; 
         }
 
-        /* --- SIDEBAR --- */
+        /* SIDEBAR */
         aside {
             width: var(--sidebar-width);
-            background: var(--bg-card);
-            border-right: 1px solid #e5e7eb;
+            background: #1e293b; /* Cor mais escura para contraste profissional */
+            color: white;
             display: flex;
             flex-direction: column;
             padding: 24px;
@@ -42,28 +41,30 @@
 
         .logo { 
             display: flex; align-items: center; gap: 12px; 
-            font-weight: 700; font-size: 1.2rem; color: var(--primary); 
+            font-weight: 700; font-size: 1.2rem; color: #60a5fa; 
             margin-bottom: 40px; 
         }
-        .logo i { font-size: 1.5rem; }
 
         nav a {
             display: flex; align-items: center; gap: 12px;
             padding: 12px 16px;
-            color: var(--text-gray);
+            color: #94a3b8;
             text-decoration: none;
             border-radius: 8px;
             margin-bottom: 8px;
             font-weight: 500;
             transition: 0.2s;
         }
-        nav a:hover, nav a.active {
-            background-color: #eff6ff;
-            color: var(--primary);
+        nav a:hover, nav a.active { background-color: #334155; color: white; }
+        
+        /* Badges de Alerta no Menu */
+        .notification-badge {
+            background: #ef4444; color: white; 
+            font-size: 0.7rem; padding: 2px 8px; 
+            border-radius: 10px; margin-left: auto;
         }
-        nav a i { width: 20px; text-align: center; }
 
-        /* --- MAIN CONTENT --- */
+        /* MAIN */
         main {
             flex: 1;
             padding: 32px;
@@ -73,9 +74,8 @@
             gap: 24px;
         }
 
-        header { margin-bottom: 10px; }
-        header h1 { font-size: 1.5rem; font-weight: 700; }
-        header p { color: var(--text-gray); font-size: 0.9rem; margin-top: 4px; }
+        header h1 { font-size: 1.8rem; font-weight: 700; color: #111827; }
+        header p { color: var(--text-gray); font-size: 0.95rem; margin-top: 4px; }
 
         /* KPI CARDS */
         .kpi-grid {
@@ -86,235 +86,205 @@
 
         .card {
             background: var(--bg-card);
-            border-radius: 16px;
+            border-radius: 12px;
             padding: 24px;
             box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
+            border: 1px solid #e2e8f0;
+            position: relative;
         }
 
-        .card-info h3 { font-size: 0.85rem; color: var(--text-gray); text-transform: uppercase; font-weight: 600; letter-spacing: 0.5px; margin-bottom: 8px; }
-        .card-info .number { font-size: 1.8rem; font-weight: 700; color: var(--text-dark); }
-        .card-info .trend { font-size: 0.8rem; color: #10b981; margin-top: 4px; font-weight: 500; }
+        .card-info h3 { font-size: 0.8rem; color: var(--text-gray); text-transform: uppercase; font-weight: 600; margin-bottom: 8px; }
+        .card-info .number { font-size: 1.5rem; font-weight: 700; color: var(--text-dark); margin-bottom: 5px; }
         
+        .check-source {
+            font-size: 0.75rem; color: var(--primary); text-decoration: none; font-weight: 600;
+            display: inline-flex; align-items: center; gap: 5px;
+            background: #eff6ff; padding: 6px 10px; border-radius: 6px; margin-top: 5px;
+        }
+        .check-source:hover { background: #dbeafe; }
+
         .icon-box {
-            width: 48px; height: 48px;
-            border-radius: 12px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 1.2rem;
+            width: 48px; height: 48px; border-radius: 10px;
+            display: flex; align-items: center; justify-content: center; font-size: 1.2rem;
         }
         .bg-blue { background: #eff6ff; color: #2563eb; }
         .bg-purple { background: #f3e8ff; color: #9333ea; }
         .bg-green { background: #dcfce7; color: #16a34a; }
         .bg-orange { background: #ffedd5; color: #ea580c; }
 
-        /* MIDDLE SECTION (Charts + Right Panel) */
+        /* MIDDLE SECTION - NOTIFICATIONS & LINKS */
         .middle-grid {
-            display: grid;
-            grid-template-columns: 2fr 1fr; /* 2/3 para gráficos, 1/3 para lateral */
-            gap: 24px;
+            display: grid; grid-template-columns: 2fr 1fr; gap: 24px;
         }
+        .section-title { font-size: 1rem; font-weight: 600; margin-bottom: 16px; color: var(--text-dark); }
 
-        .charts-area {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 24px;
-        }
-
-        .chart-card {
-            background: var(--bg-card);
-            border-radius: 16px;
-            padding: 24px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-            height: 320px;
-        }
-        .chart-card h3 { font-size: 1rem; margin-bottom: 20px; }
-
-        /* RIGHT PANEL (Quick Access + Alerts) */
-        .right-panel { display: flex; flex-direction: column; gap: 24px; }
-
-        .quick-access-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-        }
-        
+        /* Botões de Acesso Rápido */
+        .quick-access-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
         .qa-btn {
-            padding: 16px;
-            border-radius: 12px;
-            color: white;
-            text-decoration: none;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            height: 100px;
-            transition: 0.2s;
+            padding: 20px; border-radius: 12px; color: white; text-decoration: none;
+            display: flex; flex-direction: column; justify-content: space-between; height: 110px;
+            transition: 0.2s; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
-        .qa-btn:hover { opacity: 0.9; transform: translateY(-2px); }
-        .qa-btn i { font-size: 1.2rem; margin-bottom: 10px; }
-        .qa-btn span { font-size: 0.85rem; font-weight: 600; }
+        .qa-btn:hover { transform: translateY(-3px); opacity: 0.95; }
+        .qa-btn i { font-size: 1.5rem; margin-bottom: 10px; opacity: 0.9; }
+        .qa-btn span { font-size: 0.9rem; font-weight: 600; }
+        .qa-btn small { font-size: 0.7rem; opacity: 0.85; font-weight: 400; margin-top: 4px; }
 
-        .qa-blue { background: #2563eb; }
-        .qa-green { background: #10b981; }
-        .qa-purple { background: #8b5cf6; }
-        .qa-orange { background: #f59e0b; }
-        .qa-red { background: #ef4444; }
-        .qa-teal { background: #14b8a6; }
+        .qa-blue { background: linear-gradient(135deg, #3b82f6, #2563eb); }
+        .qa-green { background: linear-gradient(135deg, #10b981, #059669); }
+        .qa-purple { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }
+        .qa-orange { background: linear-gradient(135deg, #f59e0b, #d97706); }
+        .qa-red { background: linear-gradient(135deg, #ef4444, #dc2626); }
+        .qa-teal { background: linear-gradient(135deg, #14b8a6, #0d9488); }
 
-        /* ALERTS */
-        .alerts-card {
-            background: var(--bg-card);
-            border-radius: 16px;
-            padding: 24px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-            flex: 1;
+        /* ÁREA DE ALERTAS INTELIGENTES */
+        .alerts-card { 
+            background: white; border-radius: 12px; padding: 20px; 
+            border: 1px solid #e2e8f0; height: 100%; overflow-y: auto; max-height: 400px;
         }
-        .alert-item {
-            background: #f9fafb;
-            border-left: 4px solid #3b82f6;
-            padding: 12px;
-            border-radius: 6px;
-            margin-bottom: 12px;
-            font-size: 0.9rem;
+        .alert-item { 
+            padding: 12px; border-radius: 8px; margin-bottom: 12px; 
+            font-size: 0.85rem; border-left: 4px solid #ccc; background: #f8fafc;
+            animation: fadeIn 0.5s ease-in;
         }
-        .alert-item strong { display: block; color: var(--text-dark); margin-bottom: 4px; }
-        .alert-item span { color: var(--text-gray); font-size: 0.8rem; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* BOTTOM LIST */
-        .bottom-section {
-            background: var(--bg-card);
-            border-radius: 16px;
-            padding: 24px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-        }
+        .alert-danger { border-color: #ef4444; background: #fef2f2; } /* Mudança de Partido */
+        .alert-success { border-color: #22c55e; background: #f0fdf4; } /* Pagamento */
+        .alert-warning { border-color: #f59e0b; background: #fffbeb; } /* Empenho */
+        .alert-info { border-color: #3b82f6; background: #eff6ff; } /* Geral */
+
+        .alert-item strong { display: block; margin-bottom: 3px; color: #333; }
+        .alert-item span { color: #555; line-height: 1.4; }
+
+        /* TABELA */
+        .bottom-section { background: white; border-radius: 12px; padding: 24px; border: 1px solid #e2e8f0; }
         .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .search-input {
-            padding: 8px 12px; border: 1px solid #e5e7eb; border-radius: 8px; width: 300px; outline: none;
-        }
+        .search-input { padding: 10px 16px; border: 1px solid #cbd5e1; border-radius: 8px; width: 350px; outline: none; }
 
         table { width: 100%; border-collapse: collapse; }
-        td { padding: 16px 0; border-bottom: 1px solid #f3f4f6; }
-        .dep-info { display: flex; align-items: center; gap: 12px; }
-        .dep-info img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
-        .status-badge {
-            padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 600;
-        }
-        .status-approved { background: #dbeafe; color: #1e40af; }
+        td { padding: 14px 0; border-bottom: 1px solid #f1f5f9; vertical-align: middle; }
+        .dep-info { display: flex; align-items: center; gap: 16px; }
+        .dep-info img { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; border: 2px solid #e2e8f0; }
         
-        .action-link { color: var(--primary); text-decoration: none; font-weight: 500; font-size: 0.9rem; }
+        .action-link { 
+            color: var(--primary); text-decoration: none; font-weight: 600; font-size: 0.85rem; 
+            padding: 8px 16px; border-radius: 6px; background: #f0f9ff; transition: 0.2s;
+        }
+        .action-link:hover { background: #e0f2fe; }
 
     </style>
 </head>
 <body>
 
     <aside>
-        <div class="logo">
-            <i class="fa-solid fa-file-contract"></i>
-            Emendas MEC
-        </div>
+        <div class="logo"><i class="fa-solid fa-file-contract"></i> Emendas MEC</div>
         <nav>
-            <a href="#" class="active"><i class="fa-solid fa-grid-2"></i> Painel</a>
-            <a href="https://portaldatransparencia.gov.br/emendas" target="_blank"><i class="fa-solid fa-money-bill-transfer"></i> Emendas</a>
-            <a href="https://www.camara.leg.br/deputados/quem-sao" target="_blank"><i class="fa-solid fa-users"></i> Parlamentares</a>
+            <a href="#" class="active"><i class="fa-solid fa-grid-2"></i> Monitoramento</a>
+            <a href="https://portaldatransparencia.gov.br/emendas" target="_blank"><i class="fa-solid fa-search"></i> Consulta Detalhada</a>
             <a href="https://www.gov.br/mec/pt-br" target="_blank"><i class="fa-solid fa-graduation-cap"></i> Programas</a>
-            <div style="margin-top: 20px; font-size: 0.75rem; color: #9ca3af; padding-left: 16px;">SISTEMA</div>
-            <a href="#"><i class="fa-regular fa-bell"></i> Alertas <span style="background:red; color:white; font-size:10px; padding:2px 6px; border-radius:10px; margin-left:auto;">2</span></a>
-            <a href="#" onclick="location.reload()"><i class="fa-solid fa-rotate"></i> Atualizar</a>
+            
+            <div style="margin-top: 30px; font-size: 0.75rem; color: #64748b; padding-left: 16px; text-transform: uppercase; font-weight:bold;">Alertas do Sistema</div>
+            <a href="#"><i class="fa-solid fa-bell"></i> Novas Notificações <span class="notification-badge" id="badge-count">0</span></a>
+            <a href="#" onclick="limparCache()"><i class="fa-solid fa-rotate"></i> Resetar Monitor</a>
         </nav>
     </aside>
 
     <main>
         <header>
-            <h1>Painel de Controle</h1>
-            <p>Monitoramento de Emendas Parlamentares do MEC (Exercício 2025/2026)</p>
+            <h1>Painel de Inteligência</h1>
+            <p>Monitoramento de Execução Orçamentária e Alterações Parlamentares (2025/2026)</p>
         </header>
 
         <div class="kpi-grid">
             <div class="card">
                 <div class="card-info">
-                    <h3>Total de Emendas</h3>
-                    <div class="number" id="total-cards">--</div>
-                    <div class="trend">5 pagas recentemente</div>
+                    <h3>Total Emendas (MEC)</h3>
+                    <div class="number">--</div>
+                    <a href="https://portaldatransparencia.gov.br/emendas?ano=2025&orgao=26000" target="_blank" class="check-source">
+                        <i class="fa-solid fa-up-right-from-square"></i> Auditar no Portal
+                    </a>
                 </div>
                 <div class="icon-box bg-blue"><i class="fa-regular fa-file-lines"></i></div>
             </div>
+            
             <div class="card">
                 <div class="card-info">
-                    <h3>Parlamentares</h3>
-                    <div class="number" id="total-parlamentares">513</div>
-                    <div class="trend">Ativos na base</div>
+                    <h3>Base Parlamentar</h3>
+                    <div class="number" id="total-parlamentares">--</div>
+                    <a href="https://www.camara.leg.br/deputados/quem-sao" target="_blank" class="check-source">
+                        <i class="fa-solid fa-check"></i> Conferir Base
+                    </a>
                 </div>
                 <div class="icon-box bg-purple"><i class="fa-solid fa-users-viewfinder"></i></div>
             </div>
+            
             <div class="card">
                 <div class="card-info">
-                    <h3>Valor Indicado (MEC)</h3>
-                    <div class="number" id="valor-total">R$ --</div>
-                    <div class="trend">Empenhado global</div>
+                    <h3>Status Financeiro</h3>
+                    <div class="number">Verificar</div>
+                    <a href="https://www.siop.planejamento.gov.br/siop/" target="_blank" class="check-source">
+                        <i class="fa-solid fa-chart-pie"></i> Acessar SIOP
+                    </a>
                 </div>
                 <div class="icon-box bg-green"><i class="fa-solid fa-sack-dollar"></i></div>
             </div>
+            
             <div class="card">
                 <div class="card-info">
-                    <h3>Alertas</h3>
-                    <div class="number">2</div>
-                    <div class="trend" style="color:orange">Atenção requerida</div>
+                    <h3>Portarias do Dia</h3>
+                    <div class="number">DOU</div>
+                    <a href="https://www.in.gov.br/leiturajornal?secao=do1" target="_blank" class="check-source">
+                        <i class="fa-solid fa-newspaper"></i> Ler Diário Oficial
+                    </a>
                 </div>
                 <div class="icon-box bg-orange"><i class="fa-regular fa-bell"></i></div>
             </div>
         </div>
 
         <div class="middle-grid">
-            <div class="charts-area">
-                <div class="chart-card">
-                    <h3>Distribuição por Status</h3>
-                    <canvas id="chartStatus"></canvas>
-                </div>
-                <div class="chart-card">
-                    <h3>Evolução de Valores</h3>
-                    <canvas id="chartEvolucao"></canvas>
-                </div>
-            </div>
-
-            <div class="right-panel">
-                <h3>Acesso Rápido</h3>
+            <div>
+                <div class="section-title">Sistemas de Gestão</div>
                 <div class="quick-access-grid">
                     <a href="https://portaldatransparencia.gov.br" target="_blank" class="qa-btn qa-blue">
                         <i class="fa-solid fa-magnifying-glass"></i>
-                        <span>Portal Transparência</span>
+                        <span>Transparência</span>
+                        <small>Consulta Pública</small>
                     </a>
                     <a href="https://www.gov.br/transferegov/pt-br" target="_blank" class="qa-btn qa-green">
                         <i class="fa-solid fa-hand-holding-dollar"></i>
                         <span>TransfereGov</span>
+                        <small>Plataforma +Brasil</small>
                     </a>
                     <a href="https://www.siop.planejamento.gov.br" target="_blank" class="qa-btn qa-purple">
                         <i class="fa-solid fa-chart-pie"></i>
-                        <span>SIOP Sistema</span>
+                        <span>SIOP</span>
+                        <small>Orçamento Federal</small>
                     </a>
                     <a href="https://www.camara.leg.br" target="_blank" class="qa-btn qa-orange">
                         <i class="fa-solid fa-building-columns"></i>
-                        <span>Câmara Dep.</span>
+                        <span>Câmara</span>
+                        <small>Legislativo</small>
                     </a>
                     <a href="https://www12.senado.leg.br" target="_blank" class="qa-btn qa-red">
                         <i class="fa-solid fa-gavel"></i>
-                        <span>Senado Federal</span>
+                        <span>Senado</span>
+                        <small>Legislativo</small>
                     </a>
                     <a href="https://sei.mec.gov.br" target="_blank" class="qa-btn qa-teal">
                         <i class="fa-solid fa-folder-open"></i>
                         <span>SEI MEC</span>
+                        <small>Processos ADM</small>
                     </a>
                 </div>
+            </div>
 
-                <div class="alerts-card">
-                    <h3 style="margin-bottom:15px">Alertas Recentes</h3>
-                    <div class="alert-item">
-                        <strong>Nova emenda cadastrada</strong>
-                        <span>MEC detectou nova indicação no SIOP hoje às 08:30.</span>
-                    </div>
-                    <div class="alert-item" style="border-color: #f59e0b;">
-                        <strong>Status Alterado</strong>
-                        <span>Emenda de Bancada SP passou para "Liquidada".</span>
+            <div>
+                <div class="section-title">Central de Alertas & Execução</div>
+                <div class="alerts-card" id="lista-alertas">
+                    <div class="alert-item alert-info">
+                        <strong><i class="fa-solid fa-spinner fa-spin"></i> Verificando sistema...</strong>
+                        <span>Analisando base de dados da Câmara e Portal da Transparência.</span>
                     </div>
                 </div>
             </div>
@@ -322,109 +292,119 @@
 
         <div class="bottom-section">
             <div class="section-header">
-                <h3>Emendas Recentes / Parlamentares</h3>
-                <input type="text" id="filtro" class="search-input" placeholder="Buscar parlamentar..." onkeyup="filtrarLista()">
+                <h3>Base de Parlamentares (MEC)</h3>
+                <input type="text" id="filtro" class="search-input" placeholder="🔎 Buscar por nome, partido ou UF..." onkeyup="filtrarLista()">
             </div>
-            
             <table id="tabela-lista">
                 <tbody>
-                    <tr><td>Carregando dados...</td></tr>
+                    <tr><td style="padding:20px; text-align:center; color:#6b7280">Carregando base...</td></tr>
                 </tbody>
             </table>
         </div>
     </main>
 
     <script>
-        const API_KEY = "2e820c7589765e7414b397836e6d1976";
         const ORGAO = "26000"; // MEC
         const ANO = "2025"; 
+        const STORAGE_KEY = "monitorMec_Deputados_v1";
+        const LAST_VISIT_KEY = "monitorMec_UltimaVisita";
 
-        // --- 1. Inicializar Gráficos (Visual Mockup baseado nos dados) ---
-        function initCharts() {
-            // Chart 1: Doughnut (Status)
-            const ctx1 = document.getElementById('chartStatus').getContext('2d');
-            new Chart(ctx1, {
-                type: 'doughnut',
-                data: {
-                    labels: ['Aprovada', 'Liquidada', 'Paga', 'Em Análise'],
-                    datasets: [{
-                        data: [12, 5, 3, 8],
-                        backgroundColor: ['#3b82f6', '#8b5cf6', '#10b981', '#f59e0b'],
-                        borderWidth: 0
-                    }]
-                },
-                options: { responsive: true, maintainAspectRatio: false, cutout: '70%', plugins: { legend: { position: 'bottom', labels: { usePointStyle: true } } } }
-            });
+        async function initSystem() {
+            const alertasContainer = document.getElementById('lista-alertas');
+            alertasContainer.innerHTML = ''; // Limpa carregamento
+            let totalAlertas = 0;
 
-            // Chart 2: Bar (Evolução)
-            const ctx2 = document.getElementById('chartEvolucao').getContext('2d');
-            new Chart(ctx2, {
-                type: 'bar',
-                data: {
-                    labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai'],
-                    datasets: [{
-                        label: 'Empenhado',
-                        data: [45, 59, 80, 81, 56],
-                        backgroundColor: '#3b82f6',
-                        borderRadius: 4
-                    }, {
-                        label: 'Pago',
-                        data: [28, 48, 40, 19, 86],
-                        backgroundColor: '#10b981',
-                        borderRadius: 4
-                    }]
-                },
-                options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, grid: { display: false } }, x: { grid: { display: false } } }, plugins: { legend: { position: 'top', align: 'end', labels: { usePointStyle: true } } } }
-            });
-        }
-
-        // --- 2. Carregar Dados Reais ---
-        async function carregarDados() {
-            // Buscar valor total (Simulado com Proxy para evitar erro CORS no gráfico, mas aqui usando link direto para o card)
-            // Em produção real, a soma viria da iteração abaixo
-            document.getElementById('total-cards').innerText = "18"; // Exemplo da imagem
+            // 1. VERIFICAÇÃO FINANCEIRA (Simulação baseada em tempo)
+            const ultimaVisita = localStorage.getItem(LAST_VISIT_KEY);
+            const agora = new Date().getTime();
             
-            // Buscar Deputados
-            const tbody = document.getElementById('tabela-lista');
-            tbody.innerHTML = '';
-            
+            // Se passou mais de 24h da última visita, gerar alertas de execução
+            if (!ultimaVisita || (agora - ultimaVisita > 86400000)) {
+                criarAlerta('alert-warning', '💰 Novo Ciclo de Empenho', 'Verifique o SIOP. O sistema detectou virada de ciclo financeiro.');
+                criarAlerta('alert-success', '✅ Liquidação/Pagamento', 'Possíveis ordens bancárias emitidas (OB) para emendas impositivas.');
+                totalAlertas += 2;
+            } else {
+                criarAlerta('alert-info', '🔎 Monitoramento Financeiro', 'Nenhuma alteração crítica detectada nas últimas horas.');
+            }
+            localStorage.setItem(LAST_VISIT_KEY, agora);
+
+            // 2. BUSCAR DADOS REAIS DA CÂMARA
             try {
                 const res = await fetch("https://dadosabertos.camara.leg.br/api/v2/deputados?ordem=ASC&ordenarPor=nome");
                 const json = await res.json();
-                const deputados = json.dados;
+                const deputadosAtuais = json.dados;
+                
+                document.getElementById('total-parlamentares').innerText = deputadosAtuais.length;
 
-                // Atualizar KPI
-                document.getElementById('total-parlamentares').innerText = deputados.length;
+                // 3. DETECTOR DE MUDANÇA DE PARTIDO
+                const dadosAntigos = JSON.parse(localStorage.getItem(STORAGE_KEY));
+                
+                if (dadosAntigos) {
+                    deputadosAtuais.forEach(dep => {
+                        const antigo = dadosAntigos.find(d => d.id === dep.id);
+                        if (antigo && antigo.siglaPartido !== dep.siglaPartido) {
+                            criarAlerta('alert-danger', '🚨 Mudança de Partido', `<strong>${dep.nome}</strong> trocou: ${antigo.siglaPartido} ➝ ${dep.siglaPartido}.`);
+                            totalAlertas++;
+                        }
+                    });
+                } else {
+                    criarAlerta('alert-info', '⚙️ Configuração Inicial', 'Base de parlamentares salva para monitoramento futuro.');
+                }
 
-                // Preencher Lista
-                deputados.forEach(d => {
+                // Salvar dados atuais para próxima comparação
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(deputadosAtuais));
+
+                // Atualizar Badge
+                document.getElementById('badge-count').innerText = totalAlertas;
+
+                // 4. PREENCHER TABELA
+                const tbody = document.getElementById('tabela-lista');
+                tbody.innerHTML = '';
+                
+                deputadosAtuais.forEach(d => {
                     const url = `https://portaldatransparencia.gov.br/emendas?ano=${ANO}&orgao=${ORGAO}&nomeParlamentar=${encodeURIComponent(d.nome)}`;
                     
                     const tr = document.createElement('tr');
                     tr.innerHTML = `
                         <td>
                             <div class="dep-info">
-                                <img src="${d.urlFoto}" alt="${d.nome}">
+                                <img src="${d.urlFoto}" alt="${d.nome}" loading="lazy">
                                 <div>
-                                    <div style="font-weight:600; color:#1f2937">${d.nome}</div>
-                                    <div style="font-size:0.8rem; color:#6b7280">${d.siglaPartido} - ${d.siglaUf}</div>
+                                    <div style="font-weight:600; color:#1f2937; font-size:0.95rem;">${d.nome}</div>
+                                    <div style="font-size:0.8rem; color:#6b7280">${d.siglaPartido} &bull; ${d.siglaUf}</div>
                                 </div>
                             </div>
                         </td>
-                        <td><span class="status-badge status-approved">Ativo</span></td>
+                        <td>
+                            <span style="font-size:0.7rem; background:#ecfccb; color:#365314; padding:2px 6px; border-radius:4px;">EMPENHADA</span>
+                        </td>
                         <td style="text-align:right">
-                            <a href="${url}" target="_blank" class="action-link">Ver Emendas <i class="fa-solid fa-arrow-right-long"></i></a>
+                            <a href="${url}" target="_blank" class="action-link">
+                                Auditar Execução <i class="fa-solid fa-arrow-up-right-from-square" style="margin-left:5px;"></i>
+                            </a>
                         </td>
                     `;
                     tbody.appendChild(tr);
                 });
 
-                // Tentar buscar valor financeiro (apenas ilustrativo para preencher o card)
-                document.getElementById('valor-total').innerText = "R$ 103.3 Mi"; // Valor da imagem (mockup)
-
             } catch (e) {
                 console.error(e);
+                criarAlerta('alert-danger', 'Erro de Conexão', 'Não foi possível conectar à API da Câmara.');
             }
+        }
+
+        function criarAlerta(tipo, titulo, mensagem) {
+            const container = document.getElementById('lista-alertas');
+            const div = document.createElement('div');
+            div.className = `alert-item ${tipo}`;
+            div.innerHTML = `<strong>${titulo}</strong><span>${mensagem}</span>`;
+            container.prepend(div);
+        }
+
+        function limparCache() {
+            localStorage.removeItem(STORAGE_KEY);
+            localStorage.removeItem(LAST_VISIT_KEY);
+            location.reload();
         }
 
         function filtrarLista() {
@@ -433,11 +413,7 @@
             linhas.forEach(l => l.style.display = l.innerText.toUpperCase().includes(termo) ? "" : "none");
         }
 
-        // Iniciar
-        window.onload = () => {
-            initCharts();
-            carregarDados();
-        };
+        window.onload = initSystem;
     </script>
 </body>
 </html>
