@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SGA - Sistema de Gestão ASPAR v5.1</title>
+    <title>SGA - Sistema de Gestão ASPAR v6.0</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Rawline:wght@300;400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -137,9 +137,8 @@
         .search-box input:focus { border-color: var(--mec-blue-light); box-shadow: 0 0 0 3px rgba(38, 112, 232, 0.1); }
         .search-box i { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #999; }
 
-        .btn-toggle-view { display: flex; background: #E2E8F0; padding: 4px; border-radius: 6px; }
-        .btn-view { border: none; background: transparent; padding: 6px 12px; border-radius: 4px; cursor: pointer; color: #666; font-size: 0.9rem; }
-        .btn-view.active { background: white; color: var(--mec-blue-dark); font-weight: 600; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        /* Botões de View (Ocultos se necessário, mas úteis para alternar) */
+        .btn-toggle-view { display: flex; background: #E2E8F0; padding: 4px; border-radius: 6px; visibility: hidden; }
 
         /* Tabela */
         .table-card { background: white; border-radius: var(--radius); border: 1px solid var(--border-color); overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
@@ -154,8 +153,9 @@
         .user-name { font-weight: 600; color: var(--mec-blue-dark); display: block; }
         .user-meta { font-size: 0.8rem; color: var(--text-secondary); }
 
-        /* Carômetro Grid */
+        /* Grids (Carômetro e Bancadas) */
         .grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
+        
         .profile-card {
             background: white; border: 1px solid var(--border-color); border-radius: 12px; padding: 24px;
             text-align: center; cursor: pointer; transition: 0.2s; position: relative;
@@ -165,13 +165,31 @@
         .profile-name { font-weight: 700; color: var(--mec-blue-dark); font-size: 1rem; margin-bottom: 4px; }
         .profile-party { font-size: 0.85rem; color: var(--text-secondary); background: #f0f0f0; display: inline-block; padding: 2px 8px; border-radius: 12px; }
 
-        /* Modais */
+        /* Card de Bancada (Estilo Único) */
+        .bancada-card {
+            background: white; border: 1px solid var(--border-color); border-radius: 12px; padding: 20px;
+            text-align: center; cursor: default; transition: 0.2s; display: flex; flex-direction: column; justify-content: center;
+        }
+        .bancada-card:hover { border-color: var(--mec-blue-light); transform: translateY(-4px); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
+        .uf-sigla { font-size: 2.5rem; font-weight: 800; color: #E6E8EB; line-height: 1; margin-bottom: 5px; }
+        .uf-name { font-size: 1.1rem; font-weight: 700; color: var(--mec-blue-dark); margin-bottom: 5px; }
+        .uf-count { font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 15px; }
+        .uf-stat { background: #f8f9fa; border-radius: 6px; padding: 8px; margin-bottom: 5px; }
+        .uf-stat-label { font-size: 0.7rem; text-transform: uppercase; color: #888; font-weight: 700; }
+        .uf-stat-value { font-size: 0.95rem; font-weight: 700; color: var(--mec-blue-mid); }
+        .btn-filter-uf { 
+            margin-top: 15px; background: var(--mec-blue-dark); color: white; border: none; padding: 8px 16px; 
+            border-radius: 6px; font-weight: 600; font-size: 0.8rem; cursor: pointer; transition: 0.2s; width: 100%;
+        }
+        .btn-filter-uf:hover { background: var(--mec-blue-mid); }
+
+        /* Modais Overlay */
         .modal-center-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2000; justify-content: center; align-items: center; }
         .modal-box { background: white; padding: 0; border-radius: 12px; width: 600px; max-width: 90%; box-shadow: 0 20px 50px rgba(0,0,0,0.2); animation: zoomIn 0.2s; overflow: hidden; display: flex; flex-direction: column; max-height: 85vh; }
         .modal-header-box { background: var(--mec-blue-dark); color: white; padding: 20px; display: flex; justify-content: space-between; align-items: center; }
         .modal-body-box { padding: 25px; overflow-y: auto; }
 
-        /* Estilo Contatos Lista */
+        /* Lista de Contatos */
         .contact-section-title {
             font-size: 0.85rem; color: var(--mec-blue-mid); text-transform: uppercase; font-weight: 700;
             border-bottom: 2px solid var(--mec-yellow); padding-bottom: 5px; margin: 20px 0 15px 0;
@@ -226,6 +244,9 @@
             <div class="nav-label">Relacionamento</div>
             <a onclick="switchView('carometro')" class="nav-link" id="menu-carometro">
                 <i class="fa-solid fa-address-card"></i> Parlamentares
+            </a>
+            <a onclick="switchView('bancadas')" class="nav-link" id="menu-bancadas">
+                <i class="fa-solid fa-map-location-dot"></i> Bancadas Estaduais
             </a>
 
             <div class="nav-label">Ferramentas</div>
@@ -299,9 +320,8 @@
                     <input type="text" id="filtro-global" placeholder="Pesquisar por nome, partido ou UF..." onkeyup="filtrarGlobal()">
                 </div>
                 
-                <div class="btn-toggle-view">
-                    <button class="btn-view active" id="btn-view-table" onclick="switchView('table')"><i class="fa-solid fa-list"></i> Lista</button>
-                    <button class="btn-view" id="btn-view-grid" onclick="switchView('carometro')"><i class="fa-solid fa-border-all"></i> Carômetro</button>
+                <div style="font-size:0.8rem; color:#666;">
+                    <i class="fa-solid fa-info-circle"></i> Utilize o menu lateral para alternar visualizações
                 </div>
             </div>
 
@@ -318,12 +338,15 @@
                         </tr>
                     </thead>
                     <tbody id="tbody-dados">
-                        <tr><td colspan="6" style="padding:40px; text-align:center; color:#777"><i class="fa-solid fa-spinner fa-spin"></i> Carregando base de dados...</td></tr>
+                        <tr><td colspan="6" style="padding:40px; text-align:center; color:#777"><i class="fa-solid fa-spinner fa-spin"></i> Carregando base de dados integrada...</td></tr>
                     </tbody>
                 </table>
             </div>
 
             <div id="view-carometro" class="view-section grid-container" style="display:none;">
+                </div>
+
+            <div id="view-bancadas" class="view-section grid-container" style="display:none;">
                 </div>
 
         </div>
@@ -386,14 +409,16 @@
                     <label class="form-label">Unidade Responsável</label>
                     <select id="crm-responsavel" class="form-control">
                         <option value="">-- Selecione --</option>
-                        <option value="FNDE">FNDE</option>
-                        <option value="SESU">SESu</option>
-                        <option value="SETEC">SETEC</option>
-                        <option value="SEB">SEB</option>
+                        <option value="FNDE">FNDE - Fundo Nacional</option>
+                        <option value="SESU">SESu - Ensino Superior</option>
+                        <option value="SETEC">SETEC - Ensino Tecnológico</option>
+                        <option value="SEB">SEB - Educação Básica</option>
                     </select>
-                    <label class="form-label">Observações</label>
+
+                    <label class="form-label">Observações Políticas</label>
                     <textarea id="crm-obs" class="form-control" placeholder="Registre reuniões, ofícios e pendências..."></textarea>
-                    <button class="btn-save" onclick="salvarCRM()">Salvar Dados</button>
+                    
+                    <button class="btn-save" onclick="salvarCRM()" style="width:100%">Salvar Dados</button>
                 </div>
             </div>
         </div>
@@ -511,21 +536,25 @@
     </div>
 
     <script>
-        // CONFIG
+        // --- CONFIGURAÇÃO ---
         const API_KEY = "2e820c7589765e7414b397836e6d1976";
         const ORGAO = "26000"; 
         const ANO = "2026";
+        
         let baseDados = [];
         let deputadoAtualId = null;
 
         window.onload = iniciarSistema;
 
+        // --- SISTEMA ---
         async function iniciarSistema() {
             try {
+                // 1. Busca Deputados (Lista Básica)
                 const res = await fetch("https://dadosabertos.camara.leg.br/api/v2/deputados?ordem=ASC&ordenarPor=nome");
                 const json = await res.json();
                 const deputados = json.dados;
 
+                // 2. Busca Financeiro (Proxy Transparência)
                 const urlFin = `https://api.portaldatransparencia.gov.br/api-de-dados/emendas?codigoOrgao=${ORGAO}&ano=${ANO}&pagina=1`;
                 const proxy = `https://api.allorigins.win/get?url=${encodeURIComponent(urlFin)}`;
                 
@@ -543,25 +572,31 @@
                                 const emp = parseFloat(e.valorEmpenhado.replace(/\./g,'').replace(',','.'));
                                 const liq = parseFloat(e.valorLiquidado.replace(/\./g,'').replace(',','.'));
                                 const pag = parseFloat(e.valorPago.replace(/\./g,'').replace(',','.'));
+                                
                                 if(!finMap[autor]) finMap[autor] = { emp: 0, liq: 0, pag: 0 };
                                 finMap[autor].emp += emp; finMap[autor].liq += liq; finMap[autor].pag += pag;
                                 tEmp += emp; tLiq += liq; tPag += pag;
                             });
                         }
                     }
-                } catch(e) { console.log("Dados financeiros indisponíveis"); }
+                } catch(e) { console.log("Dados financeiros indisponíveis momentaneamente"); }
 
+                // 3. Montar Dados
                 baseDados = deputados.map(dep => {
                     const financeiro = finMap[dep.nome.toUpperCase()] || { emp: 0, liq: 0, pag: 0 };
                     const crm = JSON.parse(localStorage.getItem(`sga_crm_${dep.id}`)) || {};
+                    
                     let status = "Indicada";
                     let statusClass = "st-gray";
                     if(financeiro.emp > 0) { status = "Empenhada"; statusClass = "st-blue"; }
                     if(financeiro.pag > 0) { status = "Paga"; statusClass = "st-green"; }
+
                     return { ...dep, financeiro, crm, status, statusClass };
                 });
 
                 renderizarTelas();
+                
+                // Atualizar KPIs
                 document.getElementById('kpi-empenhado').innerText = formatarMoeda(tEmp);
                 document.getElementById('kpi-liquidado').innerText = formatarMoeda(tLiq);
                 document.getElementById('kpi-pago').innerText = formatarMoeda(tPag);
@@ -569,23 +604,29 @@
 
             } catch (error) {
                 console.error(error);
-                document.getElementById('tbody-dados').innerHTML = '<tr><td colspan="6" style="text-align:center">Erro API.</td></tr>';
+                document.getElementById('tbody-dados').innerHTML = '<tr><td colspan="6" style="text-align:center">Erro ao conectar à API.</td></tr>';
             }
         }
 
         function renderizarTelas() {
             const tbody = document.getElementById('tbody-dados');
             const grid = document.getElementById('view-carometro');
-            tbody.innerHTML = ''; grid.innerHTML = '';
+            
+            tbody.innerHTML = '';
+            grid.innerHTML = '';
 
             baseDados.forEach(d => {
+                // Tabela
                 const tr = document.createElement('tr');
                 tr.onclick = () => abrirDetalhes(d);
                 tr.innerHTML = `
                     <td>
                         <div class="user-cell">
                             <img src="${d.urlFoto}" class="user-avatar">
-                            <div><span class="user-name">${d.nome}</span><span class="user-meta">${d.siglaPartido} - ${d.siglaUf}</span></div>
+                            <div>
+                                <span class="user-name">${d.nome}</span>
+                                <span class="user-meta">${d.siglaPartido} - ${d.siglaUf}</span>
+                            </div>
                         </div>
                     </td>
                     <td><span class="status-pill ${d.statusClass}">${d.status}</span></td>
@@ -596,6 +637,7 @@
                 `;
                 tbody.appendChild(tr);
 
+                // Carômetro
                 const card = document.createElement('div');
                 card.className = 'profile-card';
                 card.onclick = () => abrirDetalhes(d);
@@ -603,75 +645,157 @@
                     <img src="${d.urlFoto}" class="profile-img" loading="lazy">
                     <div class="profile-name">${d.nome}</div>
                     <div class="profile-party">${d.siglaPartido} / ${d.siglaUf}</div>
-                    <div style="margin-top:10px;"><span class="status-pill ${d.statusClass}">${d.status}</span></div>
+                    <div style="margin-top:10px;">
+                        <span class="status-pill ${d.statusClass}">${d.status}</span>
+                    </div>
                 `;
                 grid.appendChild(card);
             });
         }
 
+        // --- RENDERIZAR BANCADAS (NOVO) ---
+        function renderizarBancadas() {
+            const container = document.getElementById('view-bancadas');
+            container.innerHTML = ''; 
+
+            const ufs = ['AC','AL','AP','AM','BA','CE','DF','ES','GO','MA','MT','MS','MG','PA','PB','PR','PE','PI','RJ','RN','RS','RO','RR','SC','SP','SE','TO'];
+            
+            ufs.forEach(uf => {
+                const depsDaUf = baseDados.filter(d => d.siglaUf === uf);
+                const totalEmpenhado = depsDaUf.reduce((acc, curr) => acc + curr.financeiro.emp, 0);
+                const totalPago = depsDaUf.reduce((acc, curr) => acc + curr.financeiro.pag, 0);
+
+                const card = document.createElement('div');
+                card.className = 'bancada-card';
+                card.innerHTML = `
+                    <div class="uf-sigla">${uf}</div>
+                    <div class="uf-name">Bancada ${uf}</div>
+                    <div class="uf-count">${depsDaUf.length} Parlamentares</div>
+                    
+                    <div class="uf-stat">
+                        <div class="uf-stat-label">Empenhado</div>
+                        <div class="uf-stat-value">${formatarMoeda(totalEmpenhado)}</div>
+                    </div>
+                    
+                    <div class="uf-stat">
+                        <div class="uf-stat-label">Pago</div>
+                        <div class="uf-stat-value" style="color:#008000;">${formatarMoeda(totalPago)}</div>
+                    </div>
+
+                    <button onclick="filtrarPorUF('${uf}')" class="btn-filter-uf">
+                        Ver Lista
+                    </button>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // --- DETALHES COM FETCH API ---
         async function abrirDetalhes(obj) {
             deputadoAtualId = obj.id;
             const drawer = document.getElementById('drawer-detalhes');
+            
+            // Dados Básicos (Já temos)
             document.getElementById('detalhe-foto').src = obj.urlFoto;
             document.getElementById('detalhe-nome').innerText = obj.nome;
             document.getElementById('detalhe-partido').innerText = `${obj.siglaPartido} - ${obj.siglaUf}`;
             document.getElementById('detalhe-fin-emp').innerText = formatarMoeda(obj.financeiro.emp);
             document.getElementById('detalhe-fin-pag').innerText = formatarMoeda(obj.financeiro.pag);
+            
+            // CRM (LocalStorage)
             const crm = obj.crm || {};
             document.getElementById('crm-responsavel').value = crm.responsavel || "";
             document.getElementById('crm-obs').value = crm.obs || "";
-            
+
+            // Resetar campos de detalhe enquanto carrega
             document.getElementById('detalhe-nome-civil').innerText = "Carregando...";
             document.getElementById('detalhe-nascimento').innerText = "...";
+            document.getElementById('detalhe-email').innerText = "...";
+            document.getElementById('detalhe-telefone').innerText = "...";
+            document.getElementById('detalhe-gabinete').innerText = "...";
+
             drawer.style.display = 'flex';
 
+            // --- FETCH DETALHADO (Dados Pessoais) ---
             try {
                 const res = await fetch(`https://dadosabertos.camara.leg.br/api/v2/deputados/${obj.id}`);
                 const json = await res.json();
                 const dados = json.dados;
+                
+                // Formatar Data
                 let dataNasc = "--";
                 if(dados.dataNascimento) {
-                    const p = dados.dataNascimento.split('-');
-                    dataNasc = `${p[2]}/${p[1]}/${p[0]}`;
+                    const partes = dados.dataNascimento.split('-');
+                    dataNasc = `${partes[2]}/${partes[1]}/${partes[0]}`;
                 }
+
                 document.getElementById('detalhe-nome-civil').innerText = dados.nomeCivil;
                 document.getElementById('detalhe-nascimento').innerText = dataNasc;
-                document.getElementById('detalhe-email').innerText = dados.ultimoStatus.gabinete.email || "--";
-                document.getElementById('detalhe-telefone').innerText = dados.ultimoStatus.gabinete.telefone || "--";
-                document.getElementById('detalhe-gabinete').innerText = `Sala ${dados.ultimoStatus.gabinete.sala}, Anexo ${dados.ultimoStatus.gabinete.anexo}`;
-            } catch (e) { document.getElementById('detalhe-nome-civil').innerText = "Indisponível"; }
+                document.getElementById('detalhe-email').innerText = dados.ultimoStatus.gabinete.email || "Não informado";
+                document.getElementById('detalhe-telefone').innerText = dados.ultimoStatus.gabinete.telefone || "Não informado";
+                document.getElementById('detalhe-gabinete').innerText = `Sala ${dados.ultimoStatus.gabinete.sala}, Anexo ${dados.ultimoStatus.gabinete.anexo || ''}`;
+
+            } catch (e) {
+                console.error("Erro ao buscar detalhes", e);
+                document.getElementById('detalhe-nome-civil').innerText = "Não disponível";
+            }
         }
 
         function salvarCRM() {
             if(!deputadoAtualId) return;
-            const dados = { responsavel: document.getElementById('crm-responsavel').value, obs: document.getElementById('crm-obs').value };
+            const dados = {
+                responsavel: document.getElementById('crm-responsavel').value,
+                obs: document.getElementById('crm-obs').value
+            };
             localStorage.setItem(`sga_crm_${deputadoAtualId}`, JSON.stringify(dados));
-            alert("Dados salvos.");
+            alert("Dados salvos com sucesso.");
             document.getElementById('drawer-detalhes').style.display = 'none';
             iniciarSistema();
         }
 
         function switchView(view) {
-            document.getElementById('view-table').style.display = view === 'table' ? 'block' : 'none';
-            document.getElementById('view-carometro').style.display = view === 'carometro' ? 'grid' : 'none';
-            document.getElementById('btn-view-table').className = view === 'table' ? 'btn-view active' : 'btn-view';
-            document.getElementById('btn-view-grid').className = view === 'carometro' ? 'btn-view active' : 'btn-view';
-            document.getElementById('menu-painel').className = view === 'table' ? 'nav-link active' : 'nav-link';
-            document.getElementById('menu-carometro').className = view === 'carometro' ? 'nav-link active' : 'nav-link';
+            // Esconde todas
+            document.querySelectorAll('.view-section').forEach(el => el.style.display = 'none');
+            document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active'));
+
+            // Mostra a selecionada
+            if(view === 'table') {
+                document.getElementById('view-table').style.display = 'block';
+                document.getElementById('menu-painel').classList.add('active');
+            } else if (view === 'carometro') {
+                document.getElementById('view-carometro').style.display = 'grid';
+                document.getElementById('menu-carometro').classList.add('active');
+            } else if (view === 'bancadas') {
+                document.getElementById('view-bancadas').style.display = 'grid';
+                document.getElementById('menu-bancadas').classList.add('active');
+                renderizarBancadas();
+            }
+        }
+
+        function filtrarPorUF(uf) {
+            switchView('table');
+            document.getElementById('filtro-global').value = uf;
+            filtrarGlobal();
         }
 
         function filtrarGlobal() {
             const termo = document.getElementById('filtro-global').value.toUpperCase();
+            
+            // Filtro Tabela
             const linhas = document.querySelectorAll('#tbody-dados tr');
             linhas.forEach(l => l.style.display = l.innerText.toUpperCase().includes(termo) ? '' : 'none');
+
+            // Filtro Carômetro
             const cards = document.querySelectorAll('.profile-card');
             cards.forEach(c => c.style.display = c.innerText.toUpperCase().includes(termo) ? '' : 'none');
         }
 
+        // Utils
+        function formatarMoeda(v) { return v.toLocaleString('pt-BR', {style:'currency', currency:'BRL'}); }
         function abrirModal(id) { document.getElementById(id).style.display = 'flex'; }
         function fecharModal(e, id) { if(!e || e.target.id === id) document.getElementById(id).style.display = 'none'; }
         function fecharDrawer(e, force) { if(force || e.target.id === 'drawer-detalhes') document.getElementById('drawer-detalhes').style.display = 'none'; }
-        function formatarMoeda(v) { return v.toLocaleString('pt-BR', {style:'currency', currency:'BRL'}); }
+
     </script>
 </body>
 </html>
